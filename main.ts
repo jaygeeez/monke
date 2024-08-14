@@ -3,126 +3,136 @@ namespace SpriteKind {
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), true)
-    monke.vy = -50
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        monke.vy = -50
+    }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    monke,
-    [img`
-        . . . . . . . f f f f f . . . . 
-        . . . . . . f e e e e e f . . . 
-        . . . . . f e e e d d d d f . . 
-        . . . . f f e e d f d d f d c . 
-        . . . f d d e e d f d d f d c . 
-        . . . c d b e e d d d d e e d c 
-        . . . c d b e e d d c d d d d c 
-        . . . . c f e e e d d c c c c c 
-        . . . . . f f e e e d d d d f . 
-        . . . . f e e e e f f f f f . . 
-        f f . f e e e e e e f f . . . . 
-        f e . f e e f e e f e e f . . . 
-        f e . f e e e f e e f e e f . . 
-        f e f f e f b b f b d f d b f . 
-        f f f f e b d d f d d f d d f . 
-        . f f f f f f f f f f f f f . . 
-        `,img`
-        . . . . . . . f f f f f . . . . 
-        . . . . . . f e e e e e f . . . 
-        . . . . . f e e e d d d d f . . 
-        . . . . f f e e d f d d f d c . 
-        . . . f d d e e d f d d f d c . 
-        . . . c d b e e d d d d e e d c 
-        . . . c d b e e d d c d d d d c 
-        . . . . c f e e e d d c c c c c 
-        . . . . . f f e e e d d d d f . 
-        . . . . f e e e f f e e e f . . 
-        f f . f e e e e e f f f f f . . 
-        f e . f e e f f e e f b d f . . 
-        f e . f e e e f f e f d d f f . 
-        f e f f e f b b e f f f f f f . 
-        f f f f e b d d e e e f d d f . 
-        . f f f f f f f f f f f f f . . 
-        `,img`
-        . . . . . . f f f f f . . . . . 
-        . . . . . f e e e e e f . . . . 
-        . . . . f e e d d d d d f . . . 
-        . . . f f e d f f d d f f f . . 
-        . . f d d e d d d d e e d d c . 
-        . f f f d e d d c d d d d c c . 
-        f d b f d e d d d c c c c d c . 
-        f d d f f e e d d d d d d c . . 
-        f f f e f f e e d d d d c . . . 
-        . . f e e e f e e f f f . . . . 
-        . f f f e e e e e e e f . . . . 
-        . f e f f f e e e e e e f . . . 
-        . f e f f f f f e e e e f f . . 
-        . f e f f f b b f e e f d b f . 
-        . f f f f b d d f e e f d d f . 
-        . . f f f f f f f f f f f f f . 
-        `,img`
-        . . . . . . f f f f f . . . . . 
-        . . . . . f e e e e e f . . . . 
-        . . . . f e d d d d d d f . . . 
-        . . . f f d f f d d f f d f . . 
-        . . f d e d d d d e e d d d c . 
-        . . f f e d d c d d d d c d c . 
-        f f f f e d d d c c c c d d c . 
-        f d b f f e d d d d d d d c . . 
-        f d d f f f e e d d d d c . . . 
-        f f f e e e f e e f f f . . . . 
-        . f f f e e e e e e e f . . . . 
-        . f e f f f e e e e e e f . . . 
-        . f e f f f f f e e e e f f . . 
-        . f e f f f b b f e e f d b f . 
-        . f f f f b d d f f f f d d f . 
-        . . f f f f f f f f f f f f f . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . f f f f f . . . . 
-        . . . . . . f e e e e e f . . . 
-        . . . . . f e e e d d d d f . . 
-        . . . . f f e e d d d d d f . . 
-        . . . f d d e e d f f d d d c . 
-        . . . c d b e e d d d d e e d c 
-        . . . c d b e e d d c d d f f c 
-        . . . . f e e e f f f e f d d f 
-        . . . . f f f f f e e e f d d f 
-        . f f . f f e e e e e f f f f f 
-        . f e . f f e e e f f e f f f . 
-        . f e f f f b b f f e f d b f . 
-        . f e f f b d d f e e f d d f . 
-        . . f f f f f f f f f f f f f . 
-        `,img`
-        . . . . . . . f f f f f . . . . 
-        . . . . . . f e e e e e f . . . 
-        . . . . . f e e e d d d d f . . 
-        . . . . f f e e d d f d d f . . 
-        . . . f d d e e d d f d d d c . 
-        . . . c d b e e d d d d e e d c 
-        . . . c d b e e d d c d d d d c 
-        . . . f c f e e d d d f f f f c 
-        . . . . f e e e e f f f d b f . 
-        . . . . f e e f f f e f d d f . 
-        . f f . f f f e e e e f f f . . 
-        . f e . f f e e e e f e e f . . 
-        . f e f f f f f f f e e e f f . 
-        . f e f f f b b f e e f d b f . 
-        . f f f f b d d e e f f d d f . 
-        . . f f f f f f f f f f f f f . 
-        `],
-    100,
-    false
-    )
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
-    projectile = sprites.createProjectileFromSprite(assets.image`banana`, monke, 100, -50)
-    projectile.ay = 100
-    running()
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        animation.runImageAnimation(
+        monke,
+        [img`
+            . . . . . . . f f f f f . . . . 
+            . . . . . . f e e e e e f . . . 
+            . . . . . f e e e d d d d f . . 
+            . . . . f f e e d f d d f d c . 
+            . . . f d d e e d f d d f d c . 
+            . . . c d b e e d d d d e e d c 
+            . . . c d b e e d d c d d d d c 
+            . . . . c f e e e d d c c c c c 
+            . . . . . f f e e e d d d d f . 
+            . . . . f e e e e f f f f f . . 
+            f f . f e e e e e e f f . . . . 
+            f e . f e e f e e f e e f . . . 
+            f e . f e e e f e e f e e f . . 
+            f e f f e f b b f b d f d b f . 
+            f f f f e b d d f d d f d d f . 
+            . f f f f f f f f f f f f f . . 
+            `,img`
+            . . . . . . . f f f f f . . . . 
+            . . . . . . f e e e e e f . . . 
+            . . . . . f e e e d d d d f . . 
+            . . . . f f e e d f d d f d c . 
+            . . . f d d e e d f d d f d c . 
+            . . . c d b e e d d d d e e d c 
+            . . . c d b e e d d c d d d d c 
+            . . . . c f e e e d d c c c c c 
+            . . . . . f f e e e d d d d f . 
+            . . . . f e e e f f e e e f . . 
+            f f . f e e e e e f f f f f . . 
+            f e . f e e f f e e f b d f . . 
+            f e . f e e e f f e f d d f f . 
+            f e f f e f b b e f f f f f f . 
+            f f f f e b d d e e e f d d f . 
+            . f f f f f f f f f f f f f . . 
+            `,img`
+            . . . . . . f f f f f . . . . . 
+            . . . . . f e e e e e f . . . . 
+            . . . . f e e d d d d d f . . . 
+            . . . f f e d f f d d f f f . . 
+            . . f d d e d d d d e e d d c . 
+            . f f f d e d d c d d d d c c . 
+            f d b f d e d d d c c c c d c . 
+            f d d f f e e d d d d d d c . . 
+            f f f e f f e e d d d d c . . . 
+            . . f e e e f e e f f f . . . . 
+            . f f f e e e e e e e f . . . . 
+            . f e f f f e e e e e e f . . . 
+            . f e f f f f f e e e e f f . . 
+            . f e f f f b b f e e f d b f . 
+            . f f f f b d d f e e f d d f . 
+            . . f f f f f f f f f f f f f . 
+            `,img`
+            . . . . . . f f f f f . . . . . 
+            . . . . . f e e e e e f . . . . 
+            . . . . f e d d d d d d f . . . 
+            . . . f f d f f d d f f d f . . 
+            . . f d e d d d d e e d d d c . 
+            . . f f e d d c d d d d c d c . 
+            f f f f e d d d c c c c d d c . 
+            f d b f f e d d d d d d d c . . 
+            f d d f f f e e d d d d c . . . 
+            f f f e e e f e e f f f . . . . 
+            . f f f e e e e e e e f . . . . 
+            . f e f f f e e e e e e f . . . 
+            . f e f f f f f e e e e f f . . 
+            . f e f f f b b f e e f d b f . 
+            . f f f f b d d f f f f d d f . 
+            . . f f f f f f f f f f f f f . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . f f f f f . . . . 
+            . . . . . . f e e e e e f . . . 
+            . . . . . f e e e d d d d f . . 
+            . . . . f f e e d d d d d f . . 
+            . . . f d d e e d f f d d d c . 
+            . . . c d b e e d d d d e e d c 
+            . . . c d b e e d d c d d f f c 
+            . . . . f e e e f f f e f d d f 
+            . . . . f f f f f e e e f d d f 
+            . f f . f f e e e e e f f f f f 
+            . f e . f f e e e f f e f f f . 
+            . f e f f f b b f f e f d b f . 
+            . f e f f b d d f e e f d d f . 
+            . . f f f f f f f f f f f f f . 
+            `,img`
+            . . . . . . . f f f f f . . . . 
+            . . . . . . f e e e e e f . . . 
+            . . . . . f e e e d d d d f . . 
+            . . . . f f e e d d f d d f . . 
+            . . . f d d e e d d f d d d c . 
+            . . . c d b e e d d d d e e d c 
+            . . . c d b e e d d c d d d d c 
+            . . . f c f e e d d d f f f f c 
+            . . . . f e e e e f f f d b f . 
+            . . . . f e e f f f e f d d f . 
+            . f f . f f f e e e e f f f . . 
+            . f e . f f e e e e f e e f . . 
+            . f e f f f f f f f e e e f f . 
+            . f e f f f b b f e e f d b f . 
+            . f f f f b d d e e f f d d f . 
+            . . f f f f f f f f f f f f f . 
+            `],
+        100,
+        false
+        )
+        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+        pause(500)
+        projectile = sprites.createProjectileFromSprite(assets.image`banana`, monke, 100, -50)
+        projectile.ay = 100
+        projectile.lifespan = 3000
+        running()
+    }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (gameStart == 0) {
         gameStart = 1
-        sprites.destroyAllSpritesOfKind(SpriteKind.Intro, effects.confetti, 100)
+        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
+        titleScreen.setVelocity(-100, 0)
+        titleScreen.lifespan = 2000
+        aButton.setVelocity(-100, 0)
+        aButton.lifespan = 2000
         info.setScore(0)
         info.setLife(3)
     }
@@ -304,7 +314,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         75,
         false
         )
-        music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+        music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
+        pause(700)
         running()
     }
 })
@@ -312,7 +323,7 @@ function restartGame (num: number) {
     gameStart = 0
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-    mySprite3 = sprites.create(img`
+    titleScreen = sprites.create(img`
         ....................................................................................................
         ....................................................................................................
         ....................................................................................................
@@ -364,8 +375,15 @@ function restartGame (num: number) {
         ....................................................................................................
         ....................................................................................................
         `, SpriteKind.Intro)
-    tiles.placeOnTile(mySprite3, tiles.getTileLocation(5, 12))
-    mySprite4 = sprites.create(img`
+    tiles.placeOnTile(titleScreen, tiles.getTileLocation(5, 12))
+    animation.runMovementAnimation(
+    titleScreen,
+    animation.animationPresets(animation.bobbing),
+    7500,
+    false
+    )
+    titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
+    aButton = sprites.create(img`
         ..........666666666666..........
         ........6667777777777666........
         ......66677777777777777666......
@@ -399,9 +417,10 @@ function restartGame (num: number) {
         ......ffccccbbbbbbbbbbbbff......
         ........ffffffffffffffff........
         `, SpriteKind.Intro)
-    tiles.placeOnTile(mySprite4, tiles.getTileLocation(9, 15))
+    tiles.placeOnTile(aButton, tiles.getTileLocation(9, 15))
+    aButton.setFlag(SpriteFlag.GhostThroughWalls, true)
     animation.runImageAnimation(
-    mySprite4,
+    aButton,
     [img`
         . . . . 6 6 6 6 6 6 6 . . . . . 
         . . 6 6 7 7 7 7 7 7 7 6 6 . . . 
@@ -448,7 +467,9 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
 })
 info.onLifeZero(function () {
-    music.play(music.melodyPlayable(music.wawawawaa), music.PlaybackMode.UntilDone)
+    game.setGameOverScoringType(game.ScoringType.HighScore)
+    game.setGameOverEffect(false, effects.dissolve)
+    game.gameOver(false)
 })
 function running () {
     animation.runImageAnimation(
@@ -545,15 +566,182 @@ function running () {
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
-    sprites.destroy(otherSprite, effects.hearts, 100)
+    animation.runImageAnimation(
+    otherSprite,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . b . . . . . . . 
+        . . . . . . . b d b . . . . . . 
+        . . . . . . b 5 5 5 b . . . . . 
+        . . . . . b b 5 5 5 b b . . . . 
+        . . b b b b 5 5 5 1 1 b b b b . 
+        . . b 5 5 5 5 5 5 1 1 5 5 5 b . 
+        . . b d d 5 5 5 5 5 5 5 d d b . 
+        . . . b d d 5 5 5 5 5 d d b . . 
+        . . . c b 5 5 5 5 5 5 5 b c . . 
+        . . . c b 5 5 5 5 5 5 5 b c . . 
+        . . . c 5 5 d d b d d 5 5 c . . 
+        . . . c 5 d d c c c d d 5 c . . 
+        . . . c c c c . . . c c c c . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . b b . . . . . . . 
+        . . . . . . b d d b . . . . . . 
+        . . . . . b d 5 5 d b . . . . . 
+        . . . . b b 5 5 5 5 b b . . . . 
+        . . . . b 5 5 5 5 5 5 b . . . . 
+        b b b b b 5 5 5 5 1 1 d b b b b 
+        b 5 5 5 5 5 5 5 5 1 1 1 5 5 5 b 
+        b d d 5 5 5 5 5 5 1 1 1 5 d d b 
+        . b d d 5 5 5 5 5 5 5 5 d d b . 
+        . . b b 5 5 5 5 5 5 5 5 b b . . 
+        . . c b 5 5 5 5 5 5 5 5 b c . . 
+        . . c 5 5 5 5 d d 5 5 5 5 c . . 
+        . . c 5 5 d b b b b d 5 5 c . . 
+        . . c 5 d b c c c c b d 5 c . . 
+        . . c c c c . . . . c c c c . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . b b . . . . . . . 
+        . . . . . . b 5 5 b . . . . . . 
+        . . . b b b 5 5 1 1 b b b . . . 
+        . . . b 5 5 5 5 1 1 5 5 b . . . 
+        . . . . b d 5 5 5 5 d b . . . . 
+        . . . . c b 5 5 5 5 b c . . . . 
+        . . . . c 5 d d d d 5 c . . . . 
+        . . . . c 5 d c c d 5 c . . . . 
+        . . . . c c c . . c c c . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . b . . . . . . . 
+        . . . . . . b d d c . . . . . . 
+        . . . . . b 1 1 d d c . . . . . 
+        . . . . b 1 1 1 d 1 1 b . . . . 
+        . . . . c 1 1 1 d 1 1 1 c c . . 
+        b b b c d 1 1 c c 1 1 d 1 1 b b 
+        b d 1 1 d d b c c c b d 1 1 1 b 
+        b 1 1 1 1 c c . . c d d 1 1 1 b 
+        b 1 1 1 1 c c . . b 1 1 d d c . 
+        . b 1 1 d d b c b b 1 1 b c c . 
+        . . c b d d b 1 1 b b d b c . . 
+        . . c 1 1 d d 1 1 1 d d d b . . 
+        . b d 1 1 1 d 1 1 d 1 1 1 d b . 
+        . b d 1 1 1 d b b d 1 1 1 1 b . 
+        . . b 1 1 d c c b b d 1 1 d b . 
+        . . b b b b . . . b b b b b b . 
+        `,img`
+        . . . . . b b . . . . . . . . . 
+        . . . . b 5 b b . . . . . . . . 
+        . . b b 5 5 5 b b b . . . . . . 
+        . b 5 5 5 5 5 5 5 b . . b . . . 
+        . . b b 5 5 5 b b . . b 5 b . . 
+        . . b 5 5 b 5 5 b . b 5 5 5 b . 
+        . . b 5 b b b 5 b . . b 5 b . . 
+        . . b b . . b b b . . b b b . . 
+        . b 5 b b . . . . . b 5 b . . . 
+        b 5 5 5 b b . . . b b 5 b b . . 
+        . b 5 b b 5 b . b 5 5 5 5 5 b . 
+        . b b b 5 5 5 b b b 5 5 5 b b . 
+        . . b 5 5 5 5 5 b b 5 b 5 b . . 
+        . . . b 5 5 5 b . . b b b . . . 
+        . . . b 5 b 5 b . . . . . . . . 
+        . . . b b b b b . . . . . . . . 
+        `],
+    50,
+    false
+    )
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+    sprites.destroy(otherSprite, effects.starField, 100)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
-    sprites.destroy(otherSprite, effects.ashes, 100)
+    animation.runImageAnimation(
+    otherSprite,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . 4 4 . . . . . . . 
+        . . . . . . 4 5 5 4 . . . . . . 
+        . . . . . . 2 5 5 2 . . . . . . 
+        . . . . . . . 2 2 . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . 4 . . . . . 
+        . . . . 2 . . . . 4 4 . . . . . 
+        . . . . 2 4 . . 4 5 4 . . . . . 
+        . . . . . 2 4 d 5 5 4 . . . . . 
+        . . . . . 2 5 5 5 5 4 . . . . . 
+        . . . . . . 2 5 5 5 5 4 . . . . 
+        . . . . . . 2 5 4 2 4 4 . . . . 
+        . . . . . . 4 4 . . 2 4 4 . . . 
+        . . . . . 4 4 . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . 3 . . . . . . . . . . . 4 . . 
+        . 3 3 . . . . . . . . . 4 4 . . 
+        . 3 d 3 . . 4 4 . . 4 4 d 4 . . 
+        . . 3 5 3 4 5 5 4 4 d d 4 4 . . 
+        . . 3 d 5 d 1 1 d 5 5 d 4 4 . . 
+        . . 4 5 5 1 1 1 1 5 1 1 5 4 . . 
+        . 4 5 5 5 5 1 1 5 1 1 1 d 4 4 . 
+        . 4 d 5 1 1 5 5 5 1 1 1 5 5 4 . 
+        . 4 4 5 1 1 5 5 5 5 5 d 5 5 4 . 
+        . . 4 3 d 5 5 5 d 5 5 d d d 4 . 
+        . 4 5 5 d 5 5 5 d d d 5 5 4 . . 
+        . 4 5 5 d 3 5 d d 3 d 5 5 4 . . 
+        . 4 4 d d 4 d d d 4 3 d d 4 . . 
+        . . 4 5 4 4 4 4 4 4 4 4 4 . . . 
+        . 4 5 4 . . 4 4 4 . . . 4 4 . . 
+        . 4 4 . . . . . . . . . . 4 4 . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . b b . b b b . . . . . 
+        . . . . b 1 1 b 1 1 1 b . . . . 
+        . . b b 3 1 1 d d 1 d d b b . . 
+        . b 1 1 d d b b b b b 1 1 b . . 
+        . b 1 1 1 b . . . . . b d d b . 
+        . . 3 d d b . . . . . b d 1 1 b 
+        . b 1 d 3 . . . . . . . b 1 1 b 
+        . b 1 1 b . . . . . . b b 1 d b 
+        . b 1 d b . . . . . . b d 3 d b 
+        . b b d d b . . . . b d d d b . 
+        . b d d d d b . b b 3 d d 3 b . 
+        . . b d d 3 3 b d 3 3 b b b . . 
+        . . . b b b d d d d d b . . . . 
+        . . . . . . b b b b b . . . . . 
+        `],
+    50,
+    false
+    )
+    music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
+    sprites.destroy(otherSprite)
 })
 let mySprite2: Sprite = null
-let mySprite4: Sprite = null
-let mySprite3: Sprite = null
+let aButton: Sprite = null
+let titleScreen: Sprite = null
 let gameStart = 0
 let projectile: Sprite = null
 let monke: Sprite = null
@@ -801,10 +989,11 @@ scroller.setLayerImage(scroller.BackgroundLayer.Layer1, img`
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     `)
-scroller.scrollBackgroundWithSpeed(-50, 0, scroller.BackgroundLayer.Layer0)
+scroller.scrollBackgroundWithSpeed(-25, 0, scroller.BackgroundLayer.Layer0)
 scroller.scrollBackgroundWithSpeed(-100, 0, scroller.BackgroundLayer.Layer1)
 let highScore = 0
 tiles.setCurrentTilemap(tilemap`level2`)
+restartGame(0)
 monke = sprites.create(img`
     . . . . f f f f f . . . . . . . 
     . . . f e e e e e f . . . . . . 
@@ -823,11 +1012,10 @@ monke = sprites.create(img`
     . . . f d d c d d b b d f . . . 
     . . . . f f f f f f f f f . . . 
     `, SpriteKind.Player)
-tiles.placeOnTile(monke, tiles.getTileLocation(1, 12))
+tiles.placeOnTile(monke, tiles.getTileLocation(1, 14))
 monke.ay = 500
 scene.cameraFollowSprite(monke)
 running()
-restartGame(0)
 game.onUpdateInterval(1000, function () {
     if (gameStart == 1) {
         if (Math.percentChance(50)) {
@@ -945,6 +1133,7 @@ game.onUpdateInterval(1000, function () {
         }
         mySprite2.vx = -100
         mySprite2.setFlag(SpriteFlag.GhostThroughWalls, true)
+        mySprite2.lifespan = 5000
         if (Math.percentChance(33)) {
             tiles.placeOnTile(mySprite2, tiles.getTileLocation(15, 14))
         } else if (Math.percentChance(66)) {
