@@ -120,7 +120,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         )
         music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
         pause(500)
-        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, 100, -50)
+        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, 100, -66)
         banana.ay = 100
         banana.lifespan = 3000
         running()
@@ -668,6 +668,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
+    speed += -1
     animation.runImageAnimation(
     otherSprite,
     [img`
@@ -1023,6 +1024,7 @@ tiles.placeOnTile(monke, tiles.getTileLocation(1, 14))
 monke.ay = 500
 scene.cameraFollowSprite(monke)
 running()
+let speed = -100
 game.onUpdateInterval(1000, function () {
     if (gameStart == 1) {
         if (Math.percentChance(50)) {
@@ -1138,7 +1140,7 @@ game.onUpdateInterval(1000, function () {
             true
             )
         }
-        moveSet(obstacles, -100)
+        moveSet(obstacles, speed)
         if (Math.percentChance(33)) {
             tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 14))
         } else if (Math.percentChance(66)) {
@@ -1162,7 +1164,7 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 . . . . . . . . . . . . . . . . 
                 `, SpriteKind.Wings)
-            moveSet(wings, -100)
+            moveSet(wings, speed)
             tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 13))
             tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
         }
