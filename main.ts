@@ -1,5 +1,6 @@
 namespace SpriteKind {
     export const Intro = SpriteKind.create()
+    export const Wings = SpriteKind.create()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), true)
@@ -119,23 +120,20 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         )
         music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
         pause(500)
-        projectile = sprites.createProjectileFromSprite(assets.image`banana`, monke, 100, -50)
-        projectile.ay = 100
-        projectile.lifespan = 3000
+        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, 100, -50)
+        banana.ay = 100
+        banana.lifespan = 3000
         running()
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (gameStart == 0) {
         music.stopAllSounds()
-        music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
         music.play(music.createSong(hex`00780004080200`), music.PlaybackMode.LoopingInBackground)
         gameStart = 1
         animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
-        titleScreen.setVelocity(-100, 0)
-        titleScreen.lifespan = 2000
-        aButton.setVelocity(-100, 0)
-        aButton.lifespan = 2000
+        moveSet(titleScreen, -100)
+        moveSet(aButton, -100)
         info.setScore(0)
         info.setLife(3)
     }
@@ -322,6 +320,11 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         running()
     }
 })
+function moveSet (mySprite: Sprite, velocity: number) {
+    mySprite.setVelocity(velocity, 0)
+    mySprite.lifespan = 5000
+    mySprite.setFlag(SpriteFlag.GhostThroughWalls, true)
+}
 function restartGame (num: number) {
     gameStart = 0
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
@@ -742,13 +745,21 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite)
 })
-let mySprite2: Sprite = null
+let wings: Sprite = null
+let obstacles: Sprite = null
 let aButton: Sprite = null
 let titleScreen: Sprite = null
 let gameStart = 0
-let projectile: Sprite = null
+let banana: Sprite = null
 let monke: Sprite = null
 scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
+    9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+    9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+    9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+    9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+    9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+    9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+    9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999111199999999999999999999999999999999999999999999999999999999999999999999999999999911119999999999999999999999999999999999999999999999999999
     9999999999999999999991111119999999999999999999999999999999999999999999999999999999999999999999999999999111111999999999999999999999999999999999999999999999999999
@@ -818,13 +829,6 @@ scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
     bbbbbb7bbb77bbbbb77bbbb7bbb7bbbb7b77bbb7bbbbbb7bbb77bbbbb77bbbb7bbb7bbbb7b77bbb7bbbbbb7bbb77bbbbb77bbbb7bbb7bbbb7b77bbb7bbbbbb7bbb77bbbbb77bbbb7bbb7bbbb7b77bbb7
     bb7bbb77b77bb7bbb77bbb77bbb77bbb7bb77b77bb7bbb77b77bb7bbb77bbb77bbb77bbb7bb77b77bb7bbb77b77bb7bbb77bbb77bbb77bbb7bb77b77bb7bbb77b77bb7bbb77bbb77bbb77bbb7bb77b77
     bb77bb77b77bb77bbb77b77bbbb77b7b77b7777bbb77bb77b77bb77bbb77b77bbbb77b7b77b7777bbb77bb77b77bb77bbb77b77bbbb77b7b77b7777bbb77bb77b77bb77bbb77b77bbbb77b7b77b7777b
-    7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-    7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
     7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -994,9 +998,8 @@ scroller.setLayerImage(scroller.BackgroundLayer.Layer1, img`
     `)
 scroller.scrollBackgroundWithSpeed(-25, 0, scroller.BackgroundLayer.Layer0)
 scroller.scrollBackgroundWithSpeed(-100, 0, scroller.BackgroundLayer.Layer1)
-music.play(music.createSong(hex`003c000408020301001c000f05001202c102c201000405002800000064002800031400060200040c000000020001ab2000220001ab06001c00010a006400f4016400000400000000000000000000000000000000024000000002000320242708000a00039fa3a60e001400039f242718001a00032225291c001e00032225ab200022000320242728002a00039fa3a62e003400039f242709010e02026400000403780000040a000301000000640001c80000040100000000640001640000040100000000fa0004af00000401c80000040a00019600000414000501006400140005010000002c0104dc00000401fa0000040a0001c8000004140005d0076400140005d0070000c800029001f40105c201f4010a0005900114001400039001000005c201f4010500058403050032000584030000fa00049001000005c201f4010500058403c80032000584030500640005840300009001049001000005c201f4010500058403c80064000584030500c8000584030000f40105ac0d000404a00f00000a0004ac0d2003010004a00f0000280004ac0d9001010004a00f0000280002d00700040408070f0064000408070000c80003c800c8000e7d00c80019000e64000f0032000e78000000fa00032c01c8000ee100c80019000ec8000f0032000edc000000fa0003f401c8000ea901c80019000e90010f0032000ea4010000fa0001c8000004014b000000c800012c01000401c8000000c8000190010004012c010000c80002c800000404c8000f0064000496000000c80002c2010004045e010f006400042c010000640002c409000404c4096400960004f6090000f40102b80b000404b80b64002c0104f40b0000f401022003000004200300040a000420030000ea01029001000004900100040a000490010000900102d007000410d0076400960010d0070000c800420000000100010804000500010a0c000d00010a14001500010a1c001d00010a20002100010824002500010a2c002d00010a34003500010a3a003b00010a3c003d00010a`), music.PlaybackMode.LoopingInBackground)
-let highScore = 0
-tiles.setCurrentTilemap(tilemap`level2`)
+music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
+tiles.setCurrentTilemap(tilemap`blank`)
 restartGame(0)
 monke = sprites.create(img`
     . . . . f f f f f . . . . . . . 
@@ -1023,7 +1026,7 @@ running()
 game.onUpdateInterval(1000, function () {
     if (gameStart == 1) {
         if (Math.percentChance(50)) {
-            mySprite2 = sprites.create(img`
+            obstacles = sprites.create(img`
                 . . . . . . . b b . . . . . . . 
                 . . . . . . b d d b . . . . . . 
                 . . . . . b d 5 5 d b . . . . . 
@@ -1042,26 +1045,26 @@ game.onUpdateInterval(1000, function () {
                 . . . . . . . . . . . . . . . . 
                 `, SpriteKind.Food)
         } else {
-            mySprite2 = sprites.create(img`
-                . . . . . . . 8 8 8 8 8 . . . . 
-                . . . . . 8 8 6 6 6 6 6 8 . . . 
-                . . . . 8 8 6 6 6 6 6 6 6 8 . . 
-                . . . . 8 9 7 6 6 6 6 6 7 b 8 . 
-                . . 8 8 9 9 7 7 6 6 6 6 7 9 b 8 
-                . 8 6 6 9 9 7 7 7 6 6 6 7 9 9 8 
-                8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
-                8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
-                8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
-                8 6 8 8 8 8 b b b b 8 b b 8 b 8 
-                8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
-                8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                8 8 8 8 f f f 8 8 8 8 f f f 8 8 
-                . 8 8 f b c c f 8 8 f b c c f . 
-                . . . . b b f . . . . b b f . . 
+            obstacles = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . 6 6 6 6 6 6 6 6 . . 
+                . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+                . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+                . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+                . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+                . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+                . 6 6 6 6 6 8 b b b b 8 b b b 8 
+                . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+                . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+                . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+                . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+                . 8 8 8 8 f f f 8 8 8 8 f f f f 
+                . . . 8 f f f f f 8 8 f f f f f 
+                . . . . f f f f . . . . f f f . 
+                . . . . . . . . . . . . . . . . 
                 `, SpriteKind.Enemy)
             animation.runImageAnimation(
-            mySprite2,
+            obstacles,
             [img`
                 . . . . . . . 8 8 8 8 8 . . . . 
                 . . . . . 8 8 6 6 6 6 6 8 . . . 
@@ -1135,15 +1138,33 @@ game.onUpdateInterval(1000, function () {
             true
             )
         }
-        mySprite2.vx = -100
-        mySprite2.setFlag(SpriteFlag.GhostThroughWalls, true)
-        mySprite2.lifespan = 5000
+        moveSet(obstacles, -100)
         if (Math.percentChance(33)) {
-            tiles.placeOnTile(mySprite2, tiles.getTileLocation(15, 14))
+            tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 14))
         } else if (Math.percentChance(66)) {
-            tiles.placeOnTile(mySprite2, tiles.getTileLocation(15, 15))
+            tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 15))
         } else {
-            tiles.placeOnTile(mySprite2, tiles.getTileLocation(15, 13))
+            wings = sprites.create(img`
+                . . . . . . . . . 9 9 1 1 9 9 . 
+                . . . . . . . . 9 1 1 1 1 1 9 9 
+                . . . . . . . 9 1 1 1 1 1 9 9 . 
+                . . . . . . 9 1 1 1 1 9 9 9 9 9 
+                . . . . . . 9 1 1 1 1 1 1 1 1 1 
+                . . . . . 9 9 1 9 9 9 9 1 1 1 1 
+                . . . . . 9 1 1 9 1 1 9 1 1 1 9 
+                . . . . . . 9 1 1 1 1 9 1 1 9 9 
+                . . . . . . 9 1 1 9 9 9 9 9 9 . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, SpriteKind.Wings)
+            moveSet(wings, -100)
+            tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 13))
+            tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
         }
     }
 })
