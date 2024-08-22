@@ -560,7 +560,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         pause(500)
         banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
         banana.ay = 100
-        banana.lifespan = 4000
+        banana.lifespan = 3000
         running()
     }
 })
