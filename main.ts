@@ -558,7 +558,24 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         throwing()
         music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
         pause(500)
-        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
+        banana = sprites.createProjectileFromSprite(img`
+            . . . . . . . e e . . . . . . . 
+            . . . . . 4 4 e e . . . . . . . 
+            . . . . 4 5 5 4 . . . . . . . . 
+            . . . 4 5 5 5 4 . . . . . . . . 
+            . . 4 5 5 5 5 4 . . . . . . . . 
+            . f f f f f f f . . . . . . . . 
+            . 4 5 f f 5 f f . . . . . . . . 
+            . 4 5 5 5 5 4 . . . . . . . . . 
+            . 4 5 5 5 5 4 . . . . . . . . . 
+            . 4 5 5 5 5 4 . . . . . . . . . 
+            . . 4 5 5 5 5 4 . . . . . . . . 
+            . . 4 5 5 5 5 5 4 4 . . . . . . 
+            . . . 4 5 5 5 5 5 5 4 4 4 4 . . 
+            . . . . 4 5 5 5 5 5 5 5 5 5 4 . 
+            . . . . . 4 4 4 5 5 5 5 4 4 . . 
+            . . . . . . . . 4 4 4 4 . . . . 
+            `, monke, throwSpeed[0], throwSpeed[1])
         banana.ay = 100
         banana.lifespan = 3000
         running()
