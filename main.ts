@@ -2,17 +2,6 @@ namespace SpriteKind {
     export const Intro = SpriteKind.create()
     export const Wings = SpriteKind.create()
 }
-/**
- * Powerups
- * 
- * - Big Monke
- * 
- * - Banana Split
- * 
- * - Peeling the love
- * 
- * - Jungle Beats
- */
 function jumping () {
     if (costume == 0) {
         animation.runImageAnimation(
@@ -1480,9 +1469,18 @@ controller.combos.attachSpecialCode(function () {
     running()
     controller.combos.setTriggerType(TriggerType.Disabled)
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
-    speed += 1
+/**
+ * Powerups
+ * 
+ * - Big Monke
+ * 
+ * - Banana Split
+ * 
+ * - Peeling the love
+ * 
+ * - Jungle Beats
+ */
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     animation.runImageAnimation(
     otherSprite,
     [img`
@@ -1558,7 +1556,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     false
     )
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
+    sprites.destroy(sprite)
     sprites.destroy(otherSprite)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
+    speed += 5
+    otherSprite.setVelocity(100, 100)
 })
 let wings: Sprite = null
 let obstacles: Sprite = null
