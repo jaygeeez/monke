@@ -573,7 +573,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (gameStart == 0) {
         music.stopAllSounds()
-        music.play(music.createSong(hex`00780004080200`), music.PlaybackMode.LoopingInBackground)
+        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
         gameStart = 1
         animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
         moveSet(titleScreen, -100)
@@ -1080,6 +1080,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
 })
 info.onLifeZero(function () {
+    music.stopAllSounds()
     game.setGameOverScoringType(game.ScoringType.HighScore)
     game.setGameOverEffect(false, effects.dissolve)
     game.gameOver(false)
@@ -1555,6 +1556,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     50,
     false
     )
+    otherSprite.setKind(SpriteKind.Wings)
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     sprites.destroy(sprite)
     sprites.destroy(otherSprite)
