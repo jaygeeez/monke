@@ -1,7 +1,30 @@
 namespace SpriteKind {
     export const Intro = SpriteKind.create()
     export const Wings = SpriteKind.create()
+    export const Tile = SpriteKind.create()
 }
+/**
+ * when the player touches the enemy
+ * 
+ * minus 1 to life
+ * 
+ * play a spooky sound
+ * 
+ * add 5 to speed
+ * 
+ * set enemy speed to 100 for x and y
+ */
+/**
+ * Powerups
+ * 
+ * - Big Monke
+ * 
+ * - Banana Split
+ * 
+ * - Peeling the love
+ * 
+ * - Jungle Beats
+ */
 function jumping () {
     if (costume == 0) {
         animation.runImageAnimation(
@@ -357,183 +380,6 @@ function jumping () {
         75,
         false
         )
-    } else {
-        animation.runImageAnimation(
-        monke,
-        [img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            f f . c d b e e d d c d d d d c 
-            f e f . c f e e d d d c c c c c 
-            f e f . . f f e e d d d d d f . 
-            f e f . f e e e e f f f f f . . 
-            f e f f e e e e e e e f . . . . 
-            . f f e e e e f e f f e f . . . 
-            . . f e e e e f e f f e f . . . 
-            . . . f e f f b d f b d f . . . 
-            . . . f d b b d d c d d f . . . 
-            . . . f f f f f f f f f . . . . 
-            `,img`
-            . . . . . f f f f f . . . . . . 
-            . . . . f e e e e f . . . . . . 
-            . . . f f f f f f . . . . . . . 
-            f f f e e f . . . c c f . . . . 
-            f d e e e e f . c d d d f . . . 
-            f b f e e e e f f b b d f f . . 
-            f b f e e e e f e e e e f e f . 
-            f d b f f e e e e e e e f e e f 
-            f d d e e e e e d d d f f e e f 
-            f c f f f e f d d d d f f d e f 
-            f d b f f e f d d c d f b d e f 
-            f d d e e f f d c d d d f d e f 
-            . f f f f . f d c d e f f d f . 
-            . . . . . . f d c d e f f f . . 
-            . . . . . . . f c d d f b . . . 
-            . . . . . . . . c c c . . . . . 
-            `,img`
-            . . . . f f f f f f f f f . . . 
-            . . . f d d c d d b b d f . . . 
-            . . . f d b f d b f f e f . . . 
-            . . . f e f f e f e e e e f . . 
-            . . . f e f f e f e e e e f f . 
-            . . . . f e e e e e e e f f e f 
-            . . f f f f f e e e e f . f e f 
-            . f d d d d d e e f f . . f e f 
-            c c c c c d d d e e f c . f e f 
-            c d d d d c d d e e b d c . f f 
-            c d e e d d d d e e b d c . . . 
-            . f f f d f f f e e d d f . . . 
-            . b f f f b f f f f f f . . . . 
-            . . f d d d d e e e f . . . . . 
-            . . . f e e e e e f . . . . . . 
-            . . . . f f f f f . . . . . . . 
-            `,img`
-            . . . . . c c c . . . . . . . . 
-            . . . b f d d c f . . . . . . . 
-            . . f f f e d c d f . . . . . . 
-            . f d f f e d c d f . f f f f . 
-            f e d f d d d c d f f e e d d f 
-            f e d b f d c d d f e f f b d f 
-            f e d f f d d d d f e f f f c f 
-            f e e f f d d d e e e e e d d f 
-            f e e f e e e e e e e f f b d f 
-            . f e f e e e e f e e e e f b f 
-            . . f f d b b f f e e e e f b f 
-            . . . f d d d c . f e e e e d f 
-            . . . . f c c . . . f e e f f f 
-            . . . . . . . f f f f f f . . . 
-            . . . . . . f e e e e f . . . . 
-            . . . . . . f f f f f . . . . . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            f f . c d b e e d d c d d d d c 
-            f e f . c f e e d d d c c c c c 
-            f e f . . f f e e d d d d d f . 
-            f e f . f e e e e f f f f f . . 
-            f e f f e e e e e e e f . . . . 
-            . f f e e e e f e f f e f . . . 
-            . . f e e e e f e f f e f . . . 
-            . . . f e f f b d f b d f . . . 
-            . . . f d b b d d c d d f . . . 
-            . . . f f f f f f f f f . . . . 
-            `,img`
-            . . . . . f f f f f . . . . . . 
-            . . . . f e e e e f . . . . . . 
-            . . . f f f f f f . . . . . . . 
-            f f f e e f . . . c c f . . . . 
-            f d e e e e f . c d d d f . . . 
-            f b f e e e e f f b b d f f . . 
-            f b f e e e e f e e e e f e f . 
-            f d b f f e e e e e e e f e e f 
-            f d d e e e e e d d d f f e e f 
-            f c f f f e f d d d d f f d e f 
-            f d b f f e f d d c d f b d e f 
-            f d d e e f f d c d d d f d e f 
-            . f f f f . f d c d e f f d f . 
-            . . . . . . f d c d e f f f . . 
-            . . . . . . . f c d d f b . . . 
-            . . . . . . . . c c c . . . . . 
-            `,img`
-            . . . . f f f f f f f f f . . . 
-            . . . f d d c d d b b d f . . . 
-            . . . f d b f d b f f e f . . . 
-            . . . f e f f e f e e e e f . . 
-            . . . f e f f e f e e e e f f . 
-            . . . . f e e e e e e e f f e f 
-            . . f f f f f e e e e f . f e f 
-            . f d d d d d e e f f . . f e f 
-            c c c c c d d d e e f c . f e f 
-            c d d d d c d d e e b d c . f f 
-            c d e e d d d d e e b d c . . . 
-            . f f f d f f f e e d d f . . . 
-            . b f f f b f f f f f f . . . . 
-            . . f d d d d e e e f . . . . . 
-            . . . f e e e e e f . . . . . . 
-            . . . . f f f f f . . . . . . . 
-            `,img`
-            . . . . . c c c . . . . . . . . 
-            . . . b f d d c f . . . . . . . 
-            . . f f f e d c d f . . . . . . 
-            . f d f f e d c d f . f f f f . 
-            f e d f d d d c d f f e e d d f 
-            f e d b f d c d d f e f f b d f 
-            f e d f f d d d d f e f f f c f 
-            f e e f f d d d e e e e e d d f 
-            f e e f e e e e e e e f f b d f 
-            . f e f e e e e f e e e e f b f 
-            . . f f d b b f f e e e e f b f 
-            . . . f d d d c . f e e e e d f 
-            . . . . f c c . . . f e e f f f 
-            . . . . . . . f f f f f f . . . 
-            . . . . . . f e e e e f . . . . 
-            . . . . . . f f f f f . . . . . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            f f . c d b e e d d c d d d d c 
-            f e f . c f e e d d d c c c c c 
-            f e f . . f f e e d d d d d f . 
-            f e f . f e e e e f f f f f . . 
-            f e f f e e e e e e e f . . . . 
-            . f f e e e e f e f f e f . . . 
-            . . f e e e e f e f f e f . . . 
-            . . . f e f f b d f b d f . . . 
-            . . . f d b b d d c d d f . . . 
-            . . . f f f f f f f f f . . . . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            f f . c d b e e d d c d d d d c 
-            f e f . c f e e d d d c c c c c 
-            f e f . . f f e e d d d d d f . 
-            f e f . f e e e e f f f f f . . 
-            f e f f e e e e e e e f . . . . 
-            . f f e e e e f e f f e f . . . 
-            . . f e e e e f e f f e f . . . 
-            . . . f e f f b d f b d f . . . 
-            . . . f d b b d d c d d f . . . 
-            . . . f f f f f f f f f . . . . 
-            `],
-        75,
-        false
-        )
     }
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -810,119 +656,13 @@ function throwing () {
         100,
         false
         )
-    } else {
-        animation.runImageAnimation(
-        monke,
-        [img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            . . . c d b e e d d c d d d d c 
-            . . . . c f e e e d d c c c c c 
-            . . . . . f f e e e d d d d f . 
-            . . . . f 8 8 8 1 f f f f f . . 
-            f f . f 8 8 8 8 1 1 f f . . . . 
-            f e . f 8 8 f 8 8 f 8 8 f . . . 
-            f e . f 8 8 8 f 8 8 f 8 8 f . . 
-            f e f f 8 f b b f b d f d b f . 
-            f f f f 8 b d d f d d f d d f . 
-            . f f f f f f f f f f f f f . . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            . . . c d b e e d d c d d d d c 
-            . . . . c f e e e d d c c c c c 
-            . . . . . f f e e e d d d d f . 
-            . . . . f 8 8 1 f f e e e f . . 
-            f f . f 8 8 8 1 1 f f f f f . . 
-            f e . f 8 8 f f 8 8 f b d f . . 
-            f e . f 8 8 8 f f 8 f d d f f . 
-            f e f f 8 f b b 8 f f f f f f . 
-            f f f f 8 b d d 8 8 8 f d d f . 
-            . f f f f f f f f f f f f f . . 
-            `,img`
-            . . . . . . f f f f f . . . . . 
-            . . . . . f e e e e e f . . . . 
-            . . . . f e e d d d d d f . . . 
-            . . . f f f f f b f f f f b . . 
-            . . f d d e d f f d e e f f c . 
-            . f f f d e d d c d d d d c c . 
-            f d b f d e d d d c c c c d c . 
-            f d d f f e e d d d d d d c . . 
-            f f f 8 f f e e d d d d c . . . 
-            . . f 8 8 8 f 1 1 f f f . . . . 
-            . f f f 8 8 8 1 1 8 8 f . . . . 
-            . f e f f f 8 1 1 8 8 8 f . . . 
-            . f e f f f f f 8 8 8 8 f f . . 
-            . f e f f f b b f 8 8 f d b f . 
-            . f f f f b d d f 8 8 f d d f . 
-            . . f f f f f f f f f f f f f . 
-            `,img`
-            . . . . . . f f f f f . . . . . 
-            . . . . . f e e e e e f . . . . 
-            . . . . f e d d d d d d f . . . 
-            . . . f f f f b f f f f b f . . 
-            . . f d e d f f d e e f f d c . 
-            . . f f e d d c d d d d c d c . 
-            f f f f e d d d c c c c d d c . 
-            f d b f f e d d d d d d d c . . 
-            f d d f f f e e d d d d c . . . 
-            f f f 8 8 8 f 1 1 f f f . . . . 
-            . f f f 8 8 8 1 1 8 8 f . . . . 
-            . f e f f f 8 1 1 8 8 8 f . . . 
-            . f e f f f f f 1 8 8 8 f f . . 
-            . f e f f f b b f 8 8 f d b f . 
-            . f f f f b d d f f f f d d f . 
-            . . f f f f f f f f f f f f f . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f e e d d d d d f . . 
-            . . . f d f f f f f f b f f c . 
-            . . . c d b e e d f f f e e d c 
-            . . . c d b e e d d c d d f f c 
-            . . . . f e e e f f f 8 f d d f 
-            . . . . f f f f f 8 8 8 f d d f 
-            . f f . f f 8 8 8 8 8 f f f f f 
-            . f e . f f 8 8 8 f f 8 f f f . 
-            . f e f f f b b f f 8 f d b f . 
-            . f e f f b d d f 8 8 f d d f . 
-            . . f f f f f f f f f f f f f . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f f b f f . . 
-            . . . f d d e e d f f f d d c . 
-            . . . c d b e e d d d d e e d c 
-            . . . c d b e e d d c d d d d c 
-            . . . f c f e e d d d f f f f c 
-            . . . . f e e e e f f f d b f . 
-            . . . . f e e f f f 8 f d d f . 
-            . f f . f f f 8 8 8 8 f f f . . 
-            . f e . f f 8 8 8 8 f 8 8 f . . 
-            . f e f f f f f f f 8 8 8 f f . 
-            . f e f f f b b f 8 8 f d b f . 
-            . f f f f b d d 8 8 f f d d f . 
-            . . f f f f f f f f f f f f f . 
-            `],
-        100,
-        false
-        )
     }
 }
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [25, -140]
+})
+controller.combos.attachCombo("a+b", function () {
+    monke.sayText("nice ab", 1000, false)
 })
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity, 0)
@@ -993,7 +733,7 @@ function restartGame () {
     titleScreen,
     animation.animationPresets(animation.bobbing),
     7500,
-    false
+    true
     )
     titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
     aButton = sprites.create(img`
@@ -1270,98 +1010,6 @@ function running () {
         100,
         true
         )
-    } else {
-        animation.runImageAnimation(
-        monke,
-        [img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            f f . c d b e e d d c d d d d c 
-            f e f . c f e e d d d c c c c c 
-            f e f . . f f e e d d d d d f . 
-            f e f . f e e e e f f f f f . . 
-            f e f f e e e e e e e f . . . . 
-            . f f e e e e f e f f e f . . . 
-            . . f e e e e f e f f e f . . . 
-            . . . f e f f b d f b d f . . . 
-            . . . f d b b d d c d d f . . . 
-            . . . f f f f f f f f f . . . . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . . f f f f f b f f f b . 
-            . . . . f f f e f f f d f f f . 
-            . . . f d d e e d d d d e e d c 
-            . . . c d b e e d d c d d d d c 
-            f f . c d b e e e d d c c c c c 
-            f e f . c f f e e e d d d d f . 
-            f e f . f e e e e f f f f f f . 
-            f e f f e e e e e e e f f f f . 
-            . f f e e e e f e f d d f d d f 
-            . . f e e e e f e f b d f b d f 
-            . . f e f f f f f f f f f f f f 
-            . . f d d c f . . . . . . . . . 
-            . . f f f f . . . . . . . . . . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . f f e e e d d d d f . . 
-            . . . f f f f e d d d d d d c . 
-            . . . c d f f f f f b f f f b . 
-            f f . c d b e e f f f d f f f c 
-            f e f . c f e e d d d d e e d c 
-            f e f . . f e e e d c d d d d c 
-            f e f . . f f e e e d c c c f . 
-            f e f . f e e e e f f f f f . . 
-            . f f f e e e e e e e f . . . . 
-            . . f e e e e f e e f e f f . . 
-            . . f e e e f f f e e f f e f . 
-            . f b f f f f f f c d d b d d f 
-            . f d d c f . . f d d d c d d f 
-            . . f f f . . . f f f f f f f . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . f f f e e e e e f . . . 
-            . . . f d f e e e e d d d f . . 
-            . . . c d b f e e d d d d d c . 
-            . . . c d b e f d d d d d d c . 
-            . f f . c f e e f f b f f f b c 
-            f e f . . f e e f f f d f f f c 
-            f e f . . f e e d d d d e e d c 
-            f e f . . f f e e d c d d d f . 
-            f e f . f e e e e e d f f f . . 
-            . f f f e e e e e e e f . . . . 
-            . . f f b e e e e e f f . . . . 
-            . . f f d d c e e f f e f . . . 
-            . . . . f f f c d d b d d f . . 
-            . . . . . f f d d d c d d f . . 
-            . . . . . . f f f f f f f . . . 
-            `,img`
-            . . . . . . . f f f f f . . . . 
-            . . . . . . f e e e e e f . . . 
-            . . . . . f e e e d d d d f . . 
-            . . . . f f f f f f b f f f b . 
-            . . . f d d e e f f f d f f f . 
-            . . . c d b e e d d d d e e d c 
-            . . . c d b e e d d c d d d d c 
-            . . . . c f e e e d d c c c c c 
-            . . . . . f f e e e d d d d f . 
-            . . . . f e e e e f f f f f . . 
-            f f . f e e e e e e f f . . . . 
-            f e . f e e f e e f e e f . . . 
-            f e . f e e e f e e f e e f . . 
-            f e f f e f b b f b d f d b f . 
-            f f f f e b d d f d d f d d f . 
-            . f f f f f f f f f f f f f . . 
-            `],
-        100,
-        true
-        )
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
@@ -1465,22 +1113,50 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
         gameStart += 1
     }
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite)
+    tileNumber += 1
+    sprite.sayText(tileNumber)
+    if (tileNumber == monke_list.length) {
+        sprite.sayText("beeg monke")
+    }
+    sprite.scale = 2
+})
+function randomSpawn (mySprite: Sprite) {
+    if (Math.percentChance(33)) {
+        tiles.placeOnTile(mySprite, tiles.getTileLocation(15, 14))
+    } else if (Math.percentChance(66)) {
+        tiles.placeOnTile(mySprite, tiles.getTileLocation(15, 15))
+    } else {
+        wings = sprites.create(img`
+            . . . . . . . . . 9 9 1 1 9 9 . 
+            . . . . . . . . 9 1 1 1 1 1 9 9 
+            . . . . . . . 9 1 1 1 1 1 9 9 . 
+            . . . . . . 9 1 1 1 1 9 9 9 9 9 
+            . . . . . . 9 1 1 1 1 1 1 1 1 1 
+            . . . . . 9 9 1 9 9 9 9 1 1 1 1 
+            . . . . . 9 1 1 9 1 1 9 1 1 1 9 
+            . . . . . . 9 1 1 1 1 9 1 1 9 9 
+            . . . . . . 9 1 1 9 9 9 9 9 9 . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Wings)
+        moveSet(wings, speed)
+        tiles.placeOnTile(mySprite, tiles.getTileLocation(15, 13))
+        tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
+    }
+}
 controller.combos.attachSpecialCode(function () {
     costume = 1
+    monke.sayText("cool monke :)", 1000, true)
     running()
     controller.combos.setTriggerType(TriggerType.Disabled)
 })
-/**
- * Powerups
- * 
- * - Big Monke
- * 
- * - Banana Split
- * 
- * - Peeling the love
- * 
- * - Jungle Beats
- */
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     animation.runImageAnimation(
     otherSprite,
@@ -1567,18 +1243,22 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     speed += 5
     otherSprite.setVelocity(100, 100)
 })
-let wings: Sprite = null
+let tileCollect: Sprite = null
 let obstacles: Sprite = null
+let wings: Sprite = null
 let aButton: Sprite = null
 let titleScreen: Sprite = null
 let gameStart = 0
 let banana: Sprite = null
 let bgList: Image[] = []
+let monke_list: Image[] = []
 let throwSpeed: number[] = []
+let tileNumber = 0
 let monke: Sprite = null
+let speed = 0
 let costume = 0
 costume = 0
-let speed = -100
+speed = -100
 scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -1849,8 +1529,103 @@ monke = sprites.create(img`
 tiles.placeOnTile(monke, tiles.getTileLocation(1, 11))
 monke.ay = 500
 scene.cameraFollowSprite(monke)
+jumping()
+music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 running()
+tileNumber = 0
 throwSpeed = [100, -70]
+monke_list = [
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d 5 5 4 4 4 4 d 5 5 4 e 4 
+    4 e 4 d 5 5 5 4 4 d 5 5 5 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 d 5 4 5 5 5 5 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 4 d d d d 5 5 5 5 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 5 5 5 4 4 4 4 5 5 5 4 e 4 
+    4 e 4 5 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 5 4 4 4 4 5 5 5 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 4 d 5 5 5 5 5 5 5 4 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 d d d 4 4 4 4 d d 4 e 4 
+    4 e 4 5 5 5 5 5 4 4 4 d 5 4 e 4 
+    4 e 4 5 5 4 5 5 5 4 4 5 5 4 e 4 
+    4 e 4 5 5 4 5 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 5 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 5 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 5 5 d 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 5 5 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d d d 4 4 4 4 5 d d 4 e 4 
+    4 e 4 5 5 5 4 4 4 d 5 5 5 4 e 4 
+    4 e 4 5 5 5 4 4 d 5 5 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 4 4 4 4 e 4 
+    4 e 4 d 5 5 4 5 5 5 5 4 4 4 e 4 
+    4 e 4 d 5 5 4 4 5 5 5 5 5 4 e 4 
+    4 e 4 d 5 5 4 4 4 d 5 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 d d d d d 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 5 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 d d d 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 5 4 4 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 d 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `
+]
 bgList = [
 img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -2851,6 +2626,7 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
                     . . c c c c . . . . c c c c . . 
                     . . . . . . . . . . . . . . . . 
                     `, SpriteKind.Food)
+                obstacles.startEffect(effects.starField)
             } else {
                 obstacles = sprites.create(img`
                     . . . . . . . . . . . . . . . . 
@@ -2870,6 +2646,7 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
                     . . . . f f f f . . . . f f f . 
                     . . . . . . . . . . . . . . . . 
                     `, SpriteKind.Enemy)
+                obstacles.startEffect(effects.trail)
                 animation.runImageAnimation(
                 obstacles,
                 [img`
@@ -2946,33 +2723,31 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
                 )
             }
             moveSet(obstacles, speed)
-            if (Math.percentChance(33)) {
-                tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 14))
-            } else if (Math.percentChance(66)) {
-                tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 15))
-            } else {
-                wings = sprites.create(img`
-                    . . . . . . . . . 9 9 1 1 9 9 . 
-                    . . . . . . . . 9 1 1 1 1 1 9 9 
-                    . . . . . . . 9 1 1 1 1 1 9 9 . 
-                    . . . . . . 9 1 1 1 1 9 9 9 9 9 
-                    . . . . . . 9 1 1 1 1 1 1 1 1 1 
-                    . . . . . 9 9 1 9 9 9 9 1 1 1 1 
-                    . . . . . 9 1 1 9 1 1 9 1 1 1 9 
-                    . . . . . . 9 1 1 1 1 9 1 1 9 9 
-                    . . . . . . 9 1 1 9 9 9 9 9 9 . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    . . . . . . . . . . . . . . . . 
-                    `, SpriteKind.Wings)
-                moveSet(wings, speed)
-                tiles.placeOnTile(obstacles, tiles.getTileLocation(15, 13))
-                tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
-            }
+            randomSpawn(obstacles)
+        }
+        if (Math.percentChance(10)) {
+            tileCollect = sprites.create(img`
+                4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+                4 e e e e e e e e e e e e e e 4 
+                4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+                4 e 4 d 5 5 4 4 4 4 d 5 5 4 e 4 
+                4 e 4 d 5 5 5 4 4 d 5 5 5 4 e 4 
+                4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+                4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+                4 e 4 d 5 4 5 5 5 5 4 5 5 4 e 4 
+                4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
+                4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+                4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+                4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+                4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+                4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+                4 e e e e e e e e e e e e e e 4 
+                4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+                `, SpriteKind.Tile)
+            tileCollect.setImage(monke_list[tileNumber])
+            tileCollect.startEffect(effects.clouds)
+            moveSet(tileCollect, speed)
+            randomSpawn(tileCollect)
         }
     }
 })
