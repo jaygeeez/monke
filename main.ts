@@ -4,17 +4,6 @@ namespace SpriteKind {
     export const Tile = SpriteKind.create()
 }
 /**
- * when the player touches the enemy
- * 
- * minus 1 to life
- * 
- * play a spooky sound
- * 
- * add 5 to speed
- * 
- * set enemy speed to 100 for x and y
- */
-/**
  * Powerups
  * 
  * - Big Monke
@@ -221,18 +210,6 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (gameStart == 0) {
-        music.stopAllSounds()
-        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
-        gameStart = 1
-        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
-        moveSet(titleScreen, -100)
-        moveSet(aButton, -100)
-        info.setScore(0)
-        info.setLife(3)
-    } else {
-        controller.combos.setTriggerType(TriggerType.Disabled)
-    }
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
         monke.vy = -185
         jumping()
@@ -354,6 +331,18 @@ function throwing () {
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [25, -140]
 })
+controller.combos.attachCombo("a+b", function () {
+    if (gameStart == 0) {
+        music.stopAllSounds()
+        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
+        gameStart = 1
+        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
+        moveSet(titleScreen, -100)
+        moveSet(aButton, -100)
+        info.setScore(0)
+        info.setLife(3)
+    }
+})
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity, 0)
     mySprite.lifespan = 5000
@@ -461,7 +450,7 @@ function restartGame () {
         ........ffffffffffffffff........
         `, SpriteKind.Intro)
     tiles.placeOnTile(aButton, tiles.getTileLocation(9, 15))
-    aButton.setFlag(SpriteFlag.GhostThroughWalls, true)
+    aButton.setFlag(SpriteFlag.Ghost, true)
     animation.runImageAnimation(
     aButton,
     [img`
@@ -514,6 +503,12 @@ info.onLifeZero(function () {
     game.setGameOverScoringType(game.ScoringType.HighScore)
     game.setGameOverEffect(false, effects.dissolve)
     game.gameOver(false)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
+    otherSprite.startEffect(effects.confetti, 100)
+    otherSprite.sayText("ow :(", 100, false)
+    effects.confetti.startScreenEffect(100)
+    scene.cameraShake(2, 100)
 })
 function running () {
     animation.runImageAnimation(
@@ -828,6 +823,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
+    scene.cameraShake(2, 100)
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     speed += 5
     otherSprite.setVelocity(100, 100)
