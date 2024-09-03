@@ -198,6 +198,10 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
         monke.vy = -50
     }
 })
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Tile, function (sprite, otherSprite) {
+    randomSpawn(otherSprite)
+    randomSpawn(sprite)
+})
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
         throwing()
@@ -345,9 +349,17 @@ controller.combos.attachCombo("a+b", function () {
 })
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity, 0)
-    mySprite.lifespan = 5000
     mySprite.setFlag(SpriteFlag.GhostThroughWalls, true)
+    if (mySprite.kind() != SpriteKind.Tile) {
+        mySprite.lifespan = 5000
+    } else {
+        mySprite.lifespan = 60000
+    }
 }
+sprites.onOverlap(SpriteKind.Food, SpriteKind.Tile, function (sprite, otherSprite) {
+    randomSpawn(otherSprite)
+    randomSpawn(sprite)
+})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [100, -70]
 })
@@ -629,11 +641,13 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
-    sprites.destroy(otherSprite)
+    tiles.placeOnTile(otherSprite, tiles.getTileLocation(2 + tileNumber * 2, 10))
+    otherSprite.setVelocity(0, 0)
     tileNumber += 1
     sprite.sayText(tileNumber)
     if (tileNumber == monke_list.length) {
-        sprite.sayText("beeg monke")
+        tileNumber = 0
+        sprite.sayText("beeg monke", 5000, false)
     }
 })
 function randomSpawn (mySprite: Sprite) {
@@ -2402,7 +2416,7 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 `, SpriteKind.Tile)
             tileCollect.setImage(monke_list[tileNumber])
-            tileCollect.startEffect(effects.clouds)
+            tileCollect.startEffect(effects.rings, 1000)
             moveSet(tileCollect, speed)
             randomSpawn(tileCollect)
         }
