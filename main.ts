@@ -336,9 +336,9 @@ controller.combos.attachCombo("a+b", function () {
         music.stopAllSounds()
         music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
         gameStart = 1
+        titleScreen.setFlag(SpriteFlag.Ghost, true)
         animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
         moveSet(titleScreen, -100)
-        moveSet(aButton, -100)
         info.setScore(0)
         info.setLife(3)
     }
@@ -415,82 +415,6 @@ function restartGame () {
     true
     )
     titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
-    aButton = sprites.create(img`
-        ..........666666666666..........
-        ........6667777777777666........
-        ......66677777777777777666......
-        .....6677777779999777777766.....
-        ....667777779966669977777766....
-        ....677777799668866117777776....
-        ...66777779966877861197777766...
-        ...66777799668677686699777766...
-        ...88777796688888888669777788...
-        ...88777788888888888888777788...
-        ...88977888679999997688877988...
-        ...88977886777777777768877988...
-        ...88997777777777777777779988...
-        ...88799777777777777777711788...
-        ...88679997777777777779117688...
-        ..cc866679999999999999976668cc..
-        .ccbc6666679999999999766666cbcc.
-        .fcbcc66666666666666666666ccbcf.
-        .fcbbcc666666666666666666ccbdcf.
-        .f8bbbccc66666666666666cccbddcf.
-        .f8cbbbbccccccccccccccccbdddbcf.
-        .f8ccbbbbbccccccccccccb111ddccf.
-        .f6ccccbbbddddddddddddd111dcccf.
-        .f6ccccccbbddddddddddddddbbcccf.
-        .f6cccccccccccccbbbbbbbbbdbcccf.
-        ..f6cccccccccbbbbbbbbbbbddbccf..
-        ..f6cccccccccbbbbbbbbbbbddbccf..
-        ..ff6ccccccccbbbbbbbbbbbddbcff..
-        ...ff6cccccccbbbbbbbbbbbddbff...
-        ....ffcccccccbbbbbbbbbbbdbff....
-        ......ffccccbbbbbbbbbbbbff......
-        ........ffffffffffffffff........
-        `, SpriteKind.Intro)
-    tiles.placeOnTile(aButton, tiles.getTileLocation(9, 15))
-    aButton.setFlag(SpriteFlag.Ghost, true)
-    animation.runImageAnimation(
-    aButton,
-    [img`
-        . . . . 6 6 6 6 6 6 6 . . . . . 
-        . . 6 6 7 7 7 7 7 7 7 6 6 . . . 
-        . 6 6 7 7 7 8 8 8 7 7 7 6 6 . . 
-        . 6 7 7 7 8 8 7 8 8 7 7 7 6 . . 
-        . c 7 7 8 8 8 8 8 8 8 7 7 c . . 
-        . c 9 7 8 7 7 7 7 7 8 7 9 c . . 
-        . c 9 9 7 7 7 7 7 7 7 9 9 c . . 
-        . c 6 6 9 9 9 9 9 9 9 6 6 c . . 
-        c c 6 6 6 6 6 6 6 6 6 6 6 c c . 
-        c d c c 6 6 6 6 6 6 6 c c d c . 
-        c d d d c c c c c c c d d d c . 
-        c c b d d d d d d d d d b c c . 
-        c c c c c b b b b b c c c c c . 
-        c c b b b b b b b b b b b c c . 
-        . c c b b b b b b b b b c c . . 
-        . . . c c c c c c c c c . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . 6 6 6 6 6 6 6 . . . . . 
-        . . 6 6 7 7 7 7 7 7 7 6 6 . . . 
-        . 6 6 7 7 7 8 8 8 7 7 7 6 6 . . 
-        . 6 7 7 7 8 8 7 8 8 7 7 7 6 . . 
-        . c 7 7 8 8 8 8 8 8 8 7 7 c . . 
-        . c 9 7 8 7 7 7 7 7 8 7 9 c . . 
-        c c 9 9 7 7 7 7 7 7 7 9 9 c c . 
-        c c 6 6 9 9 9 9 9 9 9 6 6 c c . 
-        c d d d c c c c c c c d d d c . 
-        c c b d d d d d d d d d b c c . 
-        c c c c c b b b b b c c c c c . 
-        c c b b b b b b b b b b b c c . 
-        . c c b b b b b b b b b c c . . 
-        . . . c c c c c c c c c . . . . 
-        `],
-    500,
-    true
-    )
 }
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     monke.vy += 50
@@ -506,7 +430,7 @@ info.onLifeZero(function () {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.confetti, 100)
-    otherSprite.sayText("ow :(", 100, false)
+    otherSprite.sayText("Press A+B to start!", 100, false)
     effects.confetti.startScreenEffect(100)
     scene.cameraShake(2, 100)
 })
@@ -823,7 +747,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
-    scene.cameraShake(2, 100)
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     speed += 5
     otherSprite.setVelocity(100, 100)
@@ -831,7 +754,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 let tileCollect: Sprite = null
 let obstacles: Sprite = null
 let wings: Sprite = null
-let aButton: Sprite = null
 let titleScreen: Sprite = null
 let gameStart = 0
 let banana: Sprite = null
@@ -2229,81 +2151,233 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
                     . . . . f f f f . . . . f f f . 
                     . . . . . . . . . . . . . . . . 
                     `, SpriteKind.Enemy)
+                if (Math.percentChance(33)) {
+                    animation.runImageAnimation(
+                    obstacles,
+                    [img`
+                        . . . . . . . 8 8 8 8 8 . . . . 
+                        . . . . . 8 8 6 6 6 6 6 8 . . . 
+                        . . . . 8 8 6 6 6 6 6 6 6 8 . . 
+                        . . . . 8 9 7 6 6 6 6 6 7 b 8 . 
+                        . . 8 8 9 9 7 7 6 6 6 6 7 9 b 8 
+                        . 8 6 6 9 9 7 7 7 6 6 6 7 9 9 8 
+                        8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
+                        8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
+                        8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
+                        8 6 8 8 8 8 b b b b 8 b b 8 b 8 
+                        8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
+                        8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 f f f 8 8 8 8 f f f 8 8 
+                        . 8 8 f b c c f 8 8 f b c c f . 
+                        . . . . b b f . . . . b b f . . 
+                        `,img`
+                        . . . . . . . 8 8 8 8 8 . . . . 
+                        . . . . . 8 8 6 6 6 6 6 8 . . . 
+                        . . . . 8 8 6 6 6 6 6 6 6 8 . . 
+                        . . . . 8 9 7 7 7 6 6 6 7 b 8 . 
+                        . . 8 8 9 9 7 7 7 7 6 6 7 9 b 8 
+                        . 8 6 6 9 9 7 7 7 7 7 6 7 9 9 8 
+                        8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
+                        8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
+                        8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
+                        8 6 8 8 8 8 b b b b 8 b b 8 b 8 
+                        8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
+                        8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 f f f 8 8 8 8 f f f 8 8 
+                        . 8 8 f f f b f 8 8 f f f b f . 
+                        . . . . c b b . . . . c b b . . 
+                        `,img`
+                        . . . . . . . 8 8 8 8 8 . . . . 
+                        . . . . . 8 8 6 6 6 6 6 8 . . . 
+                        . . . . 8 8 6 6 6 6 6 6 6 8 . . 
+                        . . . . 8 9 7 6 6 6 7 7 7 b 8 . 
+                        . . 8 8 9 9 7 6 6 6 7 7 7 9 b 8 
+                        . 8 6 6 9 9 7 7 6 6 6 7 7 9 9 8 
+                        8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
+                        8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
+                        8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
+                        8 6 8 8 8 8 b b b b 8 b b 8 b 8 
+                        8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
+                        8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 f f f 8 8 8 8 f f f 8 8 
+                        . 8 8 f c b b f 8 8 f c b b f . 
+                        . . . . f f f . . . . f f f . . 
+                        `,img`
+                        . . . . . . . 8 8 8 8 8 . . . . 
+                        . . . . . 8 8 6 6 6 6 6 8 . . . 
+                        . . . . 8 8 6 6 6 6 6 6 6 8 . . 
+                        . . . . 8 9 7 6 6 6 6 6 7 b 8 . 
+                        . . 8 8 9 9 7 6 6 6 6 6 7 9 b 8 
+                        . 8 6 6 9 9 7 7 6 6 6 6 7 9 9 8 
+                        8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
+                        8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
+                        8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
+                        8 6 8 8 8 8 b b b b 8 b b 8 b 8 
+                        8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
+                        8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
+                        8 8 8 8 f f f 8 8 8 8 f f f 8 8 
+                        . 8 8 f b b c f 8 8 f b b c f . 
+                        . . . . c f f . . . . c f f . . 
+                        `],
+                    100,
+                    true
+                    )
+                } else if (Math.percentChance(33)) {
+                    animation.runImageAnimation(
+                    obstacles,
+                    [img`
+                        . . . . . . . e e e e e . . . . 
+                        . . . . . e e 2 2 2 2 2 e . . . 
+                        . . . . e e 2 2 2 2 2 2 2 e . . 
+                        . . . . e 9 4 2 2 2 2 2 4 b e . 
+                        . . e e 9 9 4 4 2 2 2 2 4 9 b e 
+                        . e 2 2 9 9 4 4 4 2 2 2 4 9 9 e 
+                        e 2 2 2 9 9 2 4 4 4 4 4 2 9 9 e 
+                        e 2 2 2 9 9 e e e e e e e 9 9 e 
+                        e 2 2 2 9 b e b b b e b e b 9 e 
+                        e 2 e e e e b b b b e b b e b e 
+                        e e 3 3 e e 2 2 2 2 e 2 2 e e e 
+                        e 3 3 e e e e e e e e e e e e e 
+                        e e e e e e e e e e e e e e e e 
+                        e e e e f f f e e e e f f f e e 
+                        . e e f b c c f e e f b c c f . 
+                        . . . . b b f . . . . b b f . . 
+                        `,img`
+                        . . . . . . . e e e e e . . . . 
+                        . . . . . e e 2 2 2 2 2 e . . . 
+                        . . . . e e 2 2 2 2 2 2 2 e . . 
+                        . . . . e 9 4 4 4 2 2 2 4 b e . 
+                        . . e e 9 9 4 4 4 4 2 2 4 9 b e 
+                        . e 2 2 9 9 4 4 4 4 4 2 4 9 9 e 
+                        e 2 2 2 9 9 2 4 4 4 4 4 2 9 9 e 
+                        e 2 2 2 9 9 e e e e e e e 9 9 e 
+                        e 2 2 2 9 b e b b b e b e b 9 e 
+                        e 2 e e e e b b b b e b b e b e 
+                        e e 3 3 e e 2 2 2 2 e 2 2 e e e 
+                        e 3 3 e e e e e e e e e e e e e 
+                        e e e e e e e e e e e e e e e e 
+                        e e e e f f f e e e e f f f e e 
+                        . e e f f f b f e e f f f b f . 
+                        . . . . c b b . . . . c b b . . 
+                        `,img`
+                        . . . . . . . e e e e e . . . . 
+                        . . . . . e e 2 2 2 2 2 e . . . 
+                        . . . . e e 2 2 2 2 2 2 2 e . . 
+                        . . . . e 9 4 2 2 2 4 4 4 b e . 
+                        . . e e 9 9 4 2 2 2 4 4 4 9 b e 
+                        . e 2 2 9 9 4 4 2 2 2 4 4 9 9 e 
+                        e 2 2 2 9 9 2 4 4 4 4 4 2 9 9 e 
+                        e 2 2 2 9 9 e e e e e e e 9 9 e 
+                        e 2 2 2 9 b e b b b e b e b 9 e 
+                        e 2 e e e e b b b b e b b e b e 
+                        e e 3 3 e e 2 2 2 2 e 2 2 e e e 
+                        e 3 3 e e e e e e e e e e e e e 
+                        e e e e e e e e e e e e e e e e 
+                        e e e e f f f e e e e f f f e e 
+                        . e e f c b b f e e f c b b f . 
+                        . . . . f f f . . . . f f f . . 
+                        `,img`
+                        . . . . . . . e e e e e . . . . 
+                        . . . . . e e 2 2 2 2 2 e . . . 
+                        . . . . e e 2 2 2 2 2 2 2 e . . 
+                        . . . . e 9 4 2 2 2 2 2 4 b e . 
+                        . . e e 9 9 4 2 2 2 2 2 4 9 b e 
+                        . e 2 2 9 9 4 4 2 2 2 2 4 9 9 e 
+                        e 2 2 2 9 9 2 4 4 4 4 4 2 9 9 e 
+                        e 2 2 2 9 9 e e e e e e e 9 9 e 
+                        e 2 2 2 9 b e b b b e b e b 9 e 
+                        e 2 e e e e b b b b e b b e b e 
+                        e e 3 3 e e 2 2 2 2 e 2 2 e e e 
+                        e 3 3 e e e e e e e e e e e e e 
+                        e e e e e e e e e e e e e e e e 
+                        e e e e f f f e e e e f f f e e 
+                        . e e f b b c f e e f b b c f . 
+                        . . . . c f f . . . . c f f . . 
+                        `],
+                    100,
+                    true
+                    )
+                } else {
+                    animation.runImageAnimation(
+                    obstacles,
+                    [img`
+                        . . . . . . . a a a a a . . . . 
+                        . . . . . a a 3 3 3 3 3 a . . . 
+                        . . . . a a 3 3 3 3 3 3 3 a . . 
+                        . . . . a 9 d 3 3 3 3 3 d b a . 
+                        . . a a 9 9 d d 3 3 3 3 d 9 b a 
+                        . a 3 3 9 9 d d d 3 3 3 d 9 9 a 
+                        a 3 3 3 9 9 3 d d d d d 3 9 9 a 
+                        a 3 3 3 9 9 a a a a a a a 9 9 a 
+                        a 3 3 3 9 b a b b b a b a b 9 a 
+                        a 3 a a a a b b b b a b b a b a 
+                        a a 3 3 a a 3 3 3 3 a 3 3 a a a 
+                        a 3 3 a a a a a a a a a a a a a 
+                        a a a a a a a a a a a a a a a a 
+                        a a a a f f f a a a a f f f a a 
+                        . a a f b c c f a a f b c c f . 
+                        . . . . b b f . . . . b b f . . 
+                        `,img`
+                        . . . . . . . a a a a a . . . . 
+                        . . . . . a a 3 3 3 3 3 a . . . 
+                        . . . . a a 3 3 3 3 3 3 3 a . . 
+                        . . . . a 9 d d d 3 3 3 d b a . 
+                        . . a a 9 9 d d d d 3 3 d 9 b a 
+                        . a 3 3 9 9 d d d d d 3 d 9 9 a 
+                        a 3 3 3 9 9 3 d d d d d 3 9 9 a 
+                        a 3 3 3 9 9 a a a a a a a 9 9 a 
+                        a 3 3 3 9 b a b b b a b a b 9 a 
+                        a 3 a a a a b b b b a b b a b a 
+                        a a 3 3 a a 3 3 3 3 a 3 3 a a a 
+                        a 3 3 a a a a a a a a a a a a a 
+                        a a a a a a a a a a a a a a a a 
+                        a a a a f f f a a a a f f f a a 
+                        . a a f f f b f a a f f f b f . 
+                        . . . . c b b . . . . c b b . . 
+                        `,img`
+                        . . . . . . . a a a a a . . . . 
+                        . . . . . a a 3 3 3 3 3 a . . . 
+                        . . . . a a 3 3 3 3 3 3 3 a . . 
+                        . . . . a 9 d 3 3 3 d d d b a . 
+                        . . a a 9 9 d 3 3 3 d d d 9 b a 
+                        . a 3 3 9 9 d d 3 3 3 d d 9 9 a 
+                        a 3 3 3 9 9 3 d d d d d 3 9 9 a 
+                        a 3 3 3 9 9 a a a a a a a 9 9 a 
+                        a 3 3 3 9 b a b b b a b a b 9 a 
+                        a 3 a a a a b b b b a b b a b a 
+                        a a 3 3 a a 3 3 3 3 a 3 3 a a a 
+                        a 3 3 a a a a a a a a a a a a a 
+                        a a a a a a a a a a a a a a a a 
+                        a a a a f f f a a a a f f f a a 
+                        . a a f c b b f a a f c b b f . 
+                        . . . . f f f . . . . f f f . . 
+                        `,img`
+                        . . . . . . . a a a a a . . . . 
+                        . . . . . a a 3 3 3 3 3 a . . . 
+                        . . . . a a 3 3 3 3 3 3 3 a . . 
+                        . . . . a 9 d 3 3 3 3 3 d b a . 
+                        . . a a 9 9 d 3 3 3 3 3 d 9 b a 
+                        . a 3 3 9 9 d d 3 3 3 3 d 9 9 a 
+                        a 3 3 3 9 9 3 d d d d d 3 9 9 a 
+                        a 3 3 3 9 9 a a a a a a a 9 9 a 
+                        a 3 3 3 9 b a b b b a b a b 9 a 
+                        a 3 a a a a b b b b a b b a b a 
+                        a a 3 3 a a 3 3 3 3 a 3 3 a a a 
+                        a 3 3 a a a a a a a a a a a a a 
+                        a a a a a a a a a a a a a a a a 
+                        a a a a f f f a a a a f f f a a 
+                        . a a f b b c f a a f b b c f . 
+                        . . . . c f f . . . . c f f . . 
+                        `],
+                    100,
+                    true
+                    )
+                }
                 obstacles.startEffect(effects.trail)
-                animation.runImageAnimation(
-                obstacles,
-                [img`
-                    . . . . . . . 8 8 8 8 8 . . . . 
-                    . . . . . 8 8 6 6 6 6 6 8 . . . 
-                    . . . . 8 8 6 6 6 6 6 6 6 8 . . 
-                    . . . . 8 9 7 6 6 6 6 6 7 b 8 . 
-                    . . 8 8 9 9 7 7 6 6 6 6 7 9 b 8 
-                    . 8 6 6 9 9 7 7 7 6 6 6 7 9 9 8 
-                    8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
-                    8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
-                    8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
-                    8 6 8 8 8 8 b b b b 8 b b 8 b 8 
-                    8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
-                    8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 f f f 8 8 8 8 f f f 8 8 
-                    . 8 8 f b c c f 8 8 f b c c f . 
-                    . . . . b b f . . . . b b f . . 
-                    `,img`
-                    . . . . . . . 8 8 8 8 8 . . . . 
-                    . . . . . 8 8 6 6 6 6 6 8 . . . 
-                    . . . . 8 8 6 6 6 6 6 6 6 8 . . 
-                    . . . . 8 9 7 7 7 6 6 6 7 b 8 . 
-                    . . 8 8 9 9 7 7 7 7 6 6 7 9 b 8 
-                    . 8 6 6 9 9 7 7 7 7 7 6 7 9 9 8 
-                    8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
-                    8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
-                    8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
-                    8 6 8 8 8 8 b b b b 8 b b 8 b 8 
-                    8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
-                    8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 f f f 8 8 8 8 f f f 8 8 
-                    . 8 8 f f f b f 8 8 f f f b f . 
-                    . . . . c b b . . . . c b b . . 
-                    `,img`
-                    . . . . . . . 8 8 8 8 8 . . . . 
-                    . . . . . 8 8 6 6 6 6 6 8 . . . 
-                    . . . . 8 8 6 6 6 6 6 6 6 8 . . 
-                    . . . . 8 9 7 6 6 6 7 7 7 b 8 . 
-                    . . 8 8 9 9 7 6 6 6 7 7 7 9 b 8 
-                    . 8 6 6 9 9 7 7 6 6 6 7 7 9 9 8 
-                    8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
-                    8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
-                    8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
-                    8 6 8 8 8 8 b b b b 8 b b 8 b 8 
-                    8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
-                    8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 f f f 8 8 8 8 f f f 8 8 
-                    . 8 8 f c b b f 8 8 f c b b f . 
-                    . . . . f f f . . . . f f f . . 
-                    `,img`
-                    . . . . . . . 8 8 8 8 8 . . . . 
-                    . . . . . 8 8 6 6 6 6 6 8 . . . 
-                    . . . . 8 8 6 6 6 6 6 6 6 8 . . 
-                    . . . . 8 9 7 6 6 6 6 6 7 b 8 . 
-                    . . 8 8 9 9 7 6 6 6 6 6 7 9 b 8 
-                    . 8 6 6 9 9 7 7 6 6 6 6 7 9 9 8 
-                    8 6 6 6 9 9 6 7 7 7 7 7 6 9 9 8 
-                    8 6 6 6 9 9 8 8 8 8 8 8 8 9 9 8 
-                    8 6 6 6 9 b 8 b b b 8 b 8 b 9 8 
-                    8 6 8 8 8 8 b b b b 8 b b 8 b 8 
-                    8 8 3 3 8 8 6 6 6 6 8 6 6 8 8 8 
-                    8 3 3 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 
-                    8 8 8 8 f f f 8 8 8 8 f f f 8 8 
-                    . 8 8 f b b c f 8 8 f b b c f . 
-                    . . . . c f f . . . . c f f . . 
-                    `],
-                100,
-                true
-                )
             }
             moveSet(obstacles, speed)
             randomSpawn(obstacles)
