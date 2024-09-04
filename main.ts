@@ -353,7 +353,7 @@ function moveSet (mySprite: Sprite, velocity: number) {
     if (mySprite.kind() != SpriteKind.Tile) {
         mySprite.lifespan = 5000
     } else {
-        mySprite.lifespan = 60000
+        mySprite.lifespan = 10000000000
     }
 }
 sprites.onOverlap(SpriteKind.Food, SpriteKind.Tile, function (sprite, otherSprite) {
@@ -641,13 +641,24 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
-    tiles.placeOnTile(otherSprite, tiles.getTileLocation(2 + tileNumber * 2, 10))
+    tiles.placeOnTile(otherSprite, tiles.getTileLocation(tileNumber + 3, 10))
+    animation.runMovementAnimation(
+    otherSprite,
+    animation.animationPresets(animation.bobbing),
+    2000,
+    true
+    )
     otherSprite.setVelocity(0, 0)
     tileNumber += 1
     sprite.sayText(tileNumber)
     if (tileNumber == monke_list.length) {
         tileNumber = 0
         sprite.sayText("beeg monke", 5000, false)
+        for (let value of sprites.allOfKind(SpriteKind.Tile)) {
+            animation.stopAnimation(animation.AnimationTypes.All, value)
+            value.vx = speed
+            value.lifespan = 2000
+        }
     }
 })
 function randomSpawn (mySprite: Sprite) {
