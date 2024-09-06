@@ -685,12 +685,13 @@ function randomSpawn (mySprite: Sprite) {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.Wings)
-        moveSet(wings, speed)
+        moveSet(wings, speed + 3)
         tiles.placeOnTile(mySprite, tiles.getTileLocation(15, 13))
         tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
     }
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(sprite, effects.spray, 100)
     animation.runImageAnimation(
     otherSprite,
     [img`
@@ -767,11 +768,12 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     )
     otherSprite.setKind(SpriteKind.Wings)
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
-    sprites.destroy(sprite)
     sprites.destroy(otherSprite)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
+    sprite.sayText("ow", 100, false)
+    scene.cameraShake(4, 500)
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     speed += 5
     otherSprite.setVelocity(100, 100)
@@ -1428,7 +1430,7 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
             moveSet(obstacles, speed)
             randomSpawn(obstacles)
         }
-        if (Math.percentChance(50)) {
+        if (Math.percentChance(10)) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
