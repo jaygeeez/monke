@@ -192,12 +192,7 @@ function jumping () {
     false
     )
 }
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    tiles.setWallAt(tiles.getTileLocation(1, 15), true)
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        monke.vy = -50
-    }
-})
+// ensures that enemies and tiles don't show up on the same space.
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Tile, function (sprite, otherSprite) {
     randomSpawn(otherSprite)
     randomSpawn(sprite)
@@ -210,15 +205,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
         banana.ay = 100
         banana.lifespan = 3000
-        running()
-    }
-})
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        monke.vy = -185
-        jumping()
-        music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
-        pause(700)
+        banana.setFlag(SpriteFlag.GhostThroughWalls, true)
         running()
     }
 })
@@ -660,6 +647,12 @@ function moveSet (mySprite: Sprite, velocity: number) {
         mySprite.lifespan = 10000000000
     }
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
+    otherSprite.startEffect(effects.confetti, 100)
+    otherSprite.sayText("Press A+B to start!", 100, false)
+    effects.confetti.startScreenEffect(100)
+    scene.cameraShake(2, 100)
+})
 sprites.onOverlap(SpriteKind.Food, SpriteKind.Tile, function (sprite, otherSprite) {
     randomSpawn(otherSprite)
     randomSpawn(sprite)
@@ -732,23 +725,25 @@ function restartGame () {
     )
     titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
 }
-controller.A.onEvent(ControllerButtonEvent.Released, function () {
-    monke.vy += 50
-})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
+})
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        monke.vy = -185
+        jumping()
+        music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
+        pause(700)
+        running()
+    }
 })
 info.onLifeZero(function () {
     music.stopAllSounds()
     game.setGameOverScoringType(game.ScoringType.HighScore)
-    game.setGameOverEffect(false, effects.dissolve)
-    game.gameOver(false)
+    game.gameOver(true)
 })
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
-    otherSprite.startEffect(effects.confetti, 100)
-    otherSprite.sayText("Press A+B to start!", 100, false)
-    effects.confetti.startScreenEffect(100)
-    scene.cameraShake(2, 100)
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+    monke.vy += 50
 })
 function running () {
     animation.runImageAnimation(
@@ -996,6 +991,12 @@ function randomSpawn (mySprite: Sprite) {
         tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
     }
 }
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    tiles.setWallAt(tiles.getTileLocation(1, 15), true)
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        monke.vy = -50
+    }
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite, effects.spray, 100)
     animation.runImageAnimation(
@@ -1510,7 +1511,7 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
             moveSet(obstacles, speed)
             randomSpawn(obstacles)
         }
-        if (Math.percentChance(80)) {
+        if (Math.percentChance(10)) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
