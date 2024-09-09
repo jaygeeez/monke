@@ -3,17 +3,6 @@ namespace SpriteKind {
     export const Wings = SpriteKind.create()
     export const Tile = SpriteKind.create()
 }
-/**
- * Powerups
- * 
- * - Big Monke: Invincibility
- * 
- * - Banana Split:
- * 
- * - Peeling the love: bananas turn things into life hearts
- * 
- * - Jungle Beats
- */
 function jumping () {
     animation.runImageAnimation(
     monke,
@@ -647,6 +636,9 @@ function moveSet (mySprite: Sprite, velocity: number) {
         mySprite.lifespan = 10000000000
     }
 }
+info.onCountdownEnd(function () {
+	
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.confetti, 100)
     otherSprite.sayText("Press A+B to start!", 100, false)
@@ -728,6 +720,14 @@ function restartGame () {
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
 })
+function powerUp (mySprite: Sprite, num: number) {
+    if (num == 0) {
+        info.startCountdown(10)
+        mySprite.sayText("bigMonke", 2000, true)
+        tiles.placeOnTile(mySprite, tiles.getTileLocation(1, 13))
+        mySprite.scale = 2
+    }
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
         monke.vy = -185
@@ -838,6 +838,17 @@ function running () {
     true
     )
 }
+/**
+ * Powerups
+ * 
+ * - Big Monke: Invincibility
+ * 
+ * - Banana Split:
+ * 
+ * - Peeling the love: bananas turn things into life hearts
+ * 
+ * - Jungle Beats
+ */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
     speed += -1
@@ -948,9 +959,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
         tileNumber += 1
         if (tileNumber == monke_list.length) {
             tileNumber = 0
-            sprite.sayText("bigMonke", 2000, true)
-            tiles.placeOnTile(sprite, tiles.getTileLocation(1, 13))
-            sprite.scale = 2
+            powerUp(sprite, 0)
             for (let value of sprites.allOfKind(SpriteKind.Tile)) {
                 animation.stopAnimation(animation.AnimationTypes.All, value)
                 value.vx = speed
@@ -1511,7 +1520,7 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
             moveSet(obstacles, speed)
             randomSpawn(obstacles)
         }
-        if (Math.percentChance(10)) {
+        if (Math.percentChance(50)) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
