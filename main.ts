@@ -6,11 +6,11 @@ namespace SpriteKind {
 /**
  * Powerups
  * 
- * - Big Monke
+ * - Big Monke: Invincibility
  * 
- * - Banana Split
+ * - Banana Split:
  * 
- * - Peeling the love
+ * - Peeling the love: bananas turn things into life hearts
  * 
  * - Jungle Beats
  */
