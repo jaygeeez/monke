@@ -637,7 +637,9 @@ function moveSet (mySprite: Sprite, velocity: number) {
     }
 }
 info.onCountdownEnd(function () {
-	
+    if (monke.scale == 2) {
+        monke.scale = 1
+    }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.confetti, 100)
@@ -721,8 +723,8 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
 })
 function powerUp (mySprite: Sprite, num: number) {
+    info.startCountdown(10)
     if (num == 0) {
-        info.startCountdown(10)
         mySprite.sayText("bigMonke", 2000, true)
         tiles.placeOnTile(mySprite, tiles.getTileLocation(1, 13))
         mySprite.scale = 2
@@ -1475,6 +1477,7 @@ img`
 ]
 game.onUpdateInterval(Math.abs(speed * 10), function () {
     if (gameStart >= 1) {
+        info.changeScoreBy(1)
         for (let index = 0; index < gameStart; index++) {
             if (Math.percentChance(50)) {
                 obstacles = sprites.create(img`
@@ -1544,5 +1547,35 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
             moveSet(tileCollect, speed)
             randomSpawn(tileCollect)
         }
+    } else {
+        if (game.runtime() >= 10000) {
+            game.showLongText("Monke is sad because everyone left :(", DialogLayout.Top)
+            game.reset()
+        }
+    }
+})
+game.onUpdateInterval(Math.abs(speed * 15), function () {
+    if (gameStart >= 1) {
+        obstacles = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . 6 6 6 6 6 6 6 6 . . 
+            . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+            . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+            . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+            . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+            . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+            . 6 6 6 6 6 8 b b b b 8 b b b 8 
+            . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+            . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+            . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+            . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+            . 8 8 8 8 f f f 8 8 8 8 f f f f 
+            . . . 8 f f f f f 8 8 f f f f f 
+            . . . . f f f f . . . . f f f . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Enemy)
+        carSprites()
+        moveSet(obstacles, speed)
+        randomSpawn(obstacles)
     }
 })
