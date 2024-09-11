@@ -1548,8 +1548,10 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
             randomSpawn(tileCollect)
         }
     } else {
-        if (game.runtime() >= 10000) {
-            game.showLongText("Monke is sad because everyone left :(", DialogLayout.Top)
+        if (game.runtime() >= 200000) {
+            sprites.destroyAllSpritesOfKind(SpriteKind.Intro)
+            tiles.placeOnTile(monke, tiles.getTileLocation(4, 14))
+            game.showLongText("Monke is patiently waiting for your return :)", DialogLayout.Top)
             game.reset()
         }
     }
