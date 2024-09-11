@@ -2,6 +2,7 @@ namespace SpriteKind {
     export const Intro = SpriteKind.create()
     export const Wings = SpriteKind.create()
     export const Tile = SpriteKind.create()
+    export const Shadow = SpriteKind.create()
 }
 function jumping () {
     animation.runImageAnimation(
@@ -181,6 +182,12 @@ function jumping () {
     false
     )
 }
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    tiles.setWallAt(tiles.getTileLocation(1, 15), true)
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        monke.vy = -50
+    }
+})
 // ensures that enemies and tiles don't show up on the same space.
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Tile, function (sprite, otherSprite) {
     randomSpawn(otherSprite)
@@ -719,9 +726,6 @@ function restartGame () {
     )
     titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
 }
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    tiles.setWallAt(tiles.getTileLocation(1, 15), false)
-})
 function powerUp (mySprite: Sprite, num: number) {
     info.startCountdown(10)
     if (num == 0) {
@@ -738,6 +742,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         pause(700)
         running()
     }
+})
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    tiles.setWallAt(tiles.getTileLocation(1, 15), false)
+    shadow.vy = 50
 })
 info.onLifeZero(function () {
     music.stopAllSounds()
@@ -850,6 +858,8 @@ function running () {
  * - Peeling the love: bananas turn things into life hearts
  * 
  * - Jungle Beats
+ * 
+ * adds: shadow, invulnerable
  */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
@@ -1002,12 +1012,6 @@ function randomSpawn (mySprite: Sprite) {
         tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
     }
 }
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    tiles.setWallAt(tiles.getTileLocation(1, 15), true)
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        monke.vy = -50
-    }
-})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite, effects.spray, 100)
     animation.runImageAnimation(
@@ -1106,6 +1110,7 @@ let monke_list: Image[] = []
 let throwSpeed: number[] = []
 let tileNumber = 0
 let monke: Sprite = null
+let shadow: Sprite = null
 let speed = 0
 speed = -100
 scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
@@ -1357,6 +1362,24 @@ scroller.scrollBackgroundWithSpeed(speed, 0, scroller.BackgroundLayer.Layer2)
 music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
 tiles.setCurrentTilemap(tilemap`blank`)
 restartGame()
+shadow = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . c c c c c c c c c c . . . 
+    . . c c c c c c c c c c c c . . 
+    . c c c c c c c c c c c c c c . 
+    . c c c c c c c c c c c c c c . 
+    . c c c c c c c c c c c c c c . 
+    . . c c c c c c c c c c c c . . 
+    . . . c c c c c c c c c c . . . 
+    `, SpriteKind.Player)
 monke = sprites.create(img`
     . . . . f f f f f . . . . . . . 
     . . . f e e e e e f . . . . . . 
@@ -1375,8 +1398,100 @@ monke = sprites.create(img`
     . . . f d d c d d b b d f . . . 
     . . . . f f f f f f f f f . . . 
     `, SpriteKind.Player)
-tiles.placeOnTile(monke, tiles.getTileLocation(1, 11))
+tiles.placeOnTile(monke, tiles.getTileLocation(1, 14))
 monke.ay = 500
+shadow.setPosition(monke.x, monke.y + 5)
+animation.runImageAnimation(
+shadow,
+[img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . c c c c c c c . . . . . 
+    . . . c c c c c c c c c . . . . 
+    . . c c c c c c c c c c c . . . 
+    . . c c c c c c c c c c c . . . 
+    . . c c c c c c c c c c c . . . 
+    . . . c c c c c c c c c . . . . 
+    . . . . c c c c c c c . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `,img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . c c c c c c c . . . . . . 
+    . . c c c c c c c c c . . . . . 
+    . c c c c c c c c c c c . . . . 
+    . c c c c c c c c c c c . . . . 
+    . c c c c c c c c c c c . . . . 
+    . . c c c c c c c c c . . . . . 
+    . . . c c c c c c c . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `,img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . c c c c c c c c c . . . . 
+    . . c c c c c c c c c c c . . . 
+    . c c c c c c c c c c c c c . . 
+    . c c c c c c c c c c c c c . . 
+    . c c c c c c c c c c c c c . . 
+    . . c c c c c c c c c c c . . . 
+    . . . c c c c c c c c c . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `,img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . c c c c c . . . . 
+    . . . . . . c c c c c c c . . . 
+    . . . . . c c c c c c c c c . . 
+    . . . . . c c c c c c c c c . . 
+    . . . . . c c c c c c c c c . . 
+    . . . . . . c c c c c c c . . . 
+    . . . . . . . c c c c c . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `,img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . c c c c c c c . . . . . 
+    . . . c c c c c c c c c . . . . 
+    . . c c c c c c c c c c c . . . 
+    . . c c c c c c c c c c c . . . 
+    . . c c c c c c c c c c c . . . 
+    . . . c c c c c c c c c . . . . 
+    . . . . c c c c c c c . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `],
+99,
+true
+)
 scene.cameraFollowSprite(monke)
 jumping()
 music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
@@ -1548,7 +1663,7 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
             randomSpawn(tileCollect)
         }
     } else {
-        if (game.runtime() >= 200000) {
+        if (game.runtime() >= 120000) {
             sprites.destroyAllSpritesOfKind(SpriteKind.Intro)
             tiles.placeOnTile(monke, tiles.getTileLocation(4, 14))
             game.showLongText("Monke is patiently waiting for your return :)", DialogLayout.Top)
