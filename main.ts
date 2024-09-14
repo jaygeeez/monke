@@ -4,11 +4,6 @@ namespace SpriteKind {
     export const Tile = SpriteKind.create()
     export const Shadow = SpriteKind.create()
 }
-controller.up.onEvent(ControllerButtonEvent.Released, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        shadow.y = 237
-    }
-})
 function jumping () {
     animation.runImageAnimation(
     monke,
@@ -191,18 +186,6 @@ function jumping () {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Tile, function (sprite, otherSprite) {
     randomSpawn(otherSprite)
     randomSpawn(sprite)
-})
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        throwing()
-        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
-        pause(500)
-        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
-        banana.ay = 100
-        banana.lifespan = 3000
-        banana.setFlag(SpriteFlag.GhostThroughWalls, true)
-        running()
-    }
 })
 function carSprites () {
     if (Math.percentChance(25)) {
@@ -513,9 +496,11 @@ controller.combos.attachCombo("a+b", function () {
         music.stopAllSounds()
         music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
         gameStart = 1
+        bananas = 0
         titleScreen.setFlag(SpriteFlag.Ghost, true)
         animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
         moveSet(titleScreen, -100)
+        bananaText()
         info.setScore(0)
         info.setLife(3)
     }
@@ -629,6 +614,23 @@ function throwing () {
     100,
     false
     )
+}
+function bananaText () {
+    sprites.destroyAllSpritesOfKind(SpriteKind.Text)
+    textSprite = textsprite.create(": " + bananas, 1, 3)
+    textSprite.setKind(SpriteKind.Text)
+    textSprite.setPosition(40, 139)
+    textSprite.setBorder(1, 3, 1)
+    textSprite.setIcon(img`
+        . . . . . . . . 
+        . . 4 e . . . . 
+        . . 5 4 . . . . 
+        . 4 5 4 . . . . 
+        . 4 5 4 . . . . 
+        . 4 5 5 d 4 . . 
+        . . 4 5 5 5 5 . 
+        . . . . 4 4 . . 
+        `)
 }
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity, 0)
@@ -749,6 +751,22 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
     timer = 0
 })
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
+        throwing()
+        if (gameStart == 1) {
+            bananas += -1
+            bananaText()
+        }
+        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+        pause(500)
+        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
+        banana.ay = 100
+        banana.lifespan = 3000
+        banana.setFlag(SpriteFlag.GhostThroughWalls, true)
+        running()
+    }
+})
 info.onLifeZero(function () {
     music.stopAllSounds()
     game.setGameOverScoringType(game.ScoringType.HighScore)
@@ -853,9 +871,9 @@ function running () {
 /**
  * Powerups
  * 
- * - Big Monke: Invincibility
+ * - Big Monke: Invincibility (helicopters flying above)
  * 
- * - Banana Split:
+ * - Banana Split: Monkey Clones
  * 
  * - Peeling the love: bananas turn things into life hearts
  * 
@@ -864,8 +882,7 @@ function running () {
  * adds: shadow, invulnerable
  */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    info.changeScoreBy(1)
-    speed += -1
+    bananas += 1
     animation.runImageAnimation(
     otherSprite,
     [img`
@@ -957,6 +974,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     50,
     false
     )
+    bananaText()
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite, effects.starField, 100)
 })
@@ -1022,7 +1040,6 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
         monke.vy = -50
     }
-    shadow.y = 237
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite, effects.spray, 100)
@@ -1107,19 +1124,26 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
     sprite.sayText("ow", 100, false)
-    scene.cameraShake(4, 500)
+    animation.runMovementAnimation(
+    sprite,
+    animation.animationPresets(animation.shake),
+    250,
+    false
+    )
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     speed += 5
     otherSprite.setVelocity(100, 100)
 })
 let tileCollect: Sprite = null
 let wings: Sprite = null
+let banana: Sprite = null
+let textSprite: TextSprite = null
 let titleScreen: Sprite = null
 let gameStart = 0
 let obstacles: Sprite = null
-let banana: Sprite = null
 let monke_list: Image[] = []
 let throwSpeed: number[] = []
+let bananas = 0
 let tileNumber = 0
 let monke: Sprite = null
 let shadow: Sprite = null
@@ -1507,11 +1531,11 @@ monke = sprites.create(img`
 tiles.placeOnTile(monke, tiles.getTileLocation(1, 14))
 monke.ay = 500
 scene.cameraFollowSprite(monke)
-shadow.setPosition(monke.x, 237)
 jumping()
 music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 running()
 tileNumber = 0
+bananas = 1
 throwSpeed = [100, -70]
 monke_list = [
 img`
@@ -1679,14 +1703,18 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
         }
     } else {
         timer += 1000
-        monke.sayText(timer)
         if (game.runtime() >= 12000 && timer >= 12000) {
             sprites.destroyAllSpritesOfKind(SpriteKind.Intro)
             tiles.placeOnTile(monke, tiles.getTileLocation(4, 14))
             tiles.placeOnTile(shadow, tiles.getTileLocation(4, 14))
-            game.showLongText("Monke is patiently waiting for your return :)", DialogLayout.Top)
+            monke.sayText("Monke is patiently waiting for your return :)")
             game.reset()
         }
+    }
+})
+game.onUpdate(function () {
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        shadow.setPosition(monke.x, monke.y + 4)
     }
 })
 game.onUpdateInterval(Math.abs(speed * 15), function () {
