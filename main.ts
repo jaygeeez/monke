@@ -881,19 +881,6 @@ function running () {
     true
     )
 }
-/**
- * Powerups
- * 
- * - Big Monke: Invincibility (helicopters flying above)
- * 
- * - Banana Split: Monkey Clones
- * 
- * - Peeling the love: bananas turn things into life hearts
- * 
- * - Jungle Beats
- * 
- * adds: shadow, invulnerable
- */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     bananas += 1
     animation.runImageAnimation(
@@ -1054,6 +1041,19 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
         monke.vy = -50
     }
 })
+/**
+ * Powerups
+ * 
+ * - Big Monke: Invincibility (helicopters flying above)
+ * 
+ * - Banana Split: Monkey Clones
+ * 
+ * - Peeling the love: bananas turn things into life hearts
+ * 
+ * - Jungle Beats
+ * 
+ * adds: shadow, invulnerable
+ */
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite, effects.spray, 100)
     animation.runImageAnimation(
