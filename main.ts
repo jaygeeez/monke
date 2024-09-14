@@ -4,6 +4,19 @@ namespace SpriteKind {
     export const Tile = SpriteKind.create()
     export const Shadow = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    sprite.sayText("ow", 100, false)
+    animation.runMovementAnimation(
+    sprite,
+    animation.animationPresets(animation.shake),
+    250,
+    false
+    )
+    music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
+    speed += 5
+    otherSprite.setVelocity(100, 100)
+})
 function jumping () {
     animation.runImageAnimation(
     monke,
@@ -1121,19 +1134,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite)
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
-    sprite.sayText("ow", 100, false)
-    animation.runMovementAnimation(
-    sprite,
-    animation.animationPresets(animation.shake),
-    250,
-    false
-    )
-    music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
-    speed += 5
-    otherSprite.setVelocity(100, 100)
-})
 let tileCollect: Sprite = null
 let wings: Sprite = null
 let banana: Sprite = null
@@ -1703,11 +1703,11 @@ game.onUpdateInterval(Math.abs(speed * 10), function () {
         }
     } else {
         timer += 1000
-        if (game.runtime() >= 12000 && timer >= 12000) {
+        if (game.runtime() >= 120000 && timer >= 120000) {
             sprites.destroyAllSpritesOfKind(SpriteKind.Intro)
             tiles.placeOnTile(monke, tiles.getTileLocation(4, 14))
             tiles.placeOnTile(shadow, tiles.getTileLocation(4, 14))
-            monke.sayText("Monke is patiently waiting for your return :)")
+            game.showLongText("Monke is patiently waiting for your return :)", DialogLayout.Top)
             game.reset()
         }
     }
