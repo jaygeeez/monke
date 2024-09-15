@@ -195,6 +195,17 @@ function jumping () {
     false
     )
 }
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        monke.vy = -185
+        jumping()
+        shadow.scale = 0.8
+        music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
+        pause(600)
+        shadow.scale = 1
+        running()
+    }
+})
 function carSprites () {
     if (Math.percentChance(25)) {
         animation.runImageAnimation(
@@ -650,9 +661,8 @@ function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.lifespan = 3000
 }
 info.onCountdownEnd(function () {
-    if (monke.scale == 2) {
-        monke.scale = 1
-    }
+    monke.scale = 1
+    shadow.scale = 1
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.confetti, 100)
@@ -736,21 +746,11 @@ function powerUp (mySprite: Sprite, num: number) {
         mySprite.sayText("bigMonke", 2000, true)
         tiles.placeOnTile(mySprite, tiles.getTileLocation(1, 13))
         mySprite.scale = 2
+        shadow.scale = 2
     }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [100, -70]
-})
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        monke.vy = -185
-        jumping()
-        shadow.scale = 0.8
-        music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
-        pause(600)
-        shadow.scale = 1
-        running()
-    }
 })
 sprites.onOverlap(SpriteKind.Wings, SpriteKind.Wings, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
@@ -1686,7 +1686,7 @@ game.onUpdateInterval(1000, function () {
         }
         moveSet(obstacles, speed)
         randomSpawn(obstacles)
-        if (Math.percentChance(10) && info.countdown() <= 0) {
+        if (Math.percentChance(50) && info.countdown() <= 0) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
