@@ -3,17 +3,20 @@ namespace SpriteKind {
     export const Wings = SpriteKind.create()
     export const Tile = SpriteKind.create()
     export const Shadow = SpriteKind.create()
+    export const PowerUp = SpriteKind.create()
 }
 /**
  * Powerups
  * 
- * - Big Monke: Invincibility (helicopters flying above)
+ * - Big Monke: Invincibility, helicopters
  * 
  * - Banana Split: Monkey Clones
  * 
  * - Peeling the love: bananas turn things into life hearts
  * 
  * - Jungle Beats
+ * 
+ * - Bananza: Raining bananas
  * 
  * adds: shadow, invulnerable
  */
@@ -658,6 +661,7 @@ function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.lifespan = 3000
 }
 info.onCountdownEnd(function () {
+    monke.setKind(SpriteKind.Player)
     monke.scale = 1
     shadow.scale = 1
     scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
@@ -854,13 +858,129 @@ function restartGame () {
     )
     titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
 }
+sprites.onOverlap(SpriteKind.PowerUp, SpriteKind.Enemy, function (sprite, otherSprite) {
+    if (monke.kind() == SpriteKind.PowerUp) {
+        sprites.destroy(otherSprite, effects.disintegrate, 500)
+    } else if (sprite.image == assets.image`banana`) {
+        otherSprite.setImage(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f . f f f f f . . 
+            . . f f 3 3 3 f f f 3 3 3 f f . 
+            . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
+            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+            . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
+            . . f f 3 3 3 b b b 3 3 3 f f . 
+            . . . f f 3 b b b b b 3 f f . . 
+            . . . . f f b b b b b f f . . . 
+            . . . . . f f b b b f f . . . . 
+            . . . . . . f f b f f . . . . . 
+            . . . . . . . f f f . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `)
+        animation.runImageAnimation(
+        otherSprite,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f . f f f f f . . 
+            . . f f 3 3 3 f f f 3 3 3 f f . 
+            . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
+            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+            . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
+            . . f f 3 3 3 b b b 3 3 3 f f . 
+            . . . f f 3 b b b b b 3 f f . . 
+            . . . . f f b b b b b f f . . . 
+            . . . . . f f b b b f f . . . . 
+            . . . . . . f f b f f . . . . . 
+            . . . . . . . f f f . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . f f f f f f . f f f f f f . 
+            . f f 3 3 3 3 f f f 3 3 3 3 f f 
+            . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
+            . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+            . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+            . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
+            . f 3 3 3 3 b b b b b 3 3 3 3 f 
+            . f f 3 3 b b b b b b b 3 3 f f 
+            . . f f 3 b b b b b b b 3 f f . 
+            . . . f f b b b b b b b f f . . 
+            . . . . f f b b b b b f f . . . 
+            . . . . . f f b b b f f . . . . 
+            . . . . . . f f b f f . . . . . 
+            . . . . . . . f f f . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . f f f . f f f . . . . 
+            . . . . f 3 3 3 f 3 3 3 f . . . 
+            . . . . f 3 3 3 3 3 1 3 f . . . 
+            . . . . f 3 3 3 3 3 3 3 f . . . 
+            . . . . . f 3 b b b 3 f . . . . 
+            . . . . . f f b b b f f . . . . 
+            . . . . . . f f b f f . . . . . 
+            . . . . . . . f f f . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . b b b b c . . c b b b c . . 
+            . b d 1 1 1 3 c c 3 d 1 1 3 c . 
+            b d 1 1 1 1 d d 1 3 1 1 1 1 3 c 
+            b 1 1 1 1 1 d 1 1 d d 1 1 1 1 b 
+            c 3 1 1 d c c 1 1 c c 1 1 1 1 b 
+            c 3 3 d 3 . . c c . . d 1 1 d b 
+            b 1 1 1 3 . . . . . . 3 d d 3 c 
+            b 1 1 1 d b . . . . c d d 3 3 c 
+            c 3 1 1 1 1 c . . b 1 1 1 d b c 
+            . c d d 1 1 1 c b 3 1 1 1 1 c . 
+            . . c 1 1 1 d d 3 3 1 1 1 b . . 
+            . . . b 1 3 d 1 1 d d 3 b . . . 
+            . . . . b 3 1 1 1 1 d c . . . . 
+            . . . . . c b 1 1 b c . . . . . 
+            . . . . . . c b b c . . . . . . 
+            `,img`
+            . . . 3 3 . 3 3 . . . . . . . . 
+            . . 3 3 1 3 1 3 3 . . . . . . . 
+            . . 3 1 1 1 1 1 3 . . 3 . 3 . . 
+            . . . 3 1 1 1 3 . . 3 1 3 1 3 . 
+            . . . . 3 1 3 . . . 3 1 1 1 3 . 
+            . . . . . 3 . . . . . 3 1 3 . . 
+            . . . . . . . . . . . . 3 . . . 
+            3 3 . 3 3 . . . . . . . . . . . 
+            3 1 1 1 3 . . . . . 3 3 . 3 3 . 
+            . 3 1 3 . . . . . . 3 1 3 1 3 . 
+            . . 3 . . . . . . . 3 1 1 1 3 . 
+            . . . . . 3 . 3 . . . 3 1 3 . . 
+            . . . . . 1 1 1 . . . . 3 . . . 
+            . . . . . 3 1 3 . . . . . . . . 
+            . . . . . . 3 . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `],
+        500,
+        false
+        )
+        info.changeLifeBy(1)
+    }
+})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
     pause(200)
     shadow.y = 252
 })
 function powerUp (mySprite: Sprite, num: number) {
-    info.startCountdown(10)
+    info.startCountdown(20)
     if (num == 0) {
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
             cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -988,6 +1108,7 @@ function powerUp (mySprite: Sprite, num: number) {
         tiles.placeOnTile(mySprite, tiles.getTileLocation(1, 13))
         mySprite.scale = 2
         shadow.scale = 2
+        monke.setKind(SpriteKind.PowerUp)
     } else if (num == 1) {
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
@@ -1112,6 +1233,8 @@ function powerUp (mySprite: Sprite, num: number) {
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             `)
         mySprite.sayText("Peel the love <3", 2000, true)
+    } else if (num == 2) {
+    	
     }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -1271,7 +1394,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
         tileNumber += 1
         if (tileNumber == monke_list.length) {
             tileNumber = 0
-            powerUp(sprite, randint(0, 0))
+            powerUp(sprite, randint(0, 1))
             for (let value of sprites.allOfKind(SpriteKind.Tile)) {
                 animation.stopAnimation(animation.AnimationTypes.All, value)
                 value.vx = speed
@@ -1315,6 +1438,12 @@ function randomSpawn (mySprite: Sprite) {
         tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
     }
 }
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    tiles.setWallAt(tiles.getTileLocation(1, 15), true)
+    if (monke.isHittingTile(CollisionDirection.Bottom)) {
+        monke.vy = -50
+    }
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite, effects.spray, 100)
     animation.runImageAnimation(
@@ -1394,12 +1523,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     otherSprite.setKind(SpriteKind.Wings)
     music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite)
-})
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    tiles.setWallAt(tiles.getTileLocation(1, 15), true)
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        monke.vy = -50
-    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     bananas += 1
@@ -2006,7 +2129,7 @@ game.onUpdateInterval(1000, function () {
     if (gameStart >= 1) {
         info.changeScoreBy(1)
         speed += -1
-        if (Math.percentChance(10) && info.countdown() <= 0) {
+        if (Math.percentChance(80) && info.countdown() <= 0) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
