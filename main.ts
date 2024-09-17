@@ -206,6 +206,22 @@ function jumping () {
     false
     )
 }
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
+        throwing()
+        if (gameStart == 1) {
+            bananas += -1
+            bananaText()
+        }
+        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+        pause(500)
+        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
+        banana.ay = 100
+        banana.lifespan = 3000
+        banana.setFlag(SpriteFlag.GhostThroughWalls, true)
+        running()
+    }
+})
 function carSprites () {
     if (Math.percentChance(25)) {
         animation.runImageAnimation(
@@ -1110,6 +1126,8 @@ function powerUp (mySprite: Sprite, num: number) {
         shadow.scale = 2
         monke.setKind(SpriteKind.PowerUp)
     } else if (num == 1) {
+        mySprite.sayText("BANANza", 2000, true)
+    } else if (num == 2) {
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
@@ -1233,8 +1251,6 @@ function powerUp (mySprite: Sprite, num: number) {
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             `)
         mySprite.sayText("Peel the love <3", 2000, true)
-    } else if (num == 2) {
-    	
     }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -1247,7 +1263,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         shadow.scale = shadow.scale * 0.8
         music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
         pause(600)
-        shadow.scale = shadow.scale * 1.25
+        shadow.scale = shadow.scale * 1.2
         running()
     }
 })
@@ -1256,22 +1272,6 @@ sprites.onOverlap(SpriteKind.Wings, SpriteKind.Wings, function (sprite, otherSpr
 })
 controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
     timer = 0
-})
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
-        throwing()
-        if (gameStart == 1) {
-            bananas += -1
-            bananaText()
-        }
-        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
-        pause(500)
-        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
-        banana.ay = 100
-        banana.lifespan = 3000
-        banana.setFlag(SpriteFlag.GhostThroughWalls, true)
-        running()
-    }
 })
 info.onLifeZero(function () {
     music.stopAllSounds()
@@ -1626,11 +1626,11 @@ sprites.onOverlap(SpriteKind.Food, SpriteKind.Enemy, function (sprite, otherSpri
 })
 let tileCollect: Sprite = null
 let wings: Sprite = null
-let banana: Sprite = null
 let textSprite: TextSprite = null
 let titleScreen: Sprite = null
-let gameStart = 0
 let obstacles: Sprite = null
+let banana: Sprite = null
+let gameStart = 0
 let monke_list: Image[] = []
 let throwSpeed: number[] = []
 let bananas = 0
