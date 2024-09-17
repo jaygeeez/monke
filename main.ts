@@ -3,30 +3,20 @@ namespace SpriteKind {
     export const Wings = SpriteKind.create()
     export const Tile = SpriteKind.create()
     export const Shadow = SpriteKind.create()
-    export const PowerUp = SpriteKind.create()
+    export const Heart = SpriteKind.create()
 }
-/**
- * Powerups
- * 
- * - Big Monke: Invincibility, helicopters
- * 
- * - Banana Split: Monkey Clones
- * 
- * - Peeling the love: bananas turn things into life hearts
- * 
- * - Jungle Beats
- * 
- * - Bananza: Raining bananas
- * 
- * adds: shadow, invulnerable
- */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
-    info.changeScoreBy(-1)
-    sprite.sayText("ow", 100, false)
-    music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
-    speed += 10
-    otherSprite.setVelocity(100, 100)
+    if (power2 == 0) {
+        sprites.destroy(otherSprite)
+        bananas += 1
+    } else {
+        info.changeLifeBy(-1)
+        info.changeScoreBy(-1)
+        sprite.sayText("ow", 100, false)
+        music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
+        speed += 10
+        otherSprite.setVelocity(100, 100)
+    }
 })
 function jumping () {
     animation.runImageAnimation(
@@ -676,7 +666,23 @@ function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setFlag(SpriteFlag.GhostThroughWalls, true)
     mySprite.lifespan = 3000
 }
+/**
+ * Powerups
+ * 
+ * - Big Monke: Invincibility, helicopters
+ * 
+ * - Banana Split: Monkey Clones
+ * 
+ * - Peeling the love: bananas turn things into life hearts
+ * 
+ * - Jungle Beats
+ * 
+ * - Bananza: Raining bananas
+ * 
+ * adds: shadow, invulnerable
+ */
 info.onCountdownEnd(function () {
+    power2 = 100
     monke.setKind(SpriteKind.Player)
     monke.scale = 1
     shadow.scale = 1
@@ -874,122 +880,6 @@ function restartGame () {
     )
     titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
 }
-sprites.onOverlap(SpriteKind.PowerUp, SpriteKind.Enemy, function (sprite, otherSprite) {
-    if (monke.kind() == SpriteKind.PowerUp) {
-        sprites.destroy(otherSprite, effects.disintegrate, 500)
-    } else if (sprite.image == assets.image`banana`) {
-        otherSprite.setImage(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f . f f f f f . . 
-            . . f f 3 3 3 f f f 3 3 3 f f . 
-            . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
-            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
-            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
-            . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
-            . . f f 3 3 3 b b b 3 3 3 f f . 
-            . . . f f 3 b b b b b 3 f f . . 
-            . . . . f f b b b b b f f . . . 
-            . . . . . f f b b b f f . . . . 
-            . . . . . . f f b f f . . . . . 
-            . . . . . . . f f f . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `)
-        animation.runImageAnimation(
-        otherSprite,
-        [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f . f f f f f . . 
-            . . f f 3 3 3 f f f 3 3 3 f f . 
-            . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
-            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
-            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
-            . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
-            . . f f 3 3 3 b b b 3 3 3 f f . 
-            . . . f f 3 b b b b b 3 f f . . 
-            . . . . f f b b b b b f f . . . 
-            . . . . . f f b b b f f . . . . 
-            . . . . . . f f b f f . . . . . 
-            . . . . . . . f f f . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . f f f f f f . f f f f f f . 
-            . f f 3 3 3 3 f f f 3 3 3 3 f f 
-            . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
-            . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
-            . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
-            . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
-            . f 3 3 3 3 b b b b b 3 3 3 3 f 
-            . f f 3 3 b b b b b b b 3 3 f f 
-            . . f f 3 b b b b b b b 3 f f . 
-            . . . f f b b b b b b b f f . . 
-            . . . . f f b b b b b f f . . . 
-            . . . . . f f b b b f f . . . . 
-            . . . . . . f f b f f . . . . . 
-            . . . . . . . f f f . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . f f f . f f f . . . . 
-            . . . . f 3 3 3 f 3 3 3 f . . . 
-            . . . . f 3 3 3 3 3 1 3 f . . . 
-            . . . . f 3 3 3 3 3 3 3 f . . . 
-            . . . . . f 3 b b b 3 f . . . . 
-            . . . . . f f b b b f f . . . . 
-            . . . . . . f f b f f . . . . . 
-            . . . . . . . f f f . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `,img`
-            . . . . . . . . . . . . . . . . 
-            . . b b b b c . . c b b b c . . 
-            . b d 1 1 1 3 c c 3 d 1 1 3 c . 
-            b d 1 1 1 1 d d 1 3 1 1 1 1 3 c 
-            b 1 1 1 1 1 d 1 1 d d 1 1 1 1 b 
-            c 3 1 1 d c c 1 1 c c 1 1 1 1 b 
-            c 3 3 d 3 . . c c . . d 1 1 d b 
-            b 1 1 1 3 . . . . . . 3 d d 3 c 
-            b 1 1 1 d b . . . . c d d 3 3 c 
-            c 3 1 1 1 1 c . . b 1 1 1 d b c 
-            . c d d 1 1 1 c b 3 1 1 1 1 c . 
-            . . c 1 1 1 d d 3 3 1 1 1 b . . 
-            . . . b 1 3 d 1 1 d d 3 b . . . 
-            . . . . b 3 1 1 1 1 d c . . . . 
-            . . . . . c b 1 1 b c . . . . . 
-            . . . . . . c b b c . . . . . . 
-            `,img`
-            . . . 3 3 . 3 3 . . . . . . . . 
-            . . 3 3 1 3 1 3 3 . . . . . . . 
-            . . 3 1 1 1 1 1 3 . . 3 . 3 . . 
-            . . . 3 1 1 1 3 . . 3 1 3 1 3 . 
-            . . . . 3 1 3 . . . 3 1 1 1 3 . 
-            . . . . . 3 . . . . . 3 1 3 . . 
-            . . . . . . . . . . . . 3 . . . 
-            3 3 . 3 3 . . . . . . . . . . . 
-            3 1 1 1 3 . . . . . 3 3 . 3 3 . 
-            . 3 1 3 . . . . . . 3 1 3 1 3 . 
-            . . 3 . . . . . . . 3 1 1 1 3 . 
-            . . . . . 3 . 3 . . . 3 1 3 . . 
-            . . . . . 1 1 1 . . . . 3 . . . 
-            . . . . . 3 1 3 . . . . . . . . 
-            . . . . . . 3 . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `],
-        500,
-        false
-        )
-        info.changeLifeBy(1)
-    }
-})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
     pause(200)
@@ -1124,7 +1014,6 @@ function powerUp (mySprite: Sprite, num: number) {
         tiles.placeOnTile(mySprite, tiles.getTileLocation(1, 13))
         mySprite.scale = 2
         shadow.scale = 2
-        monke.setKind(SpriteKind.PowerUp)
     } else if (num == 1) {
         mySprite.sayText("BANANza", 2000, true)
     } else if (num == 2) {
@@ -1255,6 +1144,102 @@ function powerUp (mySprite: Sprite, num: number) {
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [100, -70]
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart, function (sprite, otherSprite) {
+    info.changeLifeBy(1)
+    animation.runImageAnimation(
+    otherSprite,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f . f f f f f . . 
+        . . f f 3 3 3 f f f 3 3 3 f f . 
+        . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
+        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+        . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
+        . . f f 3 3 3 b b b 3 3 3 f f . 
+        . . . f f 3 b b b b b 3 f f . . 
+        . . . . f f b b b b b f f . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . f f f f f f . f f f f f f . 
+        . f f 3 3 3 3 f f f 3 3 3 3 f f 
+        . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
+        . f 3 3 3 3 b b b b b 3 3 3 3 f 
+        . f f 3 3 b b b b b b b 3 3 f f 
+        . . f f 3 b b b b b b b 3 f f . 
+        . . . f f b b b b b b b f f . . 
+        . . . . f f b b b b b f f . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . f f f . f f f . . . . 
+        . . . . f 3 3 3 f 3 3 3 f . . . 
+        . . . . f 3 3 3 3 3 1 3 f . . . 
+        . . . . f 3 3 3 3 3 3 3 f . . . 
+        . . . . . f 3 b b b 3 f . . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . b b b b c . . c b b b c . . 
+        . b d 1 1 1 3 c c 3 d 1 1 3 c . 
+        b d 1 1 1 1 d d 1 3 1 1 1 1 3 c 
+        b 1 1 1 1 1 d 1 1 d d 1 1 1 1 b 
+        c 3 1 1 d c c 1 1 c c 1 1 1 1 b 
+        c 3 3 d 3 . . c c . . d 1 1 d b 
+        b 1 1 1 3 . . . . . . 3 d d 3 c 
+        b 1 1 1 d b . . . . c d d 3 3 c 
+        c 3 1 1 1 1 c . . b 1 1 1 d b c 
+        . c d d 1 1 1 c b 3 1 1 1 1 c . 
+        . . c 1 1 1 d d 3 3 1 1 1 b . . 
+        . . . b 1 3 d 1 1 d d 3 b . . . 
+        . . . . b 3 1 1 1 1 d c . . . . 
+        . . . . . c b 1 1 b c . . . . . 
+        . . . . . . c b b c . . . . . . 
+        `,img`
+        . . . 3 3 . 3 3 . . . . . . . . 
+        . . 3 3 1 3 1 3 3 . . . . . . . 
+        . . 3 1 1 1 1 1 3 . . 3 . 3 . . 
+        . . . 3 1 1 1 3 . . 3 1 3 1 3 . 
+        . . . . 3 1 3 . . . 3 1 1 1 3 . 
+        . . . . . 3 . . . . . 3 1 3 . . 
+        . . . . . . . . . . . . 3 . . . 
+        3 3 . 3 3 . . . . . . . . . . . 
+        3 1 1 1 3 . . . . . 3 3 . 3 3 . 
+        . 3 1 3 . . . . . . 3 1 3 1 3 . 
+        . . 3 . . . . . . . 3 1 1 1 3 . 
+        . . . . . 3 . 3 . . . 3 1 3 . . 
+        . . . . . 1 1 1 . . . . 3 . . . 
+        . . . . . 3 1 3 . . . . . . . . 
+        . . . . . . 3 . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `],
+    50,
+    false
+    )
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+    sprites.destroy(otherSprite, effects.hearts, 100)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
@@ -1394,7 +1379,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
         tileNumber += 1
         if (tileNumber == monke_list.length) {
             tileNumber = 0
-            powerUp(sprite, randint(0, 1))
+            power2 = randint(0, 0)
+            powerUp(sprite, power2)
             for (let value of sprites.allOfKind(SpriteKind.Tile)) {
                 animation.stopAnimation(animation.AnimationTypes.All, value)
                 value.vx = speed
@@ -1438,91 +1424,114 @@ function randomSpawn (mySprite: Sprite) {
         tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
     }
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(sprite)
+    if (power2 == 2) {
+        animation.stopAnimation(animation.AnimationTypes.All, otherSprite)
+        otherSprite.setImage(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f . f f f f f . . 
+            . . f f 3 3 3 f f f 3 3 3 f f . 
+            . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
+            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+            . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+            . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
+            . . f f 3 3 3 b b b 3 3 3 f f . 
+            . . . f f 3 b b b b b 3 f f . . 
+            . . . . f f b b b b b f f . . . 
+            . . . . . f f b b b f f . . . . 
+            . . . . . . f f b f f . . . . . 
+            . . . . . . . f f f . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `)
+        otherSprite.setKind(SpriteKind.Heart)
+    } else {
+        animation.runImageAnimation(
+        otherSprite,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . 4 4 . . . . . . . 
+            . . . . . . 4 5 5 4 . . . . . . 
+            . . . . . . 2 5 5 2 . . . . . . 
+            . . . . . . . 2 2 . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . 4 . . . . . 
+            . . . . 2 . . . . 4 4 . . . . . 
+            . . . . 2 4 . . 4 5 4 . . . . . 
+            . . . . . 2 4 d 5 5 4 . . . . . 
+            . . . . . 2 5 5 5 5 4 . . . . . 
+            . . . . . . 2 5 5 5 5 4 . . . . 
+            . . . . . . 2 5 4 2 4 4 . . . . 
+            . . . . . . 4 4 . . 2 4 4 . . . 
+            . . . . . 4 4 . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `,img`
+            . 3 . . . . . . . . . . . 4 . . 
+            . 3 3 . . . . . . . . . 4 4 . . 
+            . 3 d 3 . . 4 4 . . 4 4 d 4 . . 
+            . . 3 5 3 4 5 5 4 4 d d 4 4 . . 
+            . . 3 d 5 d 1 1 d 5 5 d 4 4 . . 
+            . . 4 5 5 1 1 1 1 5 1 1 5 4 . . 
+            . 4 5 5 5 5 1 1 5 1 1 1 d 4 4 . 
+            . 4 d 5 1 1 5 5 5 1 1 1 5 5 4 . 
+            . 4 4 5 1 1 5 5 5 5 5 d 5 5 4 . 
+            . . 4 3 d 5 5 5 d 5 5 d d d 4 . 
+            . 4 5 5 d 5 5 5 d d d 5 5 4 . . 
+            . 4 5 5 d 3 5 d d 3 d 5 5 4 . . 
+            . 4 4 d d 4 d d d 4 3 d d 4 . . 
+            . . 4 5 4 4 4 4 4 4 4 4 4 . . . 
+            . 4 5 4 . . 4 4 4 . . . 4 4 . . 
+            . 4 4 . . . . . . . . . . 4 4 . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . b b . b b b . . . . . 
+            . . . . b 1 1 b 1 1 1 b . . . . 
+            . . b b 3 1 1 d d 1 d d b b . . 
+            . b 1 1 d d b b b b b 1 1 b . . 
+            . b 1 1 1 b . . . . . b d d b . 
+            . . 3 d d b . . . . . b d 1 1 b 
+            . b 1 d 3 . . . . . . . b 1 1 b 
+            . b 1 1 b . . . . . . b b 1 d b 
+            . b 1 d b . . . . . . b d 3 d b 
+            . b b d d b . . . . b d d d b . 
+            . b d d d d b . b b 3 d d 3 b . 
+            . . b d d 3 3 b d 3 3 b b b . . 
+            . . . b b b d d d d d b . . . . 
+            . . . . . . b b b b b . . . . . 
+            `],
+        50,
+        false
+        )
+        otherSprite.setKind(SpriteKind.Wings)
+        music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
+        sprites.destroy(otherSprite, effects.fire, 100)
+    }
+})
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), true)
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
         monke.vy = -50
     }
-})
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    sprites.destroy(sprite, effects.spray, 100)
-    animation.runImageAnimation(
-    otherSprite,
-    [img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . 4 4 . . . . . . . 
-        . . . . . . 4 5 5 4 . . . . . . 
-        . . . . . . 2 5 5 2 . . . . . . 
-        . . . . . . . 2 2 . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . 4 . . . . . 
-        . . . . 2 . . . . 4 4 . . . . . 
-        . . . . 2 4 . . 4 5 4 . . . . . 
-        . . . . . 2 4 d 5 5 4 . . . . . 
-        . . . . . 2 5 5 5 5 4 . . . . . 
-        . . . . . . 2 5 5 5 5 4 . . . . 
-        . . . . . . 2 5 4 2 4 4 . . . . 
-        . . . . . . 4 4 . . 2 4 4 . . . 
-        . . . . . 4 4 . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,img`
-        . 3 . . . . . . . . . . . 4 . . 
-        . 3 3 . . . . . . . . . 4 4 . . 
-        . 3 d 3 . . 4 4 . . 4 4 d 4 . . 
-        . . 3 5 3 4 5 5 4 4 d d 4 4 . . 
-        . . 3 d 5 d 1 1 d 5 5 d 4 4 . . 
-        . . 4 5 5 1 1 1 1 5 1 1 5 4 . . 
-        . 4 5 5 5 5 1 1 5 1 1 1 d 4 4 . 
-        . 4 d 5 1 1 5 5 5 1 1 1 5 5 4 . 
-        . 4 4 5 1 1 5 5 5 5 5 d 5 5 4 . 
-        . . 4 3 d 5 5 5 d 5 5 d d d 4 . 
-        . 4 5 5 d 5 5 5 d d d 5 5 4 . . 
-        . 4 5 5 d 3 5 d d 3 d 5 5 4 . . 
-        . 4 4 d d 4 d d d 4 3 d d 4 . . 
-        . . 4 5 4 4 4 4 4 4 4 4 4 . . . 
-        . 4 5 4 . . 4 4 4 . . . 4 4 . . 
-        . 4 4 . . . . . . . . . . 4 4 . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . b b . b b b . . . . . 
-        . . . . b 1 1 b 1 1 1 b . . . . 
-        . . b b 3 1 1 d d 1 d d b b . . 
-        . b 1 1 d d b b b b b 1 1 b . . 
-        . b 1 1 1 b . . . . . b d d b . 
-        . . 3 d d b . . . . . b d 1 1 b 
-        . b 1 d 3 . . . . . . . b 1 1 b 
-        . b 1 1 b . . . . . . b b 1 d b 
-        . b 1 d b . . . . . . b d 3 d b 
-        . b b d d b . . . . b d d d b . 
-        . b d d d d b . b b 3 d d 3 b . 
-        . . b d d 3 3 b d 3 3 b b b . . 
-        . . . b b b d d d d d b . . . . 
-        . . . . . . b b b b b . . . . . 
-        `],
-    50,
-    false
-    )
-    otherSprite.setKind(SpriteKind.Wings)
-    music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
-    sprites.destroy(otherSprite)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     bananas += 1
@@ -1632,9 +1641,10 @@ let obstacles: Sprite = null
 let banana: Sprite = null
 let gameStart = 0
 let monke_list: Image[] = []
-let throwSpeed: number[] = []
+let power2 = 0
 let bananas = 0
 let tileNumber = 0
+let throwSpeed: number[] = []
 let monke: Sprite = null
 let shadow: Sprite = null
 let speed = 0
@@ -2024,9 +2034,10 @@ scene.cameraFollowSprite(monke)
 jumping()
 music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 running()
+throwSpeed = [100, -70]
 tileNumber = 0
 bananas = 1
-throwSpeed = [100, -70]
+power2 = 100
 monke_list = [
 img`
     4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
