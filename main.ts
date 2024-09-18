@@ -7,7 +7,7 @@ namespace SpriteKind {
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (power2 == 0) {
-        sprites.destroy(otherSprite)
+        sprites.destroy(otherSprite, effects.warmRadial, 100)
         bananas += 1
         bananaText()
     } else {
@@ -15,7 +15,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         info.changeScoreBy(-1)
         sprite.sayText("ow", 100, false)
         music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
-        speed += 10
+        if (speed <= -150) {
+            speed += 50
+        } else {
+            speed = -100
+        }
         otherSprite.setVelocity(100, 100)
     }
 })
@@ -197,22 +201,6 @@ function jumping () {
     false
     )
 }
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
-        throwing()
-        if (gameStart == 1) {
-            bananas += -1
-            bananaText()
-        }
-        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
-        pause(500)
-        banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, throwSpeed[0], throwSpeed[1])
-        banana.ay = 100
-        banana.lifespan = 3000
-        banana.setFlag(SpriteFlag.GhostThroughWalls, true)
-        running()
-    }
-})
 function carSprites () {
     if (Math.percentChance(25)) {
         animation.runImageAnimation(
@@ -658,7 +646,17 @@ function bananaText () {
         . . . . 4 4 . . 
         `)
 }
+function bananaThrow (num: number, num2: number) {
+    banana = sprites.createProjectileFromSprite(assets.image`banana`, monke, num, num2)
+    banana.ay = 100
+    banana.lifespan = 3000
+    banana.setFlag(SpriteFlag.GhostThroughWalls, true)
+    if (power2 == 0) {
+        banana.scale = 2
+    }
+}
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
     randomSpawn(sprite)
     randomSpawn(otherSprite)
 })
@@ -871,22 +869,10 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     pause(200)
     shadow.y = 252
 })
-/**
- * Powerups
- * 
- * - Big Monke: Invincibility, helicopters
- * 
- * - Banana Split: Monkey Clones
- * 
- * - Jungle Beats
- * 
- * - Bananza: Raining bananas
- * 
- * adds: shadow, invulnerable
- */
 function powerUp (mySprite: Sprite, num: number) {
     info.startCountdown(20)
     if (num == 0) {
+        effects.clouds.startScreenEffect(15000)
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
             cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
             cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -1014,8 +1000,12 @@ function powerUp (mySprite: Sprite, num: number) {
         mySprite.scale = 2
         shadow.scale = 2
     } else if (num == 1) {
+        effects.blizzard.startScreenEffect(15000)
+        bananas += 20
+        bananaText()
         mySprite.sayText("BANANza", 2000, true)
     } else if (num == 2) {
+        effects.hearts.startScreenEffect(15000)
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
@@ -1247,7 +1237,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         shadow.scale = shadow.scale * 0.8
         music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
         pause(600)
-        shadow.scale = shadow.scale * 1.2
+        shadow.scale = shadow.scale * 1.25
         running()
     }
 })
@@ -1256,6 +1246,19 @@ sprites.onOverlap(SpriteKind.Wings, SpriteKind.Wings, function (sprite, otherSpr
 })
 controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
     timer = 0
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
+        throwing()
+        if (gameStart == 1) {
+            bananas += -1
+            bananaText()
+        }
+        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+        pause(500)
+        bananaThrow(throwSpeed[0], throwSpeed[1])
+        running()
+    }
 })
 info.onLifeZero(function () {
     music.stopAllSounds()
@@ -1268,6 +1271,7 @@ controller.A.onEvent(ControllerButtonEvent.Released, function () {
     monke.vy += 50
 })
 sprites.onOverlap(SpriteKind.Food, SpriteKind.Tile, function (sprite, otherSprite) {
+    sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
     randomSpawn(otherSprite)
     randomSpawn(sprite)
 })
@@ -1378,7 +1382,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
         tileNumber += 1
         if (tileNumber == monke_list.length) {
             tileNumber = 0
-            power2 = randint(2, 2)
+            power2 = randint(0, 2)
             powerUp(sprite, power2)
             for (let value of sprites.allOfKind(SpriteKind.Tile)) {
                 animation.stopAnimation(animation.AnimationTypes.All, value)
@@ -1418,7 +1422,7 @@ function randomSpawn (mySprite: Sprite) {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.Wings)
-        moveSet(wings, speed + 3)
+        moveSet(wings, speed + 2)
         tiles.placeOnTile(mySprite, tiles.getTileLocation(15, 13))
         tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
     }
@@ -1629,16 +1633,13 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite, effects.starField, 100)
 })
-sprites.onOverlap(SpriteKind.Food, SpriteKind.Enemy, function (sprite, otherSprite) {
-    randomSpawn(otherSprite)
-})
 let tileCollect: Sprite = null
 let wings: Sprite = null
+let banana: Sprite = null
 let textSprite: TextSprite = null
 let titleScreen: Sprite = null
-let obstacles: Sprite = null
-let banana: Sprite = null
 let gameStart = 0
+let obstacles: Sprite = null
 let monke_list: Image[] = []
 let power2 = 0
 let bananas = 0
@@ -1650,6 +1651,7 @@ let speed = 0
 let timer = 0
 timer = 0
 speed = -100
+let cycles = 1
 scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -1894,7 +1896,7 @@ scroller.setLayerImage(scroller.BackgroundLayer.Layer2, img`
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     `)
-scroller.scrollBackgroundWithSpeed(-20, 0, scroller.BackgroundLayer.Layer0)
+scroller.scrollBackgroundWithSpeed(speed + 80, 0, scroller.BackgroundLayer.Layer0)
 scroller.scrollBackgroundWithSpeed(speed, 0, scroller.BackgroundLayer.Layer2)
 music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
 tiles.setCurrentTilemap(tilemap`blank`)
@@ -2130,6 +2132,7 @@ img`
     `
 ]
 game.onUpdate(function () {
+    scroller.scrollBackgroundWithSpeed(speed + 80, 0, scroller.BackgroundLayer.Layer0)
     scroller.scrollBackgroundWithSpeed(speed, 0, scroller.BackgroundLayer.Layer2)
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
         shadow.setPosition(monke.x, monke.y + 4)
@@ -2138,8 +2141,13 @@ game.onUpdate(function () {
 game.onUpdateInterval(1000, function () {
     if (gameStart >= 1) {
         info.changeScoreBy(1)
+        if (info.score() >= 100) {
+            cycles = 2
+        } else if (info.score() >= 200) {
+            cycles = 3
+        }
         speed += -1
-        if (Math.percentChance(80) && info.countdown() <= 0) {
+        if (Math.percentChance(10) && info.countdown() <= 0) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
@@ -2163,49 +2171,51 @@ game.onUpdateInterval(1000, function () {
             moveSet(tileCollect, speed)
             randomSpawn(tileCollect)
         }
-        if (Math.percentChance(30)) {
-            obstacles = sprites.create(img`
-                . . . . . . . b b . . . . . . . 
-                . . . . . . b d d b . . . . . . 
-                . . . . . b d 5 5 d b . . . . . 
-                . . . . b b 5 5 5 5 b b . . . . 
-                . . . . b 5 5 5 5 5 5 b . . . . 
-                b b b b b 5 5 5 5 1 1 d b b b b 
-                b 5 5 5 5 5 5 5 5 1 1 1 5 5 5 b 
-                b d d 5 5 5 5 5 5 1 1 1 5 d d b 
-                . b d d 5 5 5 5 5 5 5 5 d d b . 
-                . . b b 5 5 5 5 5 5 5 5 b b . . 
-                . . c b 5 5 5 5 5 5 5 5 b c . . 
-                . . c 5 5 5 5 d d 5 5 5 5 c . . 
-                . . c 5 5 d b b b b d 5 5 c . . 
-                . . c 5 d b c c c c b d 5 c . . 
-                . . c c c c . . . . c c c c . . 
-                . . . . . . . . . . . . . . . . 
-                `, SpriteKind.Food)
-            obstacles.startEffect(effects.starField)
-        } else {
-            obstacles = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . 6 6 6 6 6 6 6 6 . . 
-                . . . . . 6 c 6 6 6 6 6 6 9 6 . 
-                . . . . 6 c c 6 6 6 6 6 6 9 c 6 
-                . . d 6 9 c c 6 9 9 9 9 9 9 c c 
-                . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
-                . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
-                . 6 6 6 6 6 8 b b b b 8 b b b 8 
-                . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
-                . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
-                . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
-                . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
-                . 8 8 8 8 f f f 8 8 8 8 f f f f 
-                . . . 8 f f f f f 8 8 f f f f f 
-                . . . . f f f f . . . . f f f . 
-                . . . . . . . . . . . . . . . . 
-                `, SpriteKind.Enemy)
-            carSprites()
+        for (let index = 0; index < cycles; index++) {
+            if (Math.percentChance(30)) {
+                obstacles = sprites.create(img`
+                    . . . . . . . b b . . . . . . . 
+                    . . . . . . b d d b . . . . . . 
+                    . . . . . b d 5 5 d b . . . . . 
+                    . . . . b b 5 5 5 5 b b . . . . 
+                    . . . . b 5 5 5 5 5 5 b . . . . 
+                    b b b b b 5 5 5 5 1 1 d b b b b 
+                    b 5 5 5 5 5 5 5 5 1 1 1 5 5 5 b 
+                    b d d 5 5 5 5 5 5 1 1 1 5 d d b 
+                    . b d d 5 5 5 5 5 5 5 5 d d b . 
+                    . . b b 5 5 5 5 5 5 5 5 b b . . 
+                    . . c b 5 5 5 5 5 5 5 5 b c . . 
+                    . . c 5 5 5 5 d d 5 5 5 5 c . . 
+                    . . c 5 5 d b b b b d 5 5 c . . 
+                    . . c 5 d b c c c c b d 5 c . . 
+                    . . c c c c . . . . c c c c . . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.Food)
+                obstacles.startEffect(effects.starField)
+            } else {
+                obstacles = sprites.create(img`
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . 6 6 6 6 6 6 6 6 . . 
+                    . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+                    . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+                    . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+                    . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+                    . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+                    . 6 6 6 6 6 8 b b b b 8 b b b 8 
+                    . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+                    . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+                    . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+                    . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+                    . 8 8 8 8 f f f 8 8 8 8 f f f f 
+                    . . . 8 f f f f f 8 8 f f f f f 
+                    . . . . f f f f . . . . f f f . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.Enemy)
+                carSprites()
+            }
+            moveSet(obstacles, speed)
+            randomSpawn(obstacles)
         }
-        moveSet(obstacles, speed)
-        randomSpawn(obstacles)
     } else {
         timer += 1000
         if (game.runtime() >= 120000 && timer >= 120000) {
@@ -2215,5 +2225,10 @@ game.onUpdateInterval(1000, function () {
             game.showLongText("Monke is patiently waiting for your return :)", DialogLayout.Top)
             game.reset()
         }
+    }
+})
+game.onUpdateInterval(200, function () {
+    if (power2 == 1) {
+        bananaThrow(throwSpeed[0], throwSpeed[1])
     }
 })
