@@ -9,6 +9,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     if (power2 == 0) {
         sprites.destroy(otherSprite)
         bananas += 1
+        bananaText()
     } else {
         info.changeLifeBy(-1)
         info.changeScoreBy(-1)
@@ -666,21 +667,6 @@ function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setFlag(SpriteFlag.GhostThroughWalls, true)
     mySprite.lifespan = 3000
 }
-/**
- * Powerups
- * 
- * - Big Monke: Invincibility, helicopters
- * 
- * - Banana Split: Monkey Clones
- * 
- * - Peeling the love: bananas turn things into life hearts
- * 
- * - Jungle Beats
- * 
- * - Bananza: Raining bananas
- * 
- * adds: shadow, invulnerable
- */
 info.onCountdownEnd(function () {
     power2 = 100
     monke.setKind(SpriteKind.Player)
@@ -885,6 +871,19 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     pause(200)
     shadow.y = 252
 })
+/**
+ * Powerups
+ * 
+ * - Big Monke: Invincibility, helicopters
+ * 
+ * - Banana Split: Monkey Clones
+ * 
+ * - Jungle Beats
+ * 
+ * - Bananza: Raining bananas
+ * 
+ * adds: shadow, invulnerable
+ */
 function powerUp (mySprite: Sprite, num: number) {
     info.startCountdown(20)
     if (num == 0) {
@@ -1379,7 +1378,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
         tileNumber += 1
         if (tileNumber == monke_list.length) {
             tileNumber = 0
-            power2 = randint(0, 0)
+            power2 = randint(2, 2)
             powerUp(sprite, power2)
             for (let value of sprites.allOfKind(SpriteKind.Tile)) {
                 animation.stopAnimation(animation.AnimationTypes.All, value)
