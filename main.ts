@@ -5,6 +5,11 @@ namespace SpriteKind {
     export const Shadow = SpriteKind.create()
     export const Heart = SpriteKind.create()
 }
+/**
+ * Show score similar to "Monke" title screen.
+ * 
+ * End game with A press.
+ */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (power2 == 0) {
         sprites.destroy(otherSprite, effects.warmRadial, 100)
