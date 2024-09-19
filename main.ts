@@ -4,12 +4,8 @@ namespace SpriteKind {
     export const Tile = SpriteKind.create()
     export const Shadow = SpriteKind.create()
     export const Heart = SpriteKind.create()
+    export const Extender = SpriteKind.create()
 }
-/**
- * Show score similar to "Monke" title screen.
- * 
- * End game with A press.
- */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (power2 == 0) {
         sprites.destroy(otherSprite, effects.warmRadial, 100)
@@ -869,6 +865,10 @@ function restartGame () {
     )
     titleScreen.setFlag(SpriteFlag.GhostThroughWalls, true)
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Extender, function (sprite, otherSprite) {
+    info.changeCountdownBy(5)
+    sprites.destroy(otherSprite, effects.confetti, 100)
+})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     tiles.setWallAt(tiles.getTileLocation(1, 15), false)
     pause(200)
@@ -1138,102 +1138,6 @@ function powerUp (mySprite: Sprite, num: number) {
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [100, -70]
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart, function (sprite, otherSprite) {
-    info.changeLifeBy(1)
-    animation.runImageAnimation(
-    otherSprite,
-    [img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . f f f f f . f f f f f . . 
-        . . f f 3 3 3 f f f 3 3 3 f f . 
-        . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
-        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
-        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
-        . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
-        . . f f 3 3 3 b b b 3 3 3 f f . 
-        . . . f f 3 b b b b b 3 f f . . 
-        . . . . f f b b b b b f f . . . 
-        . . . . . f f b b b f f . . . . 
-        . . . . . . f f b f f . . . . . 
-        . . . . . . . f f f . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . f f f f f f . f f f f f f . 
-        . f f 3 3 3 3 f f f 3 3 3 3 f f 
-        . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
-        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
-        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
-        . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
-        . f 3 3 3 3 b b b b b 3 3 3 3 f 
-        . f f 3 3 b b b b b b b 3 3 f f 
-        . . f f 3 b b b b b b b 3 f f . 
-        . . . f f b b b b b b b f f . . 
-        . . . . f f b b b b b f f . . . 
-        . . . . . f f b b b f f . . . . 
-        . . . . . . f f b f f . . . . . 
-        . . . . . . . f f f . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . f f f . f f f . . . . 
-        . . . . f 3 3 3 f 3 3 3 f . . . 
-        . . . . f 3 3 3 3 3 1 3 f . . . 
-        . . . . f 3 3 3 3 3 3 3 f . . . 
-        . . . . . f 3 b b b 3 f . . . . 
-        . . . . . f f b b b f f . . . . 
-        . . . . . . f f b f f . . . . . 
-        . . . . . . . f f f . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . b b b b c . . c b b b c . . 
-        . b d 1 1 1 3 c c 3 d 1 1 3 c . 
-        b d 1 1 1 1 d d 1 3 1 1 1 1 3 c 
-        b 1 1 1 1 1 d 1 1 d d 1 1 1 1 b 
-        c 3 1 1 d c c 1 1 c c 1 1 1 1 b 
-        c 3 3 d 3 . . c c . . d 1 1 d b 
-        b 1 1 1 3 . . . . . . 3 d d 3 c 
-        b 1 1 1 d b . . . . c d d 3 3 c 
-        c 3 1 1 1 1 c . . b 1 1 1 d b c 
-        . c d d 1 1 1 c b 3 1 1 1 1 c . 
-        . . c 1 1 1 d d 3 3 1 1 1 b . . 
-        . . . b 1 3 d 1 1 d d 3 b . . . 
-        . . . . b 3 1 1 1 1 d c . . . . 
-        . . . . . c b 1 1 b c . . . . . 
-        . . . . . . c b b c . . . . . . 
-        `,img`
-        . . . 3 3 . 3 3 . . . . . . . . 
-        . . 3 3 1 3 1 3 3 . . . . . . . 
-        . . 3 1 1 1 1 1 3 . . 3 . 3 . . 
-        . . . 3 1 1 1 3 . . 3 1 3 1 3 . 
-        . . . . 3 1 3 . . . 3 1 1 1 3 . 
-        . . . . . 3 . . . . . 3 1 3 . . 
-        . . . . . . . . . . . . 3 . . . 
-        3 3 . 3 3 . . . . . . . . . . . 
-        3 1 1 1 3 . . . . . 3 3 . 3 3 . 
-        . 3 1 3 . . . . . . 3 1 3 1 3 . 
-        . . 3 . . . . . . . 3 1 1 1 3 . 
-        . . . . . 3 . 3 . . . 3 1 3 . . 
-        . . . . . 1 1 1 . . . . 3 . . . 
-        . . . . . 3 1 3 . . . . . . . . 
-        . . . . . . 3 . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `],
-    50,
-    false
-    )
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
-    sprites.destroy(otherSprite, effects.hearts, 100)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
@@ -1638,6 +1542,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite, effects.starField, 100)
 })
+let clock: Sprite = null
 let tileCollect: Sprite = null
 let wings: Sprite = null
 let banana: Sprite = null
@@ -2143,6 +2048,15 @@ game.onUpdate(function () {
         shadow.setPosition(monke.x, monke.y + 4)
     }
 })
+/**
+ * Show score similar to "Monke" title screen.
+ * 
+ * End game with A press.
+ * 
+ * Dynamic music (rolls through multiple sounds)
+ * 
+ * Music for each effect (maybe different tempo)
+ */
 game.onUpdateInterval(1000, function () {
     if (gameStart >= 1) {
         info.changeScoreBy(1)
@@ -2175,6 +2089,27 @@ game.onUpdateInterval(1000, function () {
             tileCollect.startEffect(effects.rings, 1000)
             moveSet(tileCollect, speed)
             randomSpawn(tileCollect)
+        } else if (Math.percentChance(10) && info.countdown() > 0) {
+            clock = sprites.create(img`
+                . . . . . . f f f f . . . . . . 
+                . . . . f f 1 1 1 1 f f . . . . 
+                . . . f 1 1 1 1 f 1 1 1 f . . . 
+                . . f 1 1 1 1 1 f 1 1 1 1 f . . 
+                . f 1 1 1 1 1 1 f 1 1 1 1 1 f . 
+                . f 1 1 1 1 1 1 f 1 1 1 1 1 f . 
+                f 1 1 1 1 1 1 1 f 1 1 1 1 1 1 f 
+                f 1 1 1 1 1 1 1 f 1 1 1 1 1 1 f 
+                f 1 1 f f f f f 2 1 1 1 1 1 1 f 
+                f 1 1 1 1 1 1 1 1 2 1 1 1 1 1 f 
+                . f 1 1 1 1 1 1 1 1 2 1 1 1 f . 
+                . f 1 1 1 1 1 1 1 1 1 2 1 1 f . 
+                . . f 1 1 1 1 1 1 1 1 1 1 f . . 
+                . . . f 1 1 1 1 1 1 1 1 f . . . 
+                . . . . f f 1 1 1 1 f f . . . . 
+                . . . . . . f f f f . . . . . . 
+                `, SpriteKind.Extender)
+            moveSet(clock, speed)
+            randomSpawn(clock)
         }
         for (let index = 0; index < cycles; index++) {
             if (Math.percentChance(30)) {
