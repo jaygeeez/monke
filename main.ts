@@ -5,6 +5,7 @@ namespace SpriteKind {
     export const Shadow = SpriteKind.create()
     export const Heart = SpriteKind.create()
     export const Extender = SpriteKind.create()
+    export const heli = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (power2 == 0) {
@@ -17,7 +18,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         sprite.sayText("ow", 100, false)
         music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
         if (speed <= -150) {
-            speed += 50
+            speed += 10
         } else {
             speed = -100
         }
@@ -506,6 +507,22 @@ function carSprites () {
     }
     obstacles.startEffect(effects.trail)
 }
+controller.combos.attachCombo("a+b", function () {
+    if (gameStart == 0) {
+        music.stopAllSounds()
+        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
+        gameStart = 1
+        bananas = 0
+        titleScreen.setFlag(SpriteFlag.Ghost, true)
+        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
+        moveSet(titleScreen, -100)
+        bananaText()
+        info.setScore(0)
+        info.setLife(3)
+    } else if (gameStart == 2) {
+        game.gameOver(true)
+    }
+})
 function throwing () {
     animation.runImageAnimation(
     monke,
@@ -646,22 +663,6 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSpr
     sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
     randomSpawn(sprite)
     randomSpawn(otherSprite)
-})
-controller.combos.attachCombo("a+b", function () {
-    if (gameStart == 0) {
-        music.stopAllSounds()
-        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
-        gameStart = 1
-        bananas = 0
-        titleScreen.setFlag(SpriteFlag.Ghost, true)
-        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
-        moveSet(titleScreen, -100)
-        bananaText()
-        info.setScore(0)
-        info.setLife(3)
-    } else if (gameStart == 2) {
-        game.gameOver(true)
-    }
 })
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity + randint(-1, 1), 0)
@@ -1141,6 +1142,102 @@ function powerUp (mySprite: Sprite, num: number) {
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [100, -70]
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart, function (sprite, otherSprite) {
+    info.changeLifeBy(1)
+    animation.runImageAnimation(
+    otherSprite,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f . f f f f f . . 
+        . . f f 3 3 3 f f f 3 3 3 f f . 
+        . . f 3 3 3 3 3 f 3 3 3 3 3 f . 
+        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+        . . f 3 3 3 3 3 3 3 1 1 3 3 f . 
+        . . f 3 3 3 3 3 3 3 3 3 3 3 f . 
+        . . f f 3 3 3 b b b 3 3 3 f f . 
+        . . . f f 3 b b b b b 3 f f . . 
+        . . . . f f b b b b b f f . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . f f f f f f . f f f f f f . 
+        . f f 3 3 3 3 f f f 3 3 3 3 f f 
+        . f 3 3 3 3 3 3 f 3 3 3 3 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 3 3 3 1 1 1 3 3 f 
+        . f 3 3 3 3 3 b b b 1 1 1 3 3 f 
+        . f 3 3 3 3 b b b b b 3 3 3 3 f 
+        . f f 3 3 b b b b b b b 3 3 f f 
+        . . f f 3 b b b b b b b 3 f f . 
+        . . . f f b b b b b b b f f . . 
+        . . . . f f b b b b b f f . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . f f f . f f f . . . . 
+        . . . . f 3 3 3 f 3 3 3 f . . . 
+        . . . . f 3 3 3 3 3 1 3 f . . . 
+        . . . . f 3 3 3 3 3 3 3 f . . . 
+        . . . . . f 3 b b b 3 f . . . . 
+        . . . . . f f b b b f f . . . . 
+        . . . . . . f f b f f . . . . . 
+        . . . . . . . f f f . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . b b b b c . . c b b b c . . 
+        . b d 1 1 1 3 c c 3 d 1 1 3 c . 
+        b d 1 1 1 1 d d 1 3 1 1 1 1 3 c 
+        b 1 1 1 1 1 d 1 1 d d 1 1 1 1 b 
+        c 3 1 1 d c c 1 1 c c 1 1 1 1 b 
+        c 3 3 d 3 . . c c . . d 1 1 d b 
+        b 1 1 1 3 . . . . . . 3 d d 3 c 
+        b 1 1 1 d b . . . . c d d 3 3 c 
+        c 3 1 1 1 1 c . . b 1 1 1 d b c 
+        . c d d 1 1 1 c b 3 1 1 1 1 c . 
+        . . c 1 1 1 d d 3 3 1 1 1 b . . 
+        . . . b 1 3 d 1 1 d d 3 b . . . 
+        . . . . b 3 1 1 1 1 d c . . . . 
+        . . . . . c b 1 1 b c . . . . . 
+        . . . . . . c b b c . . . . . . 
+        `,img`
+        . . . 3 3 . 3 3 . . . . . . . . 
+        . . 3 3 1 3 1 3 3 . . . . . . . 
+        . . 3 1 1 1 1 1 3 . . 3 . 3 . . 
+        . . . 3 1 1 1 3 . . 3 1 3 1 3 . 
+        . . . . 3 1 3 . . . 3 1 1 1 3 . 
+        . . . . . 3 . . . . . 3 1 3 . . 
+        . . . . . . . . . . . . 3 . . . 
+        3 3 . 3 3 . . . . . . . . . . . 
+        3 1 1 1 3 . . . . . 3 3 . 3 3 . 
+        . 3 1 3 . . . . . . 3 1 3 1 3 . 
+        . . 3 . . . . . . . 3 1 1 1 3 . 
+        . . . . . 3 . 3 . . . 3 1 3 . . 
+        . . . . . 1 1 1 . . . . 3 . . . 
+        . . . . . 3 1 3 . . . . . . . . 
+        . . . . . . 3 . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `],
+    50,
+    false
+    )
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
+    sprites.destroy(otherSprite, effects.hearts, 100)
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (monke.isHittingTile(CollisionDirection.Bottom)) {
         monke.vy = -185
@@ -1174,7 +1271,9 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 info.onLifeZero(function () {
     music.stopAllSounds()
     gameStart = 2
+    bananas = 1
     game.setGameOverScoringType(game.ScoringType.HighScore)
+    monke.sayText("finalScore :)", 2000, true)
     sprites.destroyAllSpritesOfKind(SpriteKind.Extender)
     sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
@@ -1658,6 +1757,12 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
         monke.vy = -50
     }
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Text, function (sprite, otherSprite) {
+    otherSprite.startEffect(effects.confetti, 100)
+    otherSprite.sayText("A+B to end!", 100, false)
+    effects.confetti.startScreenEffect(100)
+    scene.cameraShake(2, 100)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     bananas += 1
     animation.runImageAnimation(
@@ -1755,6 +1860,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite, effects.starField, 100)
 })
+let helicopter: Sprite = null
 let clock: Sprite = null
 let tileCollect: Sprite = null
 let wings: Sprite = null
@@ -1762,10 +1868,10 @@ let scoreSprite2: Sprite = null
 let scoreSprite: Sprite = null
 let scoreList: Image[] = []
 let scoreText = ""
-let titleScreen: Sprite = null
-let gameStart = 0
 let banana: Sprite = null
 let textSprite: TextSprite = null
+let titleScreen: Sprite = null
+let gameStart = 0
 let obstacles: Sprite = null
 let monke_list: Image[] = []
 let power2 = 0
@@ -2266,9 +2372,7 @@ game.onUpdate(function () {
     }
 })
 /**
- * Show score similar to "Monke" title screen.
- * 
- * End game with A press.
+ * Helicopter enemy
  * 
  * Dynamic music (rolls through multiple sounds)
  * 
@@ -2277,10 +2381,10 @@ game.onUpdate(function () {
 game.onUpdateInterval(1000, function () {
     if (gameStart == 1) {
         info.changeScoreBy(1)
-        if (info.score() >= 100) {
+        if (info.score() >= 50) {
             cycles = 2
-        } else if (info.score() >= 200) {
-            cycles = 3
+        } else if (info.score() >= 100) {
+            cycles = 4
         }
         speed += -1
         if (Math.percentChance(10) && info.countdown() <= 0) {
@@ -2306,7 +2410,7 @@ game.onUpdateInterval(1000, function () {
             tileCollect.startEffect(effects.rings, 1000)
             moveSet(tileCollect, speed)
             randomSpawn(tileCollect)
-        } else if (Math.percentChance(10) && info.countdown() > 0) {
+        } else if (Math.percentChance(5) && info.countdown() > 0) {
             clock = sprites.create(img`
                 . . . . . . f f f f . . . . . . 
                 . . . . f f 1 1 1 1 f f . . . . 
@@ -2372,6 +2476,136 @@ game.onUpdateInterval(1000, function () {
             }
             moveSet(obstacles, speed)
             randomSpawn(obstacles)
+        }
+        if (Math.percentChance(10)) {
+            helicopter = sprites.create(img`
+                ....ffffff.........ccc..
+                ....ff22ccf.......cc4f..
+                .....ffccccfff...cc44f..
+                ....cc24442222cccc442f..
+                ...c9b4422222222cc422f..
+                ..c999b2222222222222fc..
+                .c2b99111b222222222c22c.
+                c222b111992222ccccccc22f
+                f222222222222c222ccfffff
+                .f2222222222442222f.....
+                ..ff2222222cf442222f....
+                ....ffffffffff442222c...
+                .........f2cfffc2222c...
+                .........fcc2ffffffff...
+                ..........fc2ffff.......
+                ...........fffff........
+                `, SpriteKind.heli)
+            tiles.placeOnTile(helicopter, tiles.getTileLocation(15, 10))
+            moveSet(helicopter, speed - 25)
+            animation.runImageAnimation(
+            helicopter,
+            [img`
+                ....ffffff.........ccc..
+                ....ff22ccf.......cc4f..
+                .....ffccccfff...cc44f..
+                ....cc24442222cccc442f..
+                ...c9b4422222222cc422f..
+                ..c999b2222222222222fc..
+                .c2b99111b222222222c22c.
+                c222b111992222ccccccc22f
+                f222222222222c222ccfffff
+                .f2222222222442222f.....
+                ..ff2222222cf442222f....
+                ....ffffffffff442222c...
+                .........f2cfffc2222c...
+                .........fcc2ffffffff...
+                ..........fc2ffff.......
+                ...........fffff........
+                `,img`
+                ....ffffff.........ccc..
+                ....ff22ccf.......cc4f..
+                .....ffccccfff...cc44f..
+                ....cc24442222cccc442f..
+                ...c9b4422222222cc422f..
+                ..c9999b222222222222fc..
+                .c2b991119222222222c22c.
+                c2222b11992222ccccccc22f
+                f222222222222c222ccfffff
+                .f2222222222444222f.....
+                ..ff2222222cf444222f....
+                ....ffffffffff444222c...
+                .........f2cfffc2222c...
+                .........fcc2ffffffff...
+                ..........fc2ffff.......
+                ...........fffff........
+                `,img`
+                ...ffffff..........ccc..
+                ...ff22ccff.......c44f..
+                ....fffccccfff...c442f..
+                ....cc24442222ccc4422f..
+                ...c99b222222222cc22fc..
+                ..c999111b222222222222c.
+                .c2bb11199222ccccccc222f
+                c22222222222c222cccfffff
+                f22222222222442222ccc...
+                .f222222222224442222c...
+                ..ff2222222cffc44222c...
+                ....fffffffcffffcccc....
+                .........f2c2ffff.......
+                .........fcc2ffff.......
+                ..........ffffff........
+                ........................
+                `,img`
+                ...fffffff.........ccc..
+                ...ff22ccff.......cc4f..
+                ....fffccccfff...cc44f..
+                ....cc24442222cccc442f..
+                ...c9b4422222222cc422f..
+                ..c999b2222222222222fc..
+                .c2b99111b222222222c22c.
+                c222b111992222ccccccc22f
+                f222222222222c222ccfffff
+                .f2222222222442222f.....
+                ..ff2222222cf442222f....
+                ....ffffffffff442222c...
+                .........f2cfffc2222c...
+                .........fcc2ffffffff...
+                ..........fc2ffff.......
+                ...........fffff........
+                `,img`
+                ....ffffff..............
+                ....ff22ccf.........cf..
+                .....ffccccfff.....c4f..
+                ....cc22222222ccccc44f..
+                ...c9b244422222ccc442f..
+                ..c99944222222222242fc..
+                .c2b9992222222222222fcc.
+                c222b1111b22222222cc22cf
+                f2222211992222ccccccc22f
+                .f22222222222c222cffffff
+                ..ff2222222c442222ff....
+                ....fffffffff442222fc...
+                .........f2cff442222c...
+                .........fccfffc2222c...
+                ..........fc2ffffffff...
+                ...........c2fff........
+                `,img`
+                ....ffffff..............
+                ....ff2cccf.........cf..
+                .....ff2cccfff.....c4f..
+                ....cc22222222ccccc44f..
+                ...c9b244422222ccc442f..
+                ..c99944222222222242fc..
+                .c2b9912222222222222fcc.
+                c222b1111b22222222cc22cf
+                f2222221992222ccccccc22f
+                .f22222222222c222cffffff
+                ..ff2222222c442222ff....
+                ....fffffffff442222fc...
+                .........f2cff442222c...
+                .........fccfffc2222c...
+                ..........fc2ffffffff...
+                ...........c2fff........
+                `],
+            500,
+            true
+            )
         }
     } else {
         timer += 1000
