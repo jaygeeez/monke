@@ -506,20 +506,6 @@ function carSprites () {
     }
     obstacles.startEffect(effects.trail)
 }
-controller.combos.attachCombo("a+b", function () {
-    if (gameStart == 0) {
-        music.stopAllSounds()
-        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
-        gameStart = 1
-        bananas = 0
-        titleScreen.setFlag(SpriteFlag.Ghost, true)
-        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
-        moveSet(titleScreen, -100)
-        bananaText()
-        info.setScore(0)
-        info.setLife(3)
-    }
-})
 function throwing () {
     animation.runImageAnimation(
     monke,
@@ -660,6 +646,22 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSpr
     sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
     randomSpawn(sprite)
     randomSpawn(otherSprite)
+})
+controller.combos.attachCombo("a+b", function () {
+    if (gameStart == 0) {
+        music.stopAllSounds()
+        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
+        gameStart = 1
+        bananas = 0
+        titleScreen.setFlag(SpriteFlag.Ghost, true)
+        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
+        moveSet(titleScreen, -100)
+        bananaText()
+        info.setScore(0)
+        info.setLife(3)
+    } else if (gameStart == 2) {
+        game.gameOver(true)
+    }
 })
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity + randint(-1, 1), 0)
@@ -1171,7 +1173,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 info.onLifeZero(function () {
     music.stopAllSounds()
-    gameStart = 0
+    gameStart = 2
     game.setGameOverScoringType(game.ScoringType.HighScore)
     sprites.destroyAllSpritesOfKind(SpriteKind.Extender)
     sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
@@ -1364,8 +1366,27 @@ info.onLifeZero(function () {
     ]
     if (info.score() < 10) {
         scoreSprite = sprites.create(scoreList[info.score()], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(4, 14))
+        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(5, 12))
         scoreSprite.scale = 3
+    } else if (info.score() < 100) {
+        scoreSprite = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
+        scoreSprite.scale = 3
+        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(4, 12))
+        scoreSprite2.scale = 3
+    } else if (info.score() < 1000) {
+        scoreSprite = sprites.create(scoreList[parseFloat(scoreText[2])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
+        scoreSprite.scale = 2
+        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(5, 12))
+        scoreSprite2.scale = 2
+        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(3, 12))
+        scoreSprite2.scale = 2
+    } else {
+        game.gameOver(true)
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
@@ -1737,13 +1758,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
 let clock: Sprite = null
 let tileCollect: Sprite = null
 let wings: Sprite = null
+let scoreSprite2: Sprite = null
 let scoreSprite: Sprite = null
 let scoreList: Image[] = []
 let scoreText = ""
-let banana: Sprite = null
-let textSprite: TextSprite = null
 let titleScreen: Sprite = null
 let gameStart = 0
+let banana: Sprite = null
+let textSprite: TextSprite = null
 let obstacles: Sprite = null
 let monke_list: Image[] = []
 let power2 = 0
@@ -2253,7 +2275,7 @@ game.onUpdate(function () {
  * Music for each effect (maybe different tempo)
  */
 game.onUpdateInterval(1000, function () {
-    if (gameStart >= 1) {
+    if (gameStart == 1) {
         info.changeScoreBy(1)
         if (info.score() >= 100) {
             cycles = 2
