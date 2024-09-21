@@ -203,6 +203,10 @@ function jumping () {
     false
     )
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.heli, function (sprite, otherSprite) {
+    sprites.destroy(otherSprite, effects.fire, 100)
+    info.changeScoreBy(10)
+})
 function carSprites () {
     if (Math.percentChance(25)) {
         animation.runImageAnimation(
@@ -1273,13 +1277,14 @@ info.onLifeZero(function () {
     gameStart = 2
     bananas = 1
     game.setGameOverScoringType(game.ScoringType.HighScore)
-    monke.sayText("finalScore :)", 2000, true)
+    monke.sayText("score", 2000, true)
     sprites.destroyAllSpritesOfKind(SpriteKind.Extender)
     sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
     sprites.destroyAllSpritesOfKind(SpriteKind.Tile)
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
     sprites.destroyAllSpritesOfKind(SpriteKind.Text)
+    sprites.destroyAllSpritesOfKind(SpriteKind.heli)
     scoreText = convertToText(info.score())
     scoreList = [
     img`
@@ -1618,6 +1623,86 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [25, -140]
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.heli, function (sprite, otherSprite) {
+    sprites.destroy(sprite)
+    animation.runImageAnimation(
+    otherSprite,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . 4 4 . . . . . . . 
+        . . . . . . 4 5 5 4 . . . . . . 
+        . . . . . . 2 5 5 2 . . . . . . 
+        . . . . . . . 2 2 . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . 4 . . . . . 
+        . . . . 2 . . . . 4 4 . . . . . 
+        . . . . 2 4 . . 4 5 4 . . . . . 
+        . . . . . 2 4 d 5 5 4 . . . . . 
+        . . . . . 2 5 5 5 5 4 . . . . . 
+        . . . . . . 2 5 5 5 5 4 . . . . 
+        . . . . . . 2 5 4 2 4 4 . . . . 
+        . . . . . . 4 4 . . 2 4 4 . . . 
+        . . . . . 4 4 . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . 3 . . . . . . . . . . . 4 . . 
+        . 3 3 . . . . . . . . . 4 4 . . 
+        . 3 d 3 . . 4 4 . . 4 4 d 4 . . 
+        . . 3 5 3 4 5 5 4 4 d d 4 4 . . 
+        . . 3 d 5 d 1 1 d 5 5 d 4 4 . . 
+        . . 4 5 5 1 1 1 1 5 1 1 5 4 . . 
+        . 4 5 5 5 5 1 1 5 1 1 1 d 4 4 . 
+        . 4 d 5 1 1 5 5 5 1 1 1 5 5 4 . 
+        . 4 4 5 1 1 5 5 5 5 5 d 5 5 4 . 
+        . . 4 3 d 5 5 5 d 5 5 d d d 4 . 
+        . 4 5 5 d 5 5 5 d d d 5 5 4 . . 
+        . 4 5 5 d 3 5 d d 3 d 5 5 4 . . 
+        . 4 4 d d 4 d d d 4 3 d d 4 . . 
+        . . 4 5 4 4 4 4 4 4 4 4 4 . . . 
+        . 4 5 4 . . 4 4 4 . . . 4 4 . . 
+        . 4 4 . . . . . . . . . . 4 4 . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . b b . b b b . . . . . 
+        . . . . b 1 1 b 1 1 1 b . . . . 
+        . . b b 3 1 1 d d 1 d d b b . . 
+        . b 1 1 d d b b b b b 1 1 b . . 
+        . b 1 1 1 b . . . . . b d d b . 
+        . . 3 d d b . . . . . b d 1 1 b 
+        . b 1 d 3 . . . . . . . b 1 1 b 
+        . b 1 1 b . . . . . . b b 1 d b 
+        . b 1 d b . . . . . . b d 3 d b 
+        . b b d d b . . . . b d d d b . 
+        . b d d d d b . b b 3 d d 3 b . 
+        . . b d d 3 3 b d 3 3 b b b . . 
+        . . . b b b d d d d d b . . . . 
+        . . . . . . b b b b b . . . . . 
+        `],
+    50,
+    false
+    )
+    info.changeScoreBy(10)
+    music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
+    sprites.destroy(otherSprite, effects.fire, 100)
 })
 function randomSpawn (mySprite: Sprite) {
     if (Math.percentChance(33)) {
@@ -2371,6 +2456,11 @@ game.onUpdate(function () {
         shadow.setPosition(monke.x, monke.y + 4)
     }
 })
+game.onUpdateInterval(210, function () {
+    if (power2 == 1) {
+        bananaThrow(throwSpeed[0], throwSpeed[1])
+    }
+})
 /**
  * Helicopter enemy
  * 
@@ -2477,7 +2567,7 @@ game.onUpdateInterval(1000, function () {
             moveSet(obstacles, speed)
             randomSpawn(obstacles)
         }
-        if (Math.percentChance(10)) {
+        if (Math.percentChance(5)) {
             helicopter = sprites.create(img`
                 ....ffffff.........ccc..
                 ....ff22ccf.......cc4f..
@@ -2497,7 +2587,7 @@ game.onUpdateInterval(1000, function () {
                 ...........fffff........
                 `, SpriteKind.heli)
             tiles.placeOnTile(helicopter, tiles.getTileLocation(15, 10))
-            moveSet(helicopter, speed - 25)
+            moveSet(helicopter, speed)
             animation.runImageAnimation(
             helicopter,
             [img`
@@ -2616,10 +2706,5 @@ game.onUpdateInterval(1000, function () {
             game.showLongText("Monke is patiently waiting for your return :)", DialogLayout.Top)
             game.reset()
         }
-    }
-})
-game.onUpdateInterval(200, function () {
-    if (power2 == 1) {
-        bananaThrow(throwSpeed[0], throwSpeed[1])
     }
 })
