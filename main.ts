@@ -1275,6 +1275,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 info.onLifeZero(function () {
     info.stopCountdown()
     music.stopAllSounds()
+    music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
     gameStart = 2
     bananas = 1
     game.setGameOverScoringType(game.ScoringType.HighScore)
@@ -1491,6 +1492,7 @@ info.onLifeZero(function () {
         tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(3, 12))
         scoreSprite2.scale = 2
     } else {
+        music.stopAllSounds()
         game.gameOver(true)
     }
 })
@@ -2463,10 +2465,6 @@ game.onUpdateInterval(210, function () {
     }
 })
 /**
- * Helicopter enemy
- * 
- * Dynamic music (rolls through multiple sounds)
- * 
  * Music for each effect (maybe different tempo)
  */
 game.onUpdateInterval(1000, function () {
