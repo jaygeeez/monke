@@ -511,22 +511,6 @@ function carSprites () {
     }
     obstacles.startEffect(effects.trail)
 }
-controller.combos.attachCombo("a+b", function () {
-    if (gameStart == 0) {
-        music.stopAllSounds()
-        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
-        gameStart = 1
-        bananas = 0
-        titleScreen.setFlag(SpriteFlag.Ghost, true)
-        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
-        moveSet(titleScreen, -100)
-        bananaText()
-        info.setScore(0)
-        info.setLife(3)
-    } else if (gameStart == 2) {
-        game.gameOver(true)
-    }
-})
 function throwing () {
     animation.runImageAnimation(
     monke,
@@ -667,6 +651,22 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSpr
     sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
     randomSpawn(sprite)
     randomSpawn(otherSprite)
+})
+controller.combos.attachCombo("a+b", function () {
+    if (gameStart == 0) {
+        music.stopAllSounds()
+        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
+        gameStart = 1
+        bananas = 0
+        titleScreen.setFlag(SpriteFlag.Ghost, true)
+        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
+        moveSet(titleScreen, -100)
+        bananaText()
+        info.setScore(0)
+        info.setLife(3)
+    } else if (gameStart == 2) {
+        game.gameOver(true)
+    }
 })
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity + randint(-1, 1), 0)
@@ -1273,6 +1273,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 info.onLifeZero(function () {
+    info.stopCountdown()
     music.stopAllSounds()
     gameStart = 2
     bananas = 1
@@ -1953,10 +1954,10 @@ let scoreSprite2: Sprite = null
 let scoreSprite: Sprite = null
 let scoreList: Image[] = []
 let scoreText = ""
-let banana: Sprite = null
-let textSprite: TextSprite = null
 let titleScreen: Sprite = null
 let gameStart = 0
+let banana: Sprite = null
+let textSprite: TextSprite = null
 let obstacles: Sprite = null
 let monke_list: Image[] = []
 let power2 = 0
