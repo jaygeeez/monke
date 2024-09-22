@@ -888,6 +888,7 @@ function powerUp (mySprite: Sprite, num: number) {
     info.startCountdown(20)
     if (num == 0) {
         effects.clouds.startScreenEffect(15000)
+        music.play(music.createSong(assets.song`NLU`), music.PlaybackMode.LoopingInBackground)
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
             cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
             cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -1614,7 +1615,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
         tileNumber += 1
         if (tileNumber == monke_list.length) {
             tileNumber = 0
-            power2 = randint(0, 2)
+            power2 = randint(0, 0)
             powerUp(sprite, power2)
             for (let value of sprites.allOfKind(SpriteKind.Tile)) {
                 animation.stopAnimation(animation.AnimationTypes.All, value)
