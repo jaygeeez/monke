@@ -800,6 +800,8 @@ info.onCountdownEnd(function () {
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         `)
+    music.stopAllSounds()
+    music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.confetti, 100)
@@ -882,6 +884,7 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     shadow.y = 252
 })
 function powerUp (mySprite: Sprite, num: number) {
+    music.stopAllSounds()
     info.startCountdown(20)
     if (num == 0) {
         effects.clouds.startScreenEffect(15000)
@@ -1012,11 +1015,12 @@ function powerUp (mySprite: Sprite, num: number) {
         mySprite.scale = 2
         shadow.scale = 2
     } else if (num == 1) {
+        mySprite.sayText("BANANza", 2000, true)
         effects.blizzard.startScreenEffect(15000)
         bananas += 20
         bananaText()
-        mySprite.sayText("BANANza", 2000, true)
     } else if (num == 2) {
+        mySprite.sayText("Peel the love <3", 2000, true)
         effects.hearts.startScreenEffect(15000)
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
@@ -1140,7 +1144,6 @@ function powerUp (mySprite: Sprite, num: number) {
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             `)
-        mySprite.sayText("Peel the love <3", 2000, true)
     }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
