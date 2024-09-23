@@ -1486,7 +1486,7 @@ info.onLifeZero(function () {
         scoreSprite,
         animation.animationPresets(animation.bobbing),
         7500,
-        false
+        true
         )
     } else if (info.score() < 100) {
         scoreSprite = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
@@ -1496,7 +1496,7 @@ info.onLifeZero(function () {
         scoreSprite,
         animation.animationPresets(animation.bobbing),
         7500,
-        false
+        true
         )
         scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(4, 12))
@@ -1505,7 +1505,7 @@ info.onLifeZero(function () {
         scoreSprite2,
         animation.animationPresets(animation.bobbing),
         7500,
-        false
+        true
         )
     } else if (info.score() < 1000) {
         scoreSprite = sprites.create(scoreList[parseFloat(scoreText[2])], SpriteKind.Text)
@@ -1515,7 +1515,7 @@ info.onLifeZero(function () {
         scoreSprite,
         animation.animationPresets(animation.bobbing),
         7500,
-        false
+        true
         )
         scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(5, 12))
@@ -1524,7 +1524,7 @@ info.onLifeZero(function () {
         scoreSprite2,
         animation.animationPresets(animation.bobbing),
         7500,
-        false
+        true
         )
         scoreSprite3 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite3, tiles.getTileLocation(3, 12))
@@ -1533,11 +1533,12 @@ info.onLifeZero(function () {
         scoreSprite2,
         animation.animationPresets(animation.bobbing),
         7500,
-        false
+        true
         )
     } else {
-        music.stopAllSounds()
+        game.showLongText("Idk how you did this but you got " + info.score() + ". You are a true gamer!", DialogLayout.Right)
         game.gameOver(true)
+        music.stopAllSounds()
     }
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
