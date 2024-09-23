@@ -1530,7 +1530,7 @@ info.onLifeZero(function () {
         tiles.placeOnTile(scoreSprite3, tiles.getTileLocation(3, 12))
         scoreSprite3.scale = 2
         animation.runMovementAnimation(
-        scoreSprite2,
+        scoreSprite3,
         animation.animationPresets(animation.bobbing),
         7500,
         true
