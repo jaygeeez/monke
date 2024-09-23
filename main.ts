@@ -1023,7 +1023,7 @@ function powerUp (mySprite: Sprite, num: number) {
         bananas += 20
         bananaText()
     } else if (num == 2) {
-        music.play(music.createSong(hex`0028000408020301001c000f05001202c102c20100040500280000006400280003140006020004b40000000100012902000300012703000400012205000600011e0700080001290a000b0001270b000c0001220d000e00011e1000110001a51200130001a313001400011e15001600011b1700180001a51a001b0001a31b001c00011e2000210001a322002300012223002400011e25002600011b2700280001572e002f0001192f003000015730003100011632003300015734003500011936003700011b38003900011d3a003b00011e3c003d0001203e003f00012206001c00010a006400f401640000040000000000000000000000000000000002390000000400050f1b1e22251000140005142063272a20002400064b1b1e63272a30003400080a16191d2225292c3c004000080a169a1d22a6292c09010e02026400000403780000040a000301000000640001c80000040100000000640001640000040100000000fa0004af00000401c80000040a00019600000414000501006400140005010000002c0104dc00000401fa0000040a0001c8000004140005d0076400140005d0070000c800029001f40105c201f4010a0005900114001400039001000005c201f4010500058403050032000584030000fa00049001000005c201f4010500058403c80032000584030500640005840300009001049001000005c201f4010500058403c80064000584030500c8000584030000f40105ac0d000404a00f00000a0004ac0d2003010004a00f0000280004ac0d9001010004a00f0000280002d00700040408070f0064000408070000c80003c800c8000e7d00c80019000e64000f0032000e78000000fa00032c01c8000ee100c80019000ec8000f0032000edc000000fa0003f401c8000ea901c80019000e90010f0032000ea4010000fa0001c8000004014b000000c800012c01000401c8000000c8000190010004012c010000c80002c800000404c8000f0064000496000000c80002c2010004045e010f006400042c010000640002c409000404c4096400960004f6090000f40102b80b000404b80b64002c0104f40b0000f401022003000004200300040a000420030000ea01029001000004900100040a000490010000900102d007000410d0076400960010d0070000c800900000000100020006030004000106040005000300060a080009000200060c000d000300060a10001100020006130014000106140015000300060a180019000200061c001d000300060a20002100020006230024000106240025000300060a280029000200062c002d000300060a30003100020006330034000106340035000300060a380039000200063c003d000300060a`), music.PlaybackMode.UntilDone)
+        music.play(music.createSong(hex`0028000408020301001c000f05001202c102c20100040500280000006400280003140006020004b40000000100012902000300012703000400012205000600011e0700080001290a000b0001270b000c0001220d000e00011e1000110001a51200130001a313001400011e15001600011b1700180001a51a001b0001a31b001c00011e2000210001a322002300012223002400011e25002600011b2700280001572e002f0001192f003000015730003100011632003300015734003500011936003700011b38003900011d3a003b00011e3c003d0001203e003f00012206001c00010a006400f401640000040000000000000000000000000000000002390000000400050f1b1e22251000140005142063272a20002400064b1b1e63272a30003400080a16191d2225292c3c004000080a169a1d22a6292c09010e02026400000403780000040a000301000000640001c80000040100000000640001640000040100000000fa0004af00000401c80000040a00019600000414000501006400140005010000002c0104dc00000401fa0000040a0001c8000004140005d0076400140005d0070000c800029001f40105c201f4010a0005900114001400039001000005c201f4010500058403050032000584030000fa00049001000005c201f4010500058403c80032000584030500640005840300009001049001000005c201f4010500058403c80064000584030500c8000584030000f40105ac0d000404a00f00000a0004ac0d2003010004a00f0000280004ac0d9001010004a00f0000280002d00700040408070f0064000408070000c80003c800c8000e7d00c80019000e64000f0032000e78000000fa00032c01c8000ee100c80019000ec8000f0032000edc000000fa0003f401c8000ea901c80019000e90010f0032000ea4010000fa0001c8000004014b000000c800012c01000401c8000000c8000190010004012c010000c80002c800000404c8000f0064000496000000c80002c2010004045e010f006400042c010000640002c409000404c4096400960004f6090000f40102b80b000404b80b64002c0104f40b0000f401022003000004200300040a000420030000ea01029001000004900100040a000490010000900102d007000410d0076400960010d0070000c800900000000100020006030004000106040005000300060a080009000200060c000d000300060a10001100020006130014000106140015000300060a180019000200061c001d000300060a20002100020006230024000106240025000300060a280029000200062c002d000300060a30003100020006330034000106340035000300060a380039000200063c003d000300060a`), music.PlaybackMode.LoopingInBackground)
         mySprite.sayText("Peel the love <3", 2000, true)
         effects.hearts.startScreenEffect(15000)
         scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
@@ -1282,6 +1282,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
 info.onLifeZero(function () {
     info.stopCountdown()
     music.stopAllSounds()
+    music.play(music.melodyPlayable(music.wawawawaa), music.PlaybackMode.UntilDone)
     music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
     gameStart = 2
     bananas = 1
@@ -1481,23 +1482,59 @@ info.onLifeZero(function () {
         scoreSprite = sprites.create(scoreList[info.score()], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite, tiles.getTileLocation(5, 12))
         scoreSprite.scale = 3
+        animation.runMovementAnimation(
+        scoreSprite,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        false
+        )
     } else if (info.score() < 100) {
         scoreSprite = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
         scoreSprite.scale = 3
+        animation.runMovementAnimation(
+        scoreSprite,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        false
+        )
         scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(4, 12))
         scoreSprite2.scale = 3
+        animation.runMovementAnimation(
+        scoreSprite2,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        false
+        )
     } else if (info.score() < 1000) {
         scoreSprite = sprites.create(scoreList[parseFloat(scoreText[2])], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
         scoreSprite.scale = 2
+        animation.runMovementAnimation(
+        scoreSprite,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        false
+        )
         scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
         tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(5, 12))
         scoreSprite2.scale = 2
-        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(3, 12))
-        scoreSprite2.scale = 2
+        animation.runMovementAnimation(
+        scoreSprite2,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        false
+        )
+        scoreSprite3 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite3, tiles.getTileLocation(3, 12))
+        scoreSprite3.scale = 2
+        animation.runMovementAnimation(
+        scoreSprite2,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        false
+        )
     } else {
         music.stopAllSounds()
         game.gameOver(true)
@@ -1606,6 +1643,7 @@ function running () {
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
     if (otherSprite.image == monke_list[tileNumber]) {
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
         otherSprite.lifespan = 120000
         tiles.placeOnTile(otherSprite, tiles.getTileLocation(tileNumber + 3, 10))
         animation.runMovementAnimation(
@@ -1618,7 +1656,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
         tileNumber += 1
         if (tileNumber == monke_list.length) {
             tileNumber = 0
-            power2 = randint(1, 1)
+            power2 = randint(0, 2)
             powerUp(sprite, power2)
             for (let value of sprites.allOfKind(SpriteKind.Tile)) {
                 animation.stopAnimation(animation.AnimationTypes.All, value)
@@ -1627,6 +1665,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSpr
             }
         }
     } else {
+        music.play(music.melodyPlayable(music.powerDown), music.PlaybackMode.InBackground)
         tileNumber = 0
         sprites.destroyAllSpritesOfKind(SpriteKind.Tile, effects.disintegrate, 1000)
     }
@@ -1959,6 +1998,7 @@ let helicopter: Sprite = null
 let clock: Sprite = null
 let tileCollect: Sprite = null
 let wings: Sprite = null
+let scoreSprite3: Sprite = null
 let scoreSprite2: Sprite = null
 let scoreSprite: Sprite = null
 let scoreList: Image[] = []
@@ -2483,7 +2523,7 @@ game.onUpdateInterval(1000, function () {
             cycles = 4
         }
         speed += -1
-        if (Math.percentChance(50) && info.countdown() <= 0) {
+        if (Math.percentChance(10) && info.countdown() <= 0) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
