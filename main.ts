@@ -512,6 +512,23 @@ function carSprites () {
     }
     obstacles.startEffect(effects.trail)
 }
+controller.combos.attachCombo("a+b", function () {
+    if (gameStart == 0) {
+        music.stopAllSounds()
+        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
+        gameStart = 1
+        bananas = 0
+        titleScreen.setFlag(SpriteFlag.Ghost, true)
+        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
+        moveSet(titleScreen, -100)
+        bananaText()
+        info.setScore(0)
+        info.setLife(3)
+    } else if (gameStart == 2) {
+        music.stopAllSounds()
+        game.gameOver(true)
+    }
+})
 function throwing () {
     animation.runImageAnimation(
     monke,
@@ -653,23 +670,6 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Enemy, function (sprite, otherSpr
     randomSpawn(sprite)
     randomSpawn(otherSprite)
 })
-controller.combos.attachCombo("a+b", function () {
-    if (gameStart == 0) {
-        music.stopAllSounds()
-        music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
-        gameStart = 1
-        bananas = 0
-        titleScreen.setFlag(SpriteFlag.Ghost, true)
-        animation.stopAnimation(animation.AnimationTypes.All, titleScreen)
-        moveSet(titleScreen, -100)
-        bananaText()
-        info.setScore(0)
-        info.setLife(3)
-    } else if (gameStart == 2) {
-        music.stopAllSounds()
-        game.gameOver(true)
-    }
-})
 function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setVelocity(velocity + randint(-1, 1), 0)
     mySprite.setFlag(SpriteFlag.GhostThroughWalls, true)
@@ -810,6 +810,269 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, oth
     otherSprite.sayText("Press A+B to start!", 100, false)
     effects.confetti.startScreenEffect(100)
     scene.cameraShake(2, 100)
+})
+info.onLifeZero(function () {
+    info.stopCountdown()
+    music.stopAllSounds()
+    music.play(music.melodyPlayable(music.wawawawaa), music.PlaybackMode.UntilDone)
+    music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
+    gameStart = 2
+    bananas = 1
+    power2 = 100
+    game.setGameOverScoringType(game.ScoringType.HighScore)
+    monke.sayText("score:", 2000, true)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Extender)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Tile)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+    sprites.destroyAllSpritesOfKind(SpriteKind.Text)
+    sprites.destroyAllSpritesOfKind(SpriteKind.heli)
+    scoreText = convertToText(info.score())
+    scoreList = [
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . 1 1 1 1 1 1 1 1 . . . 
+        . . . . 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 1 . 
+        . 1 1 1 1 1 1 1 . . 1 1 1 1 1 . 
+        . 1 1 1 1 1 . . . . . 1 1 1 1 . 
+        . 1 1 1 1 . . . . . . 1 1 1 1 . 
+        . 1 1 1 . . . . . . . 1 1 1 1 . 
+        . 1 1 1 . . . . . . . 1 1 1 . . 
+        . 1 1 1 . . . . . . 1 1 1 1 . . 
+        . 1 1 1 . . . . . 1 1 1 1 1 . . 
+        . 1 1 1 1 1 1 . 1 1 1 1 1 . . . 
+        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 . . . . . 
+        . . . . . 1 1 1 1 1 . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . . . 1 1 1 . . . . . . 
+        . . . . . . . 1 1 1 . . . . . . 
+        . . . . . 1 1 1 1 1 1 . . . . . 
+        . . . . 1 1 1 1 1 1 1 . . . . . 
+        . . 1 1 1 1 1 1 1 1 1 . . . . . 
+        . 1 1 1 1 1 1 1 1 1 1 . . . . . 
+        . 1 1 1 1 1 . 1 1 1 . . . . . . 
+        . 1 1 1 1 . . 1 1 1 . . . . . . 
+        . . . . . . . 1 1 1 . . . . . . 
+        . . . . . . . 1 1 1 . . . . . . 
+        . . . . . . . 1 1 1 1 1 1 1 1 . 
+        . . . . 1 1 1 1 1 1 1 1 1 1 1 . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 1 . 
+        . . 1 1 1 1 1 1 1 1 . . 1 1 1 . 
+        . . 1 1 1 1 . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . 1 1 1 1 1 1 . . . . . 
+        . . . 1 1 1 1 1 1 1 1 1 . . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 . . . . 
+        . . 1 1 1 1 1 . . 1 1 1 . . . . 
+        . . 1 1 1 . . . . 1 1 1 . . . . 
+        . . . . . . . . 1 1 1 1 . . . . 
+        . . . . . . . 1 1 1 1 1 . . . . 
+        . . . . . . 1 1 1 1 1 1 . . . . 
+        . . . . . 1 1 1 1 1 1 . . . . . 
+        . . . . 1 1 1 1 1 1 . . . . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 . . . 1 1 1 . . . 
+        . . 1 1 1 . . . . 1 1 1 1 . . . 
+        . . . . . . . 1 1 1 1 1 1 . . . 
+        . . . . . 1 1 1 1 1 1 1 1 . . . 
+        . . . . . 1 1 1 1 1 1 1 1 . . . 
+        . . . . . 1 1 1 1 1 1 1 1 1 . . 
+        . . . . . . . . . . 1 1 1 1 1 . 
+        . . . . . . . . . . . 1 1 1 1 . 
+        . . . . . . . . . . . 1 1 1 1 . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 1 . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . . . . . . . 1 1 1 1 . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . 1 1 1 . . . . . . 1 1 1 . . . 
+        . 1 1 1 . . . . . . 1 1 1 . . . 
+        . 1 1 1 . . . . . 1 1 1 1 . . . 
+        . 1 1 1 . . . . . 1 1 1 1 . . . 
+        . 1 1 1 1 . . . . 1 1 1 . . . . 
+        . 1 1 1 1 . . . . 1 1 1 . . . . 
+        . 1 1 1 1 1 . . . 1 1 1 . . . . 
+        . . 1 1 1 1 1 . . 1 1 1 1 1 1 . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 1 . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 1 . 
+        . . . . . 1 1 1 1 1 1 1 1 . . . 
+        . . . . . . . . . 1 1 1 . . . . 
+        . . . . . . . . . 1 1 1 . . . . 
+        . . . . . . . . . 1 1 1 . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . 1 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . 1 1 1 1 . . . . . . . . . . . 
+        . 1 1 1 1 . . . . . . . . . . . 
+        . 1 1 1 1 . . . . . . . . . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 . . . 1 1 1 1 1 . . 
+        . . . . . . . . 1 1 1 1 1 1 . . 
+        . . . . . 1 1 1 1 1 1 1 1 . . . 
+        . . . . . 1 1 1 1 1 1 1 . . . . 
+        . . . . . 1 1 1 1 1 1 . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . 1 1 1 1 1 1 1 1 . . . 
+        . . . . 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 . . . . . . . . . 
+        . . 1 1 1 1 . . . . . . . . . . 
+        . . 1 1 1 1 . . . . . . . . . . 
+        . . 1 1 1 1 1 1 1 1 1 . . . . . 
+        . 1 1 1 1 1 1 1 1 1 1 1 . . . . 
+        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . 1 1 1 1 . . . . 1 1 1 1 . . . 
+        . 1 1 1 1 1 . . . 1 1 1 1 . . . 
+        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 1 . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 . . . . 1 1 1 1 . . . 
+        . . . . . . . . . 1 1 1 . . . . 
+        . . . . . . . . 1 1 1 1 . . . . 
+        . . . . . . . 1 1 1 1 1 . . . . 
+        . . . . . . . 1 1 1 1 . . . . . 
+        . . . . . . 1 1 1 1 . . . . . . 
+        . . . . . 1 1 1 1 1 . . . . . . 
+        . . . . . 1 1 1 1 . . . . . . . 
+        . . . . . 1 1 1 . . . . . . . . 
+        . . . . . 1 1 1 . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,
+    img`
+        . . . . 1 1 1 1 . . . . . . . . 
+        . . . 1 1 1 1 1 1 1 1 1 . . . . 
+        . . . 1 1 1 1 1 1 1 1 1 . . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 . . . 1 1 1 1 1 . . 
+        . . 1 1 1 1 . . . . 1 1 1 1 . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . . . 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 . . . 1 1 1 1 . . . 
+        . . 1 1 1 1 . . . 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 . . . . . 
+        `,
+    img`
+        . . . . . . . . . . . . . . . . 
+        . . . . 1 1 1 1 1 1 1 1 . . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . . 1 1 1 1 . . . . 1 1 1 1 . . 
+        . . 1 1 1 1 . . . . . 1 1 1 . . 
+        . . 1 1 1 1 1 . . . . 1 1 1 1 . 
+        . . 1 1 1 1 1 1 1 . . 1 1 1 1 . 
+        . . . 1 1 1 1 1 1 1 1 1 1 1 1 . 
+        . . . . . 1 1 1 1 1 1 1 1 1 1 . 
+        . . . . . . . 1 1 1 1 1 1 1 . . 
+        . . . . . . . . . . 1 1 1 1 . . 
+        . 1 1 1 1 1 . . 1 1 1 1 1 1 . . 
+        . 1 1 1 1 1 1 1 1 1 1 1 1 1 . . 
+        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . . 1 1 1 1 1 1 . . . . . . 
+        `
+    ]
+    if (info.score() < 10) {
+        scoreSprite = sprites.create(scoreList[info.score()], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(5, 12))
+        scoreSprite.scale = 3
+        animation.runMovementAnimation(
+        scoreSprite,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        true
+        )
+    } else if (info.score() < 100) {
+        scoreSprite = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
+        scoreSprite.scale = 3
+        animation.runMovementAnimation(
+        scoreSprite,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        true
+        )
+        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(4, 12))
+        scoreSprite2.scale = 3
+        animation.runMovementAnimation(
+        scoreSprite2,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        true
+        )
+    } else if (info.score() < 1000) {
+        scoreSprite = sprites.create(scoreList[parseFloat(scoreText[2])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
+        scoreSprite.scale = 2
+        animation.runMovementAnimation(
+        scoreSprite,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        true
+        )
+        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(5, 12))
+        scoreSprite2.scale = 2
+        animation.runMovementAnimation(
+        scoreSprite2,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        true
+        )
+        scoreSprite3 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
+        tiles.placeOnTile(scoreSprite3, tiles.getTileLocation(3, 12))
+        scoreSprite3.scale = 2
+        animation.runMovementAnimation(
+        scoreSprite3,
+        animation.animationPresets(animation.bobbing),
+        7500,
+        true
+        )
+    } else {
+        game.showLongText("Idk how you did this but you got " + info.score() + ". You are a true gamer!", DialogLayout.Right)
+        game.gameOver(true)
+        music.stopAllSounds()
+    }
 })
 function restartGame () {
     gameStart = 0
@@ -1283,269 +1546,6 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         running()
     }
 })
-info.onLifeZero(function () {
-    info.stopCountdown()
-    music.stopAllSounds()
-    music.play(music.melodyPlayable(music.wawawawaa), music.PlaybackMode.UntilDone)
-    music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
-    gameStart = 2
-    bananas = 1
-    power2 = 100
-    game.setGameOverScoringType(game.ScoringType.HighScore)
-    monke.sayText("score:", 2000, true)
-    sprites.destroyAllSpritesOfKind(SpriteKind.Extender)
-    sprites.destroyAllSpritesOfKind(SpriteKind.Wings)
-    sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-    sprites.destroyAllSpritesOfKind(SpriteKind.Tile)
-    sprites.destroyAllSpritesOfKind(SpriteKind.Food)
-    sprites.destroyAllSpritesOfKind(SpriteKind.Text)
-    sprites.destroyAllSpritesOfKind(SpriteKind.heli)
-    scoreText = convertToText(info.score())
-    scoreList = [
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . 1 1 1 1 1 1 1 1 . . . 
-        . . . . 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 1 . 
-        . 1 1 1 1 1 1 1 . . 1 1 1 1 1 . 
-        . 1 1 1 1 1 . . . . . 1 1 1 1 . 
-        . 1 1 1 1 . . . . . . 1 1 1 1 . 
-        . 1 1 1 . . . . . . . 1 1 1 1 . 
-        . 1 1 1 . . . . . . . 1 1 1 . . 
-        . 1 1 1 . . . . . . 1 1 1 1 . . 
-        . 1 1 1 . . . . . 1 1 1 1 1 . . 
-        . 1 1 1 1 1 1 . 1 1 1 1 1 . . . 
-        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 . . . . . 
-        . . . . . 1 1 1 1 1 . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,
-    img`
-        . . . . . . . 1 1 1 . . . . . . 
-        . . . . . . . 1 1 1 . . . . . . 
-        . . . . . 1 1 1 1 1 1 . . . . . 
-        . . . . 1 1 1 1 1 1 1 . . . . . 
-        . . 1 1 1 1 1 1 1 1 1 . . . . . 
-        . 1 1 1 1 1 1 1 1 1 1 . . . . . 
-        . 1 1 1 1 1 . 1 1 1 . . . . . . 
-        . 1 1 1 1 . . 1 1 1 . . . . . . 
-        . . . . . . . 1 1 1 . . . . . . 
-        . . . . . . . 1 1 1 . . . . . . 
-        . . . . . . . 1 1 1 1 1 1 1 1 . 
-        . . . . 1 1 1 1 1 1 1 1 1 1 1 . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 1 . 
-        . . 1 1 1 1 1 1 1 1 . . 1 1 1 . 
-        . . 1 1 1 1 . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . 1 1 1 1 1 1 . . . . . 
-        . . . 1 1 1 1 1 1 1 1 1 . . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 . . . . 
-        . . 1 1 1 1 1 . . 1 1 1 . . . . 
-        . . 1 1 1 . . . . 1 1 1 . . . . 
-        . . . . . . . . 1 1 1 1 . . . . 
-        . . . . . . . 1 1 1 1 1 . . . . 
-        . . . . . . 1 1 1 1 1 1 . . . . 
-        . . . . . 1 1 1 1 1 1 . . . . . 
-        . . . . 1 1 1 1 1 1 . . . . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . . . . . . . . . . . . . . . 
-        `,
-    img`
-        . . . . . 1 1 1 1 1 1 1 1 . . . 
-        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 . . . 1 1 1 . . . 
-        . . 1 1 1 . . . . 1 1 1 1 . . . 
-        . . . . . . . 1 1 1 1 1 1 . . . 
-        . . . . . 1 1 1 1 1 1 1 1 . . . 
-        . . . . . 1 1 1 1 1 1 1 1 . . . 
-        . . . . . 1 1 1 1 1 1 1 1 1 . . 
-        . . . . . . . . . . 1 1 1 1 1 . 
-        . . . . . . . . . . . 1 1 1 1 . 
-        . . . . . . . . . . . 1 1 1 1 . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 1 . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . . . . . . . 1 1 1 1 . . . . 
-        `,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . 1 1 1 . . . . . . 1 1 1 . . . 
-        . 1 1 1 . . . . . . 1 1 1 . . . 
-        . 1 1 1 . . . . . 1 1 1 1 . . . 
-        . 1 1 1 . . . . . 1 1 1 1 . . . 
-        . 1 1 1 1 . . . . 1 1 1 . . . . 
-        . 1 1 1 1 . . . . 1 1 1 . . . . 
-        . 1 1 1 1 1 . . . 1 1 1 . . . . 
-        . . 1 1 1 1 1 . . 1 1 1 1 1 1 . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 1 . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 1 . 
-        . . . . . 1 1 1 1 1 1 1 1 . . . 
-        . . . . . . . . . 1 1 1 . . . . 
-        . . . . . . . . . 1 1 1 . . . . 
-        . . . . . . . . . 1 1 1 . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . 1 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . 1 1 1 1 . . . . . . . . . . . 
-        . 1 1 1 1 . . . . . . . . . . . 
-        . 1 1 1 1 . . . . . . . . . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 . . . 1 1 1 1 1 . . 
-        . . . . . . . . 1 1 1 1 1 1 . . 
-        . . . . . 1 1 1 1 1 1 1 1 . . . 
-        . . . . . 1 1 1 1 1 1 1 . . . . 
-        . . . . . 1 1 1 1 1 1 . . . . . 
-        `,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . 1 1 1 1 1 1 1 1 . . . 
-        . . . . 1 1 1 1 1 1 1 1 1 . . . 
-        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . . 1 1 1 1 . . . . . . . . . 
-        . . 1 1 1 1 . . . . . . . . . . 
-        . . 1 1 1 1 . . . . . . . . . . 
-        . . 1 1 1 1 1 1 1 1 1 . . . . . 
-        . 1 1 1 1 1 1 1 1 1 1 1 . . . . 
-        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . 1 1 1 1 . . . . 1 1 1 1 . . . 
-        . 1 1 1 1 1 . . . 1 1 1 1 . . . 
-        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . . 1 1 1 1 1 1 1 1 1 . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 . . . . 1 1 1 1 . . . 
-        . . . . . . . . . 1 1 1 . . . . 
-        . . . . . . . . 1 1 1 1 . . . . 
-        . . . . . . . 1 1 1 1 1 . . . . 
-        . . . . . . . 1 1 1 1 . . . . . 
-        . . . . . . 1 1 1 1 . . . . . . 
-        . . . . . 1 1 1 1 1 . . . . . . 
-        . . . . . 1 1 1 1 . . . . . . . 
-        . . . . . 1 1 1 . . . . . . . . 
-        . . . . . 1 1 1 . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `,
-    img`
-        . . . . 1 1 1 1 . . . . . . . . 
-        . . . 1 1 1 1 1 1 1 1 1 . . . . 
-        . . . 1 1 1 1 1 1 1 1 1 . . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 . . . 1 1 1 1 1 . . 
-        . . 1 1 1 1 . . . . 1 1 1 1 . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . . . 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 . . . 1 1 1 1 . . . 
-        . . 1 1 1 1 . . . 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . . 1 1 1 1 1 1 1 1 . . . . . 
-        `,
-    img`
-        . . . . . . . . . . . . . . . . 
-        . . . . 1 1 1 1 1 1 1 1 . . . . 
-        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . . 1 1 1 1 . . . . 1 1 1 1 . . 
-        . . 1 1 1 1 . . . . . 1 1 1 . . 
-        . . 1 1 1 1 1 . . . . 1 1 1 1 . 
-        . . 1 1 1 1 1 1 1 . . 1 1 1 1 . 
-        . . . 1 1 1 1 1 1 1 1 1 1 1 1 . 
-        . . . . . 1 1 1 1 1 1 1 1 1 1 . 
-        . . . . . . . 1 1 1 1 1 1 1 . . 
-        . . . . . . . . . . 1 1 1 1 . . 
-        . 1 1 1 1 1 . . 1 1 1 1 1 1 . . 
-        . 1 1 1 1 1 1 1 1 1 1 1 1 1 . . 
-        . 1 1 1 1 1 1 1 1 1 1 1 1 . . . 
-        . . . . 1 1 1 1 1 1 . . . . . . 
-        `
-    ]
-    if (info.score() < 10) {
-        scoreSprite = sprites.create(scoreList[info.score()], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(5, 12))
-        scoreSprite.scale = 3
-        animation.runMovementAnimation(
-        scoreSprite,
-        animation.animationPresets(animation.bobbing),
-        7500,
-        true
-        )
-    } else if (info.score() < 100) {
-        scoreSprite = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
-        scoreSprite.scale = 3
-        animation.runMovementAnimation(
-        scoreSprite,
-        animation.animationPresets(animation.bobbing),
-        7500,
-        true
-        )
-        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(4, 12))
-        scoreSprite2.scale = 3
-        animation.runMovementAnimation(
-        scoreSprite2,
-        animation.animationPresets(animation.bobbing),
-        7500,
-        true
-        )
-    } else if (info.score() < 1000) {
-        scoreSprite = sprites.create(scoreList[parseFloat(scoreText[2])], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite, tiles.getTileLocation(7, 12))
-        scoreSprite.scale = 2
-        animation.runMovementAnimation(
-        scoreSprite,
-        animation.animationPresets(animation.bobbing),
-        7500,
-        true
-        )
-        scoreSprite2 = sprites.create(scoreList[parseFloat(scoreText[1])], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite2, tiles.getTileLocation(5, 12))
-        scoreSprite2.scale = 2
-        animation.runMovementAnimation(
-        scoreSprite2,
-        animation.animationPresets(animation.bobbing),
-        7500,
-        true
-        )
-        scoreSprite3 = sprites.create(scoreList[parseFloat(scoreText[0])], SpriteKind.Text)
-        tiles.placeOnTile(scoreSprite3, tiles.getTileLocation(3, 12))
-        scoreSprite3.scale = 2
-        animation.runMovementAnimation(
-        scoreSprite3,
-        animation.animationPresets(animation.bobbing),
-        7500,
-        true
-        )
-    } else {
-        game.showLongText("Idk how you did this but you got " + info.score() + ". You are a true gamer!", DialogLayout.Right)
-        game.gameOver(true)
-        music.stopAllSounds()
-    }
-})
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     monke.vy += 50
 })
@@ -2010,10 +2010,10 @@ let scoreSprite2: Sprite = null
 let scoreSprite: Sprite = null
 let scoreList: Image[] = []
 let scoreText = ""
-let titleScreen: Sprite = null
-let gameStart = 0
 let banana: Sprite = null
 let textSprite: TextSprite = null
+let titleScreen: Sprite = null
+let gameStart = 0
 let obstacles: Sprite = null
 let monke_list: Image[] = []
 let power2 = 0
@@ -2520,7 +2520,7 @@ game.onUpdateInterval(210, function () {
     }
 })
 /**
- * Music for each effect (maybe different tempo)
+ * By Josh Garvida
  */
 game.onUpdateInterval(1000, function () {
     if (gameStart == 1) {
@@ -2531,7 +2531,7 @@ game.onUpdateInterval(1000, function () {
             cycles = 4
         }
         speed += -1
-        if (Math.percentChance(15) && info.countdown() <= 0) {
+        if (Math.percentChance(18) && info.countdown() <= 0) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
                 4 e e e e e e e e e e e e e e 4 
