@@ -676,6 +676,7 @@ function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.lifespan = 3000
 }
 info.onCountdownEnd(function () {
+    tiles.placeOnTile(monke, tiles.getTileLocation(1, 14))
     sprites.destroyAllSpritesOfKind(SpriteKind.Extender)
     music.stopAllSounds()
     music.play(music.createSong(assets.song`in game`), music.PlaybackMode.LoopingInBackground)
@@ -2147,6 +2148,7 @@ let monke: Sprite = null
 let shadow: Sprite = null
 let speed = 0
 let timer = 0
+music.setVolume(255)
 music.stopAllSounds()
 timer = 0
 speed = -100
@@ -2653,7 +2655,9 @@ game.onUpdateInterval(1000, function () {
         } else if (info.score() >= 100) {
             cycles = 4
         }
-        speed += -1
+        if (speed > -210) {
+            speed += -1
+        }
         if (Math.percentChance(18) && info.countdown() <= 0) {
             tileCollect = sprites.create(img`
                 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
