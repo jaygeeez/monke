@@ -2880,7 +2880,7 @@ game.onUpdateInterval(1000, function () {
         }
     } else {
         timer += 1000
-        if (game.runtime() >= 120000 && timer >= 120000) {
+        if (game.runtime() >= 120000 && timer >= 120000 && gameStart != 2) {
             sprites.destroyAllSpritesOfKind(SpriteKind.Intro)
             tiles.placeOnTile(monke, tiles.getTileLocation(4, 14))
             tiles.placeOnTile(shadow, tiles.getTileLocation(4, 14))
