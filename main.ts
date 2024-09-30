@@ -2655,7 +2655,7 @@ game.onUpdateInterval(1000, function () {
         } else if (info.score() >= 100) {
             cycles = 4
         }
-        if (speed > -210) {
+        if (speed > -220) {
             speed += -1
         }
         if (Math.percentChance(18) && info.countdown() <= 0) {
