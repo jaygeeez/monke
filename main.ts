@@ -813,8 +813,20 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, oth
     effects.confetti.startScreenEffect(100)
     scene.cameraShake(2, 100)
 })
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (sprites.allOfKind(SpriteKind.Player).length == 1) {
+        if (monke.isHittingTile(CollisionDirection.Bottom)) {
+            monke.vy = -185
+            jumping()
+            shadow.scale = shadow.scale * 0.8
+            music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
+            pause(600)
+            shadow.scale = shadow.scale * 1.25
+            running()
+        }
+    }
+})
 function restartGame () {
-    gameStart = 0
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
     titleScreen = sprites.create(img`
@@ -1255,35 +1267,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Heart, function (sprite, otherSp
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
     sprites.destroy(otherSprite, effects.hearts, 100)
 })
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        monke.vy = -185
-        jumping()
-        shadow.scale = shadow.scale * 0.8
-        music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
-        pause(600)
-        shadow.scale = shadow.scale * 1.25
-        running()
-    }
-})
 sprites.onOverlap(SpriteKind.Wings, SpriteKind.Wings, function (sprite, otherSprite) {
     sprites.destroy(otherSprite)
 })
 controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
     timer = 0
-})
-controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
-        throwing()
-        if (gameStart == 1) {
-            bananas += -1
-            bananaText()
-        }
-        music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
-        pause(500)
-        bananaThrow(throwSpeed[0], throwSpeed[1])
-        running()
-    }
 })
 controller.A.onEvent(ControllerButtonEvent.Released, function () {
     monke.vy += 50
@@ -1800,6 +1788,21 @@ info.onLifeZero(function () {
         music.stopAllSounds()
     }
 })
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (sprites.allOfKind(SpriteKind.Player).length == 1) {
+        if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
+            throwing()
+            if (gameStart == 1) {
+                bananas += -1
+                bananaText()
+            }
+            music.play(music.melodyPlayable(music.knock), music.PlaybackMode.InBackground)
+            pause(500)
+            bananaThrow(throwSpeed[0], throwSpeed[1])
+            running()
+        }
+    }
+})
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     throwSpeed = [25, -140]
 })
@@ -2137,7 +2140,6 @@ let scoreText = ""
 let banana: Sprite = null
 let textSprite: TextSprite = null
 let titleScreen: Sprite = null
-let gameStart = 0
 let obstacles: Sprite = null
 let monke_list: Image[] = []
 let power2 = 0
@@ -2148,11 +2150,13 @@ let monke: Sprite = null
 let shadow: Sprite = null
 let speed = 0
 let timer = 0
-music.setVolume(255)
-music.stopAllSounds()
+let gameStart = 0
+gameStart = 0
 timer = 0
 speed = -100
 let cycles = 1
+music.stopAllSounds()
+music.setVolume(255)
 scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
