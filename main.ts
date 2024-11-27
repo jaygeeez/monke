@@ -814,6 +814,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, oth
     scene.cameraShake(2, 100)
 })
 function restartGame () {
+    gameStart = 0
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
     titleScreen = sprites.create(img`
@@ -2136,6 +2137,7 @@ let scoreText = ""
 let banana: Sprite = null
 let textSprite: TextSprite = null
 let titleScreen: Sprite = null
+let gameStart = 0
 let obstacles: Sprite = null
 let monke_list: Image[] = []
 let power2 = 0
@@ -2144,7 +2146,6 @@ let tileNumber = 0
 let throwSpeed: number[] = []
 let monke: Sprite = null
 let shadow: Sprite = null
-let gameStart = 0
 let speed = 0
 let timer = 0
 music.setVolume(255)
@@ -2152,7 +2153,6 @@ music.stopAllSounds()
 timer = 0
 speed = -100
 let cycles = 1
-gameStart = 0
 scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
