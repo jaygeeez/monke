@@ -512,6 +512,14 @@ function carSprites () {
     }
     obstacles.startEffect(effects.trail)
 }
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (sprites.allOfKind(SpriteKind.Player).length > 0) {
+        tiles.setWallAt(tiles.getTileLocation(1, 15), true)
+        if (monke.isHittingTile(CollisionDirection.Bottom)) {
+            monke.vy = -50
+        }
+    }
+})
 controller.combos.attachCombo("a+b", function () {
     if (gameStart == 0) {
         music.stopAllSounds()
@@ -814,7 +822,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, oth
     scene.cameraShake(2, 100)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (sprites.allOfKind(SpriteKind.Player).length == 1) {
+    if (sprites.allOfKind(SpriteKind.Player).length > 0) {
         if (monke.isHittingTile(CollisionDirection.Bottom)) {
             monke.vy = -185
             jumping()
@@ -1789,7 +1797,7 @@ info.onLifeZero(function () {
     }
 })
 controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (sprites.allOfKind(SpriteKind.Player).length == 1) {
+    if (sprites.allOfKind(SpriteKind.Player).length > 0) {
         if (monke.isHittingTile(CollisionDirection.Bottom) && bananas > 0) {
             throwing()
             if (gameStart == 1) {
@@ -2017,12 +2025,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
         otherSprite.setKind(SpriteKind.Wings)
         music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
         sprites.destroy(otherSprite, effects.fire, 100)
-    }
-})
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    tiles.setWallAt(tiles.getTileLocation(1, 15), true)
-    if (monke.isHittingTile(CollisionDirection.Bottom)) {
-        monke.vy = -50
     }
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Text, function (sprite, otherSprite) {
