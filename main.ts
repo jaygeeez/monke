@@ -2143,22 +2143,119 @@ let banana: Sprite = null
 let textSprite: TextSprite = null
 let titleScreen: Sprite = null
 let obstacles: Sprite = null
-let monke_list: Image[] = []
-let power2 = 0
-let bananas = 0
-let tileNumber = 0
-let throwSpeed: number[] = []
 let monke: Sprite = null
 let shadow: Sprite = null
-let speed = 0
+let power2 = 0
 let timer = 0
+let speed = 0
+let bananas = 0
 let gameStart = 0
+let tileNumber = 0
+let monke_list: Image[] = []
+let throwSpeed: number[] = []
+throwSpeed = [100, -70]
+monke_list = [
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d 5 5 4 4 4 4 d 5 5 4 e 4 
+    4 e 4 d 5 5 5 4 4 d 5 5 5 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 d 5 4 5 5 5 5 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 4 d d d d 5 5 5 5 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 5 5 5 4 4 4 4 5 5 5 4 e 4 
+    4 e 4 5 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
+    4 e 4 d 5 5 4 4 4 4 5 5 5 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 4 d 5 5 5 5 5 5 5 4 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 d d d 4 4 4 4 d d 4 e 4 
+    4 e 4 5 5 5 5 5 4 4 4 d 5 4 e 4 
+    4 e 4 5 5 4 5 5 5 4 4 5 5 4 e 4 
+    4 e 4 5 5 4 5 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 5 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 5 5 5 4 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 5 5 d 5 5 4 e 4 
+    4 e 4 d 5 4 4 4 4 5 5 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d d d 4 4 4 4 5 d d 4 e 4 
+    4 e 4 5 5 5 4 4 4 d 5 5 5 4 e 4 
+    4 e 4 5 5 5 4 4 d 5 5 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 4 4 4 4 e 4 
+    4 e 4 d 5 5 4 5 5 5 5 4 4 4 e 4 
+    4 e 4 d 5 5 4 4 5 5 5 5 5 4 e 4 
+    4 e 4 d 5 5 4 4 4 d 5 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `,
+img`
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 d d d d d 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 5 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 d d d 4 4 4 e 4 
+    4 e 4 5 5 5 5 5 5 5 5 4 4 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d 5 4 4 4 4 4 4 4 4 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 d 4 e 4 
+    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
+    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
+    4 e e e e e e e e e e e e e e 4 
+    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+    `
+]
+tileNumber = 0
 gameStart = 0
-timer = 0
+bananas = 1
 speed = -100
 let cycles = 1
+timer = 0
+power2 = 100
 music.stopAllSounds()
 music.setVolume(255)
+music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
 scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -2405,7 +2502,6 @@ scroller.setLayerImage(scroller.BackgroundLayer.Layer2, img`
     `)
 scroller.scrollBackgroundWithSpeed(speed + 80, 0, scroller.BackgroundLayer.Layer0)
 scroller.scrollBackgroundWithSpeed(speed, 0, scroller.BackgroundLayer.Layer2)
-music.play(music.createSong(assets.song`Intro`), music.PlaybackMode.LoopingInBackground)
 tiles.setCurrentTilemap(tilemap`blank`)
 restartGame()
 shadow = sprites.create(img`
@@ -2542,102 +2638,6 @@ scene.cameraFollowSprite(monke)
 jumping()
 music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.UntilDone)
 running()
-throwSpeed = [100, -70]
-tileNumber = 0
-bananas = 1
-power2 = 100
-monke_list = [
-img`
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 d 5 5 4 4 4 4 d 5 5 4 e 4 
-    4 e 4 d 5 5 5 4 4 d 5 5 5 4 e 4 
-    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
-    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
-    4 e 4 d 5 4 5 5 5 5 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    `,
-img`
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 4 d d d d 5 5 5 5 4 4 e 4 
-    4 e 4 5 5 5 5 5 5 5 5 5 5 4 e 4 
-    4 e 4 5 5 5 4 4 4 4 5 5 5 4 e 4 
-    4 e 4 5 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 5 5 4 e 4 
-    4 e 4 d 5 5 4 4 4 4 5 5 5 4 e 4 
-    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
-    4 e 4 4 d 5 5 5 5 5 5 5 4 4 e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    `,
-img`
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 5 d d d 4 4 4 4 d d 4 e 4 
-    4 e 4 5 5 5 5 5 4 4 4 d 5 4 e 4 
-    4 e 4 5 5 4 5 5 5 4 4 5 5 4 e 4 
-    4 e 4 5 5 4 5 5 5 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 5 5 4 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 5 5 5 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 5 5 5 4 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 5 5 d 5 5 4 e 4 
-    4 e 4 d 5 4 4 4 4 5 5 5 5 4 e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    `,
-img`
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 d d d 4 4 4 4 5 d d 4 e 4 
-    4 e 4 5 5 5 4 4 4 d 5 5 5 4 e 4 
-    4 e 4 5 5 5 4 4 d 5 5 4 4 4 e 4 
-    4 e 4 5 5 5 5 5 5 5 4 4 4 4 e 4 
-    4 e 4 5 5 5 5 4 4 4 4 4 4 4 e 4 
-    4 e 4 5 5 5 5 4 4 4 4 4 4 4 e 4 
-    4 e 4 5 5 5 5 5 5 5 4 4 4 4 e 4 
-    4 e 4 d 5 5 4 5 5 5 5 4 4 4 e 4 
-    4 e 4 d 5 5 4 4 5 5 5 5 5 4 e 4 
-    4 e 4 d 5 5 4 4 4 d 5 5 5 4 e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    `,
-img`
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 5 5 5 5 5 d d d d d 4 e 4 
-    4 e 4 5 5 5 5 5 5 5 5 5 5 4 e 4 
-    4 e 4 5 5 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 5 5 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 5 5 5 5 5 d d d 4 4 4 e 4 
-    4 e 4 5 5 5 5 5 5 5 5 4 4 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 d 5 4 4 4 4 4 4 4 4 4 e 4 
-    4 e 4 d 5 5 5 5 5 5 5 5 d 4 e 4 
-    4 e 4 d 5 5 5 5 5 5 5 5 5 4 e 4 
-    4 e 4 4 4 4 4 4 4 4 4 4 4 4 e 4 
-    4 e e e e e e e e e e e e e e 4 
-    4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
-    `
-]
 game.onUpdate(function () {
     scroller.scrollBackgroundWithSpeed(speed + 80, 0, scroller.BackgroundLayer.Layer0)
     scroller.scrollBackgroundWithSpeed(speed, 0, scroller.BackgroundLayer.Layer2)
