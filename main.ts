@@ -815,35 +815,6 @@ info.onCountdownEnd(function () {
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         `)
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
-    if (otherSprite.image == monke_list[tileNumber]) {
-        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
-        otherSprite.lifespan = 120000
-        tiles.placeOnTile(otherSprite, tiles.getTileLocation(tileNumber + 3, 10))
-        animation.runMovementAnimation(
-        otherSprite,
-        animation.animationPresets(animation.bobbing),
-        2000,
-        true
-        )
-        otherSprite.setVelocity(1, 1)
-        tileNumber += 1
-        if (tileNumber == monke_list.length) {
-            tileNumber = 0
-            power2 = randint(0, 2)
-            powerUp(sprite, power2)
-            for (let value of sprites.allOfKind(SpriteKind.Tile)) {
-                animation.stopAnimation(animation.AnimationTypes.All, value)
-                value.vx = speed
-                value.lifespan = 2000
-            }
-        }
-    } else {
-        music.play(music.melodyPlayable(music.powerDown), music.PlaybackMode.InBackground)
-        tileNumber = 0
-        sprites.destroyAllSpritesOfKind(SpriteKind.Tile, effects.disintegrate, 1000)
-    }
-})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.confetti, 100)
     otherSprite.sayText("Press A+B to start!", 100, false)
@@ -1202,6 +1173,8 @@ function powerUp (mySprite: Sprite, num: number) {
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             `)
+    } else if (num == 3) {
+        mySprite.sayText("Reference", 2000, true)
     }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -1411,6 +1384,35 @@ function running () {
     true
     )
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
+    if (otherSprite.image == monke_list[tileNumber]) {
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+        otherSprite.lifespan = 120000
+        tiles.placeOnTile(otherSprite, tiles.getTileLocation(tileNumber + 3, 10))
+        animation.runMovementAnimation(
+        otherSprite,
+        animation.animationPresets(animation.bobbing),
+        2000,
+        true
+        )
+        otherSprite.setVelocity(1, 1)
+        tileNumber += 1
+        if (tileNumber == monke_list.length) {
+            tileNumber = 0
+            power2 = randint(0, 2)
+            powerUp(sprite, power2)
+            for (let value of sprites.allOfKind(SpriteKind.Tile)) {
+                animation.stopAnimation(animation.AnimationTypes.All, value)
+                value.vx = speed
+                value.lifespan = 2000
+            }
+        }
+    } else {
+        music.play(music.melodyPlayable(music.powerDown), music.PlaybackMode.InBackground)
+        tileNumber = 0
+        sprites.destroyAllSpritesOfKind(SpriteKind.Tile, effects.disintegrate, 1000)
+    }
+})
 info.onLifeZero(function () {
     scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
         9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
