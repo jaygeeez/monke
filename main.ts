@@ -1173,8 +1173,6 @@ function powerUp (mySprite: Sprite, num: number) {
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
             `)
-    } else if (num == 3) {
-        mySprite.sayText("Reference", 2000, true)
     }
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -1926,6 +1924,9 @@ function randomSpawn (mySprite: Sprite) {
         tiles.placeOnTile(wings, tiles.getTileLocation(15, 13))
     }
 }
+controller.combos.attachSpecialCode(function () {
+	
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     sprites.destroy(sprite)
     if (power2 == 2) {
