@@ -7,6 +7,13 @@ namespace SpriteKind {
     export const Extender = SpriteKind.create()
     export const heli = SpriteKind.create()
 }
+/**
+ * Powerup Ideas
+ * 
+ * - Reference (Ducky Clash)
+ * 
+ * - Plane Monke (Drop bananas, pea shooter)
+ */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (power2 == 0) {
         sprites.destroy(otherSprite, effects.warmRadial, 100)
@@ -16,6 +23,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         info.changeLifeBy(-1)
         info.changeScoreBy(-1)
         sprite.sayText("ow", 100, false)
+        scene.cameraShake(4, 500)
         music.play(music.melodyPlayable(music.spooky), music.PlaybackMode.UntilDone)
         if (speed <= -150) {
             speed += 10
