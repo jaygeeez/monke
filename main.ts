@@ -13,6 +13,8 @@ namespace SpriteKind {
  * - Reference (Ducky Clash)
  * 
  * - Plane Monke (Drop bananas, pea shooter)
+ * 
+ * - Monke Business (Raining Stars/Bananas)
  */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (power2 == 0) {
