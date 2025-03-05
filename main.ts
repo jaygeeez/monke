@@ -6,6 +6,7 @@ namespace SpriteKind {
     export const Heart = SpriteKind.create()
     export const Extender = SpriteKind.create()
     export const heli = SpriteKind.create()
+    export const StatusBar = SpriteKind.create()
 }
 /**
  * Powerup Ideas
