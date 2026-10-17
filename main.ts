@@ -17,6 +17,9 @@ namespace SpriteKind {
  * 
  * - Monke Business (Raining Stars/Bananas)
  */
+/**
+ * Made with love at Code Ninjas Markham :)
+ */
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     if (power2 == 0) {
         sprites.destroy(otherSprite, effects.warmRadial, 100)
@@ -694,6 +697,35 @@ function moveSet (mySprite: Sprite, velocity: number) {
     mySprite.setFlag(SpriteFlag.GhostThroughWalls, true)
     mySprite.lifespan = 3000
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
+    if (otherSprite.image == monke_list[tileNumber]) {
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
+        otherSprite.lifespan = 120000
+        tiles.placeOnTile(otherSprite, tiles.getTileLocation(tileNumber + 3, 10))
+        animation.runMovementAnimation(
+        otherSprite,
+        animation.animationPresets(animation.bobbing),
+        2000,
+        true
+        )
+        otherSprite.setVelocity(1, 1)
+        tileNumber += 1
+        if (tileNumber == monke_list.length) {
+            tileNumber = 0
+            power2 = randint(0, 2)
+            powerUp(sprite, power2)
+            for (let value of sprites.allOfKind(SpriteKind.Tile)) {
+                animation.stopAnimation(animation.AnimationTypes.All, value)
+                value.vx = speed
+                value.lifespan = 2000
+            }
+        }
+    } else {
+        music.play(music.melodyPlayable(music.powerDown), music.PlaybackMode.InBackground)
+        tileNumber = 0
+        sprites.destroyAllSpritesOfKind(SpriteKind.Tile, effects.disintegrate, 1000)
+    }
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Intro, function (sprite, otherSprite) {
     otherSprite.startEffect(effects.confetti, 100)
     otherSprite.sayText("Press A+B to start!", 100, false)
@@ -1393,35 +1425,6 @@ function running () {
     true
     )
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Tile, function (sprite, otherSprite) {
-    if (otherSprite.image == monke_list[tileNumber]) {
-        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.InBackground)
-        otherSprite.lifespan = 120000
-        tiles.placeOnTile(otherSprite, tiles.getTileLocation(tileNumber + 3, 10))
-        animation.runMovementAnimation(
-        otherSprite,
-        animation.animationPresets(animation.bobbing),
-        2000,
-        true
-        )
-        otherSprite.setVelocity(1, 1)
-        tileNumber += 1
-        if (tileNumber == monke_list.length) {
-            tileNumber = 0
-            power2 = randint(0, 2)
-            powerUp(sprite, power2)
-            for (let value of sprites.allOfKind(SpriteKind.Tile)) {
-                animation.stopAnimation(animation.AnimationTypes.All, value)
-                value.vx = speed
-                value.lifespan = 2000
-            }
-        }
-    } else {
-        music.play(music.melodyPlayable(music.powerDown), music.PlaybackMode.InBackground)
-        tileNumber = 0
-        sprites.destroyAllSpritesOfKind(SpriteKind.Tile, effects.disintegrate, 1000)
-    }
-})
 info.onLifeZero(function () {
     scroller.setLayerImage(scroller.BackgroundLayer.Layer0, img`
         9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -2786,6 +2789,7 @@ game.onUpdateInterval(1000, function () {
                 ..........fc2ffff.......
                 ...........fffff........
                 `, SpriteKind.heli)
+            helicopter.sayText("CN Markham :)", 2000, false)
             tiles.placeOnTile(helicopter, tiles.getTileLocation(15, 10))
             moveSet(helicopter, speed)
             animation.runImageAnimation(
